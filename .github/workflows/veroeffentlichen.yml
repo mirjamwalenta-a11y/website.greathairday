@@ -3,7 +3,7 @@
 # Einmalig in GitHub einrichten (Settings → Secrets and variables → Actions):
 #   Secrets:    FTP_SERVER    (FTP-Server laut World4You, z. B. ftp.greathairday.at)
 #               FTP_USERNAME  (FTP-Benutzername)
-#               FTP_PASSWORD  (FTP-Passwort)
+#               FTP_PASSWORD  (FTP-Passwort; die Schreibweise FTP_PASSWORT wird auch akzeptiert)
 #   Variables (optional):
 #               FTP_DIR       (Zielordner auf dem Server, Standard: ./  – muss mit / enden)
 #               FTP_PROTOCOL  (ftps = verschlüsselt, Standard; nur falls das nicht klappt: ftp)
@@ -33,7 +33,7 @@ jobs:
         env:
           FTP_SERVER: ${{ secrets.FTP_SERVER }}
           FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
-          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD || secrets.FTP_PASSWORT }}
         run: |
           fehlt=""
           [ -z "$FTP_SERVER" ] && fehlt="$fehlt FTP_SERVER"
@@ -49,7 +49,7 @@ jobs:
         with:
           server: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
-          password: ${{ secrets.FTP_PASSWORD }}
+          password: ${{ secrets.FTP_PASSWORD || secrets.FTP_PASSWORT }}
           protocol: ${{ vars.FTP_PROTOCOL || 'ftps' }}
           server-dir: ${{ vars.FTP_DIR || './' }}
           exclude: |
