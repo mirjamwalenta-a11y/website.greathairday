@@ -12,15 +12,22 @@ Website von **Great Hair Day**, Friseursalon Mirjam Walenta, Rechte Wienzeile 47
 | `Preise-und-Texte-bearbeiten.html` | Werkzeug zum Ändern von Preisen und Texten, läuft im Browser |
 | `bilder/` | Salonfotos und Vorschaubild für WhatsApp/Facebook |
 | `fonts/` | Schriften (Playfair Display, Inter) – liegen bewusst lokal, damit keine Daten an Google gehen |
+| `.github/workflows/` | automatischer Upload zu World4You |
 
 ## Veröffentlichen
 
-Alle Dateien und die Ordner `bilder/` und `fonts/` so, wie sie hier liegen, in den Scaleway-Bucket hochladen.
+Die Website liegt bei **World4You**. Jede Änderung auf `main` wird von GitHub automatisch per FTP dorthin hochgeladen (`.github/workflows/veroeffentlichen.yml`). FileZilla ist dafür nicht mehr nötig.
+
+- Hochgeladen werden nur geänderte Dateien. Auf dem Server wird nichts gelöscht, was nicht von diesem Ablauf stammt.
+- `README.md` und `CLAUDE.md` bleiben nur hier im Repo. Das Bearbeitungswerkzeug wird mit hochgeladen, damit auf dem Server immer die aktuelle Version liegt.
+- Der Webspace-Ordner ist `/` auf `ftp.greathairday.at` (dort liegt auch noch die alte Joomla-Installation von Netpoint – nicht anfassen, der Ablauf löscht nichts davon).
+- Ablauf ansehen oder von Hand starten: Reiter **Actions** → „Website veröffentlichen“ → **Run workflow**.
+- Einmalige Einrichtung: unter **Settings → Secrets and variables → Actions** die Secrets `FTP_SERVER`, `FTP_USERNAME` und `FTP_PASSWORD` anlegen (Daten aus dem World4You-Kundenbereich). Optional die Variables `FTP_DIR` (Zielordner) und `FTP_PROTOCOL` (`ftps` oder `ftp`).
 
 ## Preise und Texte ändern
 
 1. `Preise-und-Texte-bearbeiten.html` im Browser öffnen.
 2. Aktuelle `leistungen.html` bzw. `index.html` laden, Werte ändern, Vorschau ansehen.
-3. Heruntergeladene Datei hier ins Repo übernehmen und in den Bucket hochladen.
+3. Heruntergeladene Datei auf GitHub hochladen (**Add file → Upload files**, gleicher Dateiname) – die Website aktualisiert sich dann von selbst.
 
 Preise auch bei **stylisten.eu** und im **Google-Unternehmensprofil** gleich halten.

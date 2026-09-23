@@ -45,7 +45,7 @@
     <ol>
       <li>Werte unten ändern.</li>
       <li>„Vorschau“ anschauen.</li>
-      <li>Datei herunterladen und im Scaleway-Bucket wieder hochladen (die alte Datei wird überschrieben).</li>
+      <li>Datei herunterladen und auf GitHub im Repo <code>website.greathairday</code> hochladen (<em>Add file → Upload files</em>, gleicher Dateiname) – die Website aktualisiert sich dann automatisch.</li>
     </ol>
     Eine Preisänderung wird automatisch an <em>allen</em> Stellen übernommen: Preiszeile, Fragen &amp; Antworten, Google-Beschreibung und Suchmaschinen-Daten.
   </div>
@@ -233,7 +233,7 @@ function showPreview() {
 function downloadLeistungen() {
   if (!validate()) return;
   download('leistungen.html', build());
-  toast('leistungen.html wurde heruntergeladen. Jetzt im Scaleway-Bucket hochladen.');
+  toast('leistungen.html wurde heruntergeladen. Jetzt auf GitHub hochladen.');
 }
 async function loadLeistungen(file) {
   if (!file) return;
@@ -279,7 +279,7 @@ async function loadIndex(file) {
 }
 function downloadIndex() {
   if (!indexSrc || !validate()) return;
-  try { download('index.html', buildIndex()); toast('index.html wurde heruntergeladen. Jetzt im Scaleway-Bucket hochladen.'); }
+  try { download('index.html', buildIndex()); toast('index.html wurde heruntergeladen. Jetzt auf GitHub hochladen.'); }
   catch (e) { toast(e.message); }
 }
 

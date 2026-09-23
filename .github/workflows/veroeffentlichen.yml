@@ -1,0 +1,60 @@
+# Lädt die Website bei jeder Änderung auf "main" automatisch per FTP zu World4You hoch.
+#
+# Einmalig in GitHub einrichten (Settings → Secrets and variables → Actions):
+#   Secrets:    FTP_SERVER    (FTP-Server laut World4You, z. B. ftp.greathairday.at)
+#               FTP_USERNAME  (FTP-Benutzername)
+#               FTP_PASSWORD  (FTP-Passwort)
+#   Variables (optional):
+#               FTP_DIR       (Zielordner auf dem Server, Standard: ./  – muss mit / enden)
+#               FTP_PROTOCOL  (ftps = verschlüsselt, Standard; nur falls das nicht klappt: ftp)
+#
+# Hochgeladen werden nur geänderte Dateien. Es wird nichts gelöscht, was nicht von
+# diesem Ablauf selbst stammt. README und CLAUDE.md bleiben nur im Repo. Das Werkzeug
+# wird mit hochgeladen, damit auf dem Server nie eine veraltete Version liegt.
+
+name: Website veröffentlichen
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: veroeffentlichen
+  cancel-in-progress: false
+
+jobs:
+  hochladen:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Einstellungen prüfen
+        env:
+          FTP_SERVER: ${{ secrets.FTP_SERVER }}
+          FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+        run: |
+          fehlt=""
+          [ -z "$FTP_SERVER" ] && fehlt="$fehlt FTP_SERVER"
+          [ -z "$FTP_USERNAME" ] && fehlt="$fehlt FTP_USERNAME"
+          [ -z "$FTP_PASSWORD" ] && fehlt="$fehlt FTP_PASSWORD"
+          if [ -n "$fehlt" ]; then
+            echo "::error::Es fehlen diese Secrets in den Repo-Einstellungen:$fehlt"
+            exit 1
+          fi
+
+      - name: Zu World4You hochladen
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          protocol: ${{ vars.FTP_PROTOCOL || 'ftps' }}
+          server-dir: ${{ vars.FTP_DIR || './' }}
+          exclude: |
+            **/.git*
+            **/.git*/**
+            .github/**
+            README.md
+            CLAUDE.md
