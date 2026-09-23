@@ -1,13 +1,15 @@
-# Lädt die Website bei jeder Änderung auf "main" automatisch in den Scaleway-Bucket.
+# Lädt die Website bei jeder Änderung auf "main" automatisch per FTP zu World4You hoch.
 #
 # Einmalig in GitHub einrichten (Settings → Secrets and variables → Actions):
-#   Secrets:    SCW_ACCESS_KEY, SCW_SECRET_KEY   (Scaleway-API-Schlüssel)
-#   Variables:  SCW_BUCKET  (Name des Buckets, z. B. greathairday.at)
-#               SCW_REGION  (z. B. fr-par, nl-ams oder pl-waw)
+#   Secrets:    FTP_SERVER    (FTP-Server laut World4You, z. B. ftp.greathairday.at)
+#               FTP_USERNAME  (FTP-Benutzername)
+#               FTP_PASSWORD  (FTP-Passwort)
+#   Variables (optional):
+#               FTP_DIR       (Zielordner auf dem Server, Standard: ./  – muss mit / enden)
+#               FTP_PROTOCOL  (ftps = verschlüsselt, Standard; nur falls das nicht klappt: ftp)
 #
-# Es werden nur hochgeladen/überschrieben: die Seiten (*.html), bilder/ und fonts/.
-# Nichts im Bucket wird gelöscht. Das Bearbeitungswerkzeug, README und CLAUDE.md
-# bleiben nur im Repo.
+# Hochgeladen werden nur geänderte Dateien. Es wird nichts gelöscht, was nicht von
+# diesem Ablauf selbst stammt. Werkzeug, README und CLAUDE.md bleiben nur im Repo.
 
 name: Website veröffentlichen
 
@@ -28,46 +30,31 @@ jobs:
 
       - name: Einstellungen prüfen
         env:
-          SCW_ACCESS_KEY: ${{ secrets.SCW_ACCESS_KEY }}
-          SCW_SECRET_KEY: ${{ secrets.SCW_SECRET_KEY }}
-          SCW_BUCKET: ${{ vars.SCW_BUCKET }}
-          SCW_REGION: ${{ vars.SCW_REGION }}
+          FTP_SERVER: ${{ secrets.FTP_SERVER }}
+          FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
         run: |
           fehlt=""
-          [ -z "$SCW_ACCESS_KEY" ] && fehlt="$fehlt SCW_ACCESS_KEY(Secret)"
-          [ -z "$SCW_SECRET_KEY" ] && fehlt="$fehlt SCW_SECRET_KEY(Secret)"
-          [ -z "$SCW_BUCKET" ] && fehlt="$fehlt SCW_BUCKET(Variable)"
-          [ -z "$SCW_REGION" ] && fehlt="$fehlt SCW_REGION(Variable)"
+          [ -z "$FTP_SERVER" ] && fehlt="$fehlt FTP_SERVER"
+          [ -z "$FTP_USERNAME" ] && fehlt="$fehlt FTP_USERNAME"
+          [ -z "$FTP_PASSWORD" ] && fehlt="$fehlt FTP_PASSWORD"
           if [ -n "$fehlt" ]; then
-            echo "::error::Es fehlt in den Repo-Einstellungen:$fehlt"
+            echo "::error::Es fehlen diese Secrets in den Repo-Einstellungen:$fehlt"
             exit 1
           fi
 
-      - name: In den Scaleway-Bucket hochladen
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.SCW_ACCESS_KEY }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.SCW_SECRET_KEY }}
-          AWS_DEFAULT_REGION: ${{ vars.SCW_REGION }}
-          BUCKET: ${{ vars.SCW_BUCKET }}
-          REGION: ${{ vars.SCW_REGION }}
-        run: |
-          set -euo pipefail
-          ZIEL="s3://$BUCKET"
-          S3="aws s3 --endpoint-url https://s3.$REGION.scw.cloud"
-
-          # Seiten: immer frisch laden, damit Preisänderungen sofort sichtbar sind
-          $S3 sync . "$ZIEL" --acl public-read --exclude "*" --include "*.html" \
-            --exclude "Preise-und-Texte-bearbeiten.html" \
-            --content-type "text/html; charset=utf-8" --cache-control "no-cache"
-
-          # Fotos: eine Woche im Browser zwischenspeichern
-          $S3 sync bilder "$ZIEL/bilder" --acl public-read \
-            --cache-control "public, max-age=604800"
-
-          # Schriften: mit korrektem Dateityp, ein Jahr zwischenspeichern
-          $S3 sync fonts "$ZIEL/fonts" --acl public-read --exclude "*" --include "*.woff2" \
-            --content-type "font/woff2" --cache-control "public, max-age=31536000"
-          $S3 cp fonts/LIZENZ.txt "$ZIEL/fonts/LIZENZ.txt" --acl public-read \
-            --content-type "text/plain; charset=utf-8"
-
-          echo "Fertig – die Website ist aktualisiert."
+      - name: Zu World4You hochladen
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          protocol: ${{ vars.FTP_PROTOCOL || 'ftps' }}
+          server-dir: ${{ vars.FTP_DIR || './' }}
+          exclude: |
+            **/.git*
+            **/.git*/**
+            .github/**
+            README.md
+            CLAUDE.md
+            Preise-und-Texte-bearbeiten.html

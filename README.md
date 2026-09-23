@@ -12,15 +12,16 @@ Website von **Great Hair Day**, Friseursalon Mirjam Walenta, Rechte Wienzeile 47
 | `Preise-und-Texte-bearbeiten.html` | Werkzeug zum Ändern von Preisen und Texten, läuft im Browser |
 | `bilder/` | Salonfotos und Vorschaubild für WhatsApp/Facebook |
 | `fonts/` | Schriften (Playfair Display, Inter) – liegen bewusst lokal, damit keine Daten an Google gehen |
+| `.github/workflows/` | automatischer Upload zu World4You |
 
 ## Veröffentlichen
 
-**Automatisch:** Jede Änderung auf `main` wird von GitHub in etwa einer Minute in den Scaleway-Bucket hochgeladen (`.github/workflows/veroeffentlichen.yml`). FileZilla ist dafür nicht mehr nötig.
+Die Website liegt bei **World4You**. Jede Änderung auf `main` wird von GitHub automatisch per FTP dorthin hochgeladen (`.github/workflows/veroeffentlichen.yml`). FileZilla ist dafür nicht mehr nötig.
 
-- Hochgeladen werden die Seiten (`*.html`), `bilder/` und `fonts/`. Im Bucket wird nichts gelöscht.
+- Hochgeladen werden nur geänderte Dateien. Auf dem Server wird nichts gelöscht, was nicht von diesem Ablauf stammt.
 - Das Bearbeitungswerkzeug, `README.md` und `CLAUDE.md` bleiben nur hier im Repo.
 - Ablauf ansehen oder von Hand starten: Reiter **Actions** → „Website veröffentlichen“ → **Run workflow**.
-- Einmalige Einrichtung: unter **Settings → Secrets and variables → Actions** die Secrets `SCW_ACCESS_KEY` und `SCW_SECRET_KEY` sowie die Variables `SCW_BUCKET` und `SCW_REGION` anlegen.
+- Einmalige Einrichtung: unter **Settings → Secrets and variables → Actions** die Secrets `FTP_SERVER`, `FTP_USERNAME` und `FTP_PASSWORD` anlegen (Daten aus dem World4You-Kundenbereich). Optional die Variables `FTP_DIR` (Zielordner) und `FTP_PROTOCOL` (`ftps` oder `ftp`).
 
 ## Preise und Texte ändern
 
