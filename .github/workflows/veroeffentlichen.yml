@@ -9,7 +9,8 @@
 #               FTP_PROTOCOL  (ftps = verschlüsselt, Standard; nur falls das nicht klappt: ftp)
 #
 # Hochgeladen werden nur geänderte Dateien. Es wird nichts gelöscht, was nicht von
-# diesem Ablauf selbst stammt. Werkzeug, README und CLAUDE.md bleiben nur im Repo.
+# diesem Ablauf selbst stammt. README und CLAUDE.md bleiben nur im Repo. Das Werkzeug
+# wird mit hochgeladen, damit auf dem Server nie eine veraltete Version liegt.
 
 name: Website veröffentlichen
 
@@ -57,4 +58,3 @@ jobs:
             .github/**
             README.md
             CLAUDE.md
-            Preise-und-Texte-bearbeiten.html

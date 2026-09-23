@@ -19,7 +19,8 @@ Website von **Great Hair Day**, Friseursalon Mirjam Walenta, Rechte Wienzeile 47
 Die Website liegt bei **World4You**. Jede Änderung auf `main` wird von GitHub automatisch per FTP dorthin hochgeladen (`.github/workflows/veroeffentlichen.yml`). FileZilla ist dafür nicht mehr nötig.
 
 - Hochgeladen werden nur geänderte Dateien. Auf dem Server wird nichts gelöscht, was nicht von diesem Ablauf stammt.
-- Das Bearbeitungswerkzeug, `README.md` und `CLAUDE.md` bleiben nur hier im Repo.
+- `README.md` und `CLAUDE.md` bleiben nur hier im Repo. Das Bearbeitungswerkzeug wird mit hochgeladen, damit auf dem Server immer die aktuelle Version liegt.
+- Der Webspace-Ordner ist `/` auf `ftp.greathairday.at` (dort liegt auch noch die alte Joomla-Installation von Netpoint – nicht anfassen, der Ablauf löscht nichts davon).
 - Ablauf ansehen oder von Hand starten: Reiter **Actions** → „Website veröffentlichen“ → **Run workflow**.
 - Einmalige Einrichtung: unter **Settings → Secrets and variables → Actions** die Secrets `FTP_SERVER`, `FTP_USERNAME` und `FTP_PASSWORD` anlegen (Daten aus dem World4You-Kundenbereich). Optional die Variables `FTP_DIR` (Zielordner) und `FTP_PROTOCOL` (`ftps` oder `ftp`).
 
