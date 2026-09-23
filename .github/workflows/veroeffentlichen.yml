@@ -1,0 +1,73 @@
+# Lädt die Website bei jeder Änderung auf "main" automatisch in den Scaleway-Bucket.
+#
+# Einmalig in GitHub einrichten (Settings → Secrets and variables → Actions):
+#   Secrets:    SCW_ACCESS_KEY, SCW_SECRET_KEY   (Scaleway-API-Schlüssel)
+#   Variables:  SCW_BUCKET  (Name des Buckets, z. B. greathairday.at)
+#               SCW_REGION  (z. B. fr-par, nl-ams oder pl-waw)
+#
+# Es werden nur hochgeladen/überschrieben: die Seiten (*.html), bilder/ und fonts/.
+# Nichts im Bucket wird gelöscht. Das Bearbeitungswerkzeug, README und CLAUDE.md
+# bleiben nur im Repo.
+
+name: Website veröffentlichen
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: veroeffentlichen
+  cancel-in-progress: false
+
+jobs:
+  hochladen:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Einstellungen prüfen
+        env:
+          SCW_ACCESS_KEY: ${{ secrets.SCW_ACCESS_KEY }}
+          SCW_SECRET_KEY: ${{ secrets.SCW_SECRET_KEY }}
+          SCW_BUCKET: ${{ vars.SCW_BUCKET }}
+          SCW_REGION: ${{ vars.SCW_REGION }}
+        run: |
+          fehlt=""
+          [ -z "$SCW_ACCESS_KEY" ] && fehlt="$fehlt SCW_ACCESS_KEY(Secret)"
+          [ -z "$SCW_SECRET_KEY" ] && fehlt="$fehlt SCW_SECRET_KEY(Secret)"
+          [ -z "$SCW_BUCKET" ] && fehlt="$fehlt SCW_BUCKET(Variable)"
+          [ -z "$SCW_REGION" ] && fehlt="$fehlt SCW_REGION(Variable)"
+          if [ -n "$fehlt" ]; then
+            echo "::error::Es fehlt in den Repo-Einstellungen:$fehlt"
+            exit 1
+          fi
+
+      - name: In den Scaleway-Bucket hochladen
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.SCW_ACCESS_KEY }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.SCW_SECRET_KEY }}
+          AWS_DEFAULT_REGION: ${{ vars.SCW_REGION }}
+          BUCKET: ${{ vars.SCW_BUCKET }}
+          REGION: ${{ vars.SCW_REGION }}
+        run: |
+          set -euo pipefail
+          ZIEL="s3://$BUCKET"
+          S3="aws s3 --endpoint-url https://s3.$REGION.scw.cloud"
+
+          # Seiten: immer frisch laden, damit Preisänderungen sofort sichtbar sind
+          $S3 sync . "$ZIEL" --acl public-read --exclude "*" --include "*.html" \
+            --exclude "Preise-und-Texte-bearbeiten.html" \
+            --content-type "text/html; charset=utf-8" --cache-control "no-cache"
+
+          # Fotos: eine Woche im Browser zwischenspeichern
+          $S3 sync bilder "$ZIEL/bilder" --acl public-read \
+            --cache-control "public, max-age=604800"
+
+          # Schriften: mit korrektem Dateityp, ein Jahr zwischenspeichern
+          $S3 sync fonts "$ZIEL/fonts" --acl public-read --exclude "*" --include "*.woff2" \
+            --content-type "font/woff2" --cache-control "public, max-age=31536000"
+          $S3 cp fonts/LIZENZ.txt "$ZIEL/fonts/LIZENZ.txt" --acl public-read \
+            --content-type "text/plain; charset=utf-8"
+
+          echo "Fertig – die Website ist aktualisiert."
