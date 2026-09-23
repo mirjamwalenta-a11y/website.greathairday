@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Preise &amp; Texte bearbeiten – Great Hair Day</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  :root { --perg:#F5F0E8; --mokka:#816a3c; --night:#1A1A18; --seide:#E8E0D4; --white:#FDFAF5; }
+  body { margin:0; background:var(--perg); color:var(--night); font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; line-height:1.55; }
+  .wrap { max-width: 760px; margin: 0 auto; padding: 1.4rem 1.1rem 5rem; }
+  h1 { font-family: Georgia, 'Times New Roman', serif; font-size: 1.7rem; margin: 0 0 .4rem; }
+  h2 { font-family: Georgia, 'Times New Roman', serif; font-size: 1.25rem; margin: 2.2rem 0 .6rem; padding-top: 1rem; border-top: 1px solid var(--seide); }
+  h3 { font-size: .95rem; margin: 1.2rem 0 .3rem; color: var(--mokka); }
+  p { margin: .4rem 0; }
+  .lead { color:#5a5a52; }
+  .steps { background: var(--white); border-left: 3px solid var(--mokka); padding: .8rem 1rem; margin: 1rem 0; border-radius: 3px; }
+  .steps ol { margin: .3rem 0 .3rem 1.2rem; padding: 0; }
+  label { display:block; font-size:.88rem; color:#5a5a52; margin: .8rem 0 .25rem; }
+  input[type=text], textarea { width:100%; font: inherit; font-size: 16px; padding: .65rem .75rem; border:1px solid #cfc6b6; border-radius: 3px; background:#fff; color:var(--night); }
+  textarea { min-height: 5.2rem; resize: vertical; }
+  .grid { display:grid; grid-template-columns: 1fr 1fr; gap: .2rem 1rem; }
+  @media (max-width: 560px) { .grid { grid-template-columns: 1fr; } }
+  .price-input { display:flex; align-items:center; gap:.4rem; }
+  .price-input input { max-width: 8rem; }
+  button, .btn { font: inherit; font-size: 1rem; background: var(--mokka); color:#fff; border:0; border-radius: 3px; padding: .8rem 1.2rem; cursor:pointer; margin: .3rem .4rem .3rem 0; display:inline-block; }
+  button.sec, .btn.sec { background: transparent; color: var(--mokka); border: 1px solid var(--mokka); }
+  button.del { background: transparent; color:#9a3b2f; border:1px solid #d9b7b1; padding:.35rem .7rem; font-size:.85rem; margin-top:.4rem; }
+  .faq-card { background: var(--white); border:1px solid var(--seide); border-radius: 3px; padding: .2rem 1rem 1rem; margin: .8rem 0; }
+  .hint { font-size:.85rem; color:#6a6a60; }
+  .warn { background:#fff6df; border:1px solid #e9d59a; padding:.7rem 1rem; border-radius:3px; font-size:.92rem; margin: 1rem 0; }
+  #preview { display:none; margin-top:1rem; }
+  #preview iframe { width:100%; height: 620px; border:1px solid #cfc6b6; background:#fff; }
+  #msg { position: fixed; left: 1rem; right: 1rem; bottom: 1rem; max-width: 720px; margin: 0 auto; background: var(--night); color:#fff; padding:.8rem 1rem; border-radius: 4px; display:none; z-index: 10; }
+  input[type=file] { font-size: .95rem; margin: .3rem 0; max-width: 100%; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Preise &amp; Texte bearbeiten</h1>
+  <p class="lead">Great Hair Day · Leistungen-Seite und Startseite</p>
+
+  <div class="steps">
+    <strong>So geht's:</strong>
+    <ol>
+      <li>Werte unten ändern.</li>
+      <li>„Vorschau“ anschauen.</li>
+      <li>Datei herunterladen und im Scaleway-Bucket wieder hochladen (die alte Datei wird überschrieben).</li>
+    </ol>
+    Eine Preisänderung wird automatisch an <em>allen</em> Stellen übernommen: Preiszeile, Fragen &amp; Antworten, Google-Beschreibung und Suchmaschinen-Daten.
+  </div>
+
+  <h2>1 · Preise</h2>
+  <p class="hint">Nur die Zahl eingeben, das €-Zeichen kommt automatisch.</p>
+  <div class="grid" id="prices"></div>
+
+  <h2>2 · Texte der Leistungen-Seite</h2>
+  <p class="hint">In Texten kannst du Preise so einfügen: <code>{haarschnitt}</code>, <code>{haarschnitt_fohn}</code>, <code>{tonung}</code>, <code>{farbe}</code>, <code>{straehnen}</code>, <code>{kopfmassage}</code> – sie werden zu „55 €“ usw. Ein Link geht so: <code>[Terminbuchung](https://…)</code>.</p>
+  <div id="texts"></div>
+
+  <h2>3 · Häufige Fragen</h2>
+  <div id="faq"></div>
+  <button class="sec" onclick="addFaq()">+ Frage hinzufügen</button>
+
+  <h2>4 · Leistungen-Seite erzeugen</h2>
+  <button class="sec" onclick="showPreview()">Vorschau anzeigen</button>
+  <button onclick="downloadLeistungen()">leistungen.html herunterladen</button>
+  <div id="preview"><iframe id="frame" title="Vorschau"></iframe></div>
+  <p class="hint" style="margin-top:1rem">Hast du die Seite schon einmal mit diesem Werkzeug geändert und diese Datei geöffnet, findest du oben nicht deine letzten Werte? Dann lade hier deine aktuelle <code>leistungen.html</code>:</p>
+  <input type="file" accept=".html,text/html" onchange="loadLeistungen(this.files[0]); this.value=''">
+
+  <h2>5 · Startseite (optional)</h2>
+  <p class="hint">Wähle deine aktuelle <code>index.html</code>. Dann erscheinen die Texte der Startseite zum Ändern. Wenn du nur den Haarschnitt-Preis geändert hast, lade sie trotzdem einmal und lade sie wieder herunter – der Preis steckt auch dort in den Suchmaschinen-Daten.</p>
+  <input type="file" accept=".html,text/html" onchange="loadIndex(this.files[0]); this.value=''">
+  <div id="indexFields"></div>
+  <div id="indexActions" style="display:none">
+    <button onclick="downloadIndex()">index.html herunterladen</button>
+  </div>
+
+  <div class="warn"><strong>Nicht vergessen:</strong> Preise stehen auch bei <strong>stylisten.eu</strong> und im <strong>Google-Profil</strong>. Dort bitte ebenfalls ändern, damit überall dasselbe steht.</div>
+</div>
+<div id="msg"></div>
+
+<script>
+const TEMPLATE = "<!DOCTYPE html>\n<html lang=\"de\">\n<head>\n  <meta charset=\"UTF-8\" />\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\n  <title>Leistungen &amp; Preise – Friseur Wien 1050 | Great Hair Day<\/title>\n  <meta name=\"description\" content=\"{{META_DESC}}\" />\n  <link rel=\"canonical\" href=\"https://www.greathairday.at/leistungen.html\" />\n  <meta name=\"robots\" content=\"index, follow, max-image-preview:large\" />\n  <meta property=\"og:type\" content=\"website\" />\n  <meta property=\"og:locale\" content=\"de_AT\" />\n  <meta property=\"og:site_name\" content=\"Great Hair Day\" />\n  <meta property=\"og:title\" content=\"Leistungen &amp; Preise – Friseur Wien 1050 | Great Hair Day\" />\n  <meta property=\"og:description\" content=\"{{META_DESC}}\" />\n  <meta property=\"og:url\" content=\"https://www.greathairday.at/leistungen.html\" />\n  <meta name=\"twitter:card\" content=\"summary\" />\n  <link rel=\"icon\" type=\"image/svg+xml\" href=\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='10' fill='%23F5F0E8'/%3E%3Ctext x='32' y='46' font-family='Georgia,serif' font-size='44' font-weight='700' text-anchor='middle' fill='%23816a3c'%3EG%3C/text%3E%3C/svg%3E\" />\n  {{JSONLD}}\n  {{DATA}}\n  <link rel=\"preconnect\" href=\"https://fonts.googleapis.com\" />\n  <link rel=\"preconnect\" href=\"https://fonts.gstatic.com\" crossorigin />\n  <link href=\"https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Inter:wght@300;400;500;600&display=swap\" rel=\"stylesheet\" />\n  <style>\n    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }\n\n    :root {\n      --night:    #1A1A18;\n      --perg:     #F5F0E8;\n      --mokka:    #816a3c;\n      --leinen:   #C8B89A;\n      --seide:    #E8E0D4;\n      --white:    #FDFAF5;\n      --font-display: 'Playfair Display', Georgia, serif;\n      --font-body:    'Inter', system-ui, sans-serif;\n    }\n\n    html { scroll-behavior: smooth; }\n\n    body {\n      background: var(--perg);\n      color: var(--night);\n      font-family: var(--font-body);\n      font-size: 16px;\n      line-height: 1.65;\n      -webkit-font-smoothing: antialiased;\n    }\n\n    /* ── NAV ── */\n    nav {\n      position: fixed; top: 0; left: 0; right: 0; z-index: 100;\n      display: flex; align-items: center; justify-content: space-between;\n      padding: 1.2rem 2.5rem;\n      background: rgba(245,240,232,0.92);\n      backdrop-filter: blur(8px);\n      border-bottom: 1px solid var(--seide);\n    }\n    .nav-logo {\n      font-family: var(--font-display);\n      font-size: 1.15rem;\n      font-weight: 700;\n      letter-spacing: 0.02em;\n      color: var(--night);\n      text-decoration: none;\n    }\n    .nav-logo span { color: var(--mokka); }\n    .nav-links { display: flex; gap: 2rem; list-style: none; }\n    .nav-links a {\n      font-size: 0.82rem;\n      letter-spacing: 0.08em;\n      text-transform: uppercase;\n      font-weight: 500;\n      color: var(--night);\n      text-decoration: none;\n      transition: color 0.2s;\n    }\n    .nav-links a:hover { color: var(--mokka); }\n    .nav-links a.current { color: var(--mokka); }\n    .nav-cta {\n      background: var(--mokka);\n      color: var(--white) !important;\n      padding: 0.55rem 1.3rem;\n      border-radius: 2px;\n      transition: background 0.2s !important;\n    }\n    .nav-cta:hover { background: var(--night) !important; }\n    .nav-toggle {\n      display: none;\n      width: 36px; height: 36px;\n      background: none;\n      border: none;\n      padding: 0;\n      cursor: pointer;\n      align-items: center;\n      justify-content: center;\n    }\n    .nav-toggle span,\n    .nav-toggle span::before,\n    .nav-toggle span::after {\n      content: '';\n      display: block;\n      width: 22px; height: 2px;\n      background: var(--night);\n    }\n    .nav-toggle span { position: relative; }\n    .nav-toggle span::before { position: absolute; top: -7px; }\n    .nav-toggle span::after { position: absolute; top: 7px; }\n\n    /* ── NAV: kein Zeilenumbruch; Menü-Button schon ab Tablet-/Desktop-Ansicht am Handy ── */\n    .nav-logo, .nav-links a { white-space: nowrap; }\n    @media (max-width: 1024px) {\n      nav { padding: 1rem 1.2rem; }\n      .nav-links { display: none; }\n      .nav-toggle { display: inline-flex; }\n      .nav-links.open {\n        display: flex;\n        flex-direction: column;\n        position: absolute;\n        top: 100%; left: 0; right: 0;\n        background: var(--perg);\n        border-bottom: 1px solid var(--seide);\n        padding: 1.2rem;\n        gap: 1.2rem;\n      }\n      .nav-links.open a { display: block; }\n      .nav-links.open .nav-cta { text-align: center; }\n    }\n\n    /* ── PAGE HEADER ── */\n    #kopf {\n      padding: 9rem 2.5rem 4rem;\n      max-width: 1100px; margin: 0 auto;\n    }\n    .section-eyebrow {\n      font-size: 0.72rem;\n      letter-spacing: 0.18em;\n      text-transform: uppercase;\n      color: var(--mokka);\n      font-weight: 500;\n      margin-bottom: 1rem;\n    }\n    .page-title {\n      font-family: var(--font-display);\n      font-size: clamp(2.2rem, 5vw, 3.4rem);\n      font-weight: 700;\n      line-height: 1.15;\n      margin-bottom: 1.3rem;\n      max-width: 700px;\n      text-wrap: balance;\n    }\n    .page-sub {\n      font-size: 1.05rem;\n      color: #5a5a52;\n      max-width: 560px;\n      line-height: 1.7;\n    }\n\n    /* ── SECTIONS GENERAL ── */\n    section { padding: 0 2.5rem 6rem; }\n    .container { max-width: 1100px; margin: 0 auto; }\n\n    /* ── PREISE ── */\n    .preis-row {\n      display: flex;\n      justify-content: space-between;\n      align-items: center;\n      gap: 1.5rem;\n      padding: 1.8rem 0;\n      border-top: 1px solid var(--seide);\n    }\n    .preis-row:last-of-type { border-bottom: 1px solid var(--seide); }\n    .preis-info { min-width: 0; }\n    .preis-info h3 {\n      font-family: var(--font-display);\n      font-size: 1.35rem;\n      font-weight: 700;\n      margin-bottom: 0.35rem;\n    }\n    .preis-info p {\n      font-size: 0.92rem;\n      color: #6a6a60;\n      max-width: 420px;\n    }\n    .preis-amount {\n      font-family: var(--font-display);\n      font-size: 1.5rem;\n      font-weight: 700;\n      color: var(--mokka);\n      white-space: nowrap;\n      flex-shrink: 0;\n      text-align: right;\n      min-width: 90px;\n    }\n    .preis-amount .von { font-size: 0.85rem; font-weight: 500; color: #8a8a80; margin-right: 0.3rem; }\n\n    .zusatz-row {\n      display: flex;\n      justify-content: space-between;\n      align-items: center;\n      gap: 1.5rem;\n      padding: 1.1rem 1.4rem;\n      background: var(--white);\n      border-radius: 3px;\n      margin-top: 1.5rem;\n      font-size: 0.92rem;\n    }\n    .zusatz-row .label { color: #5a5a52; }\n    .zusatz-row .amount { font-family: var(--font-display); font-weight: 700; color: var(--mokka); }\n\n    .preis-hinweis {\n      margin-top: 2rem;\n      font-size: 0.88rem;\n      color: #6a6a60;\n      max-width: 620px;\n      line-height: 1.7;\n    }\n\n    /* ── FAQ ── */\n    #faq h2 {\n      font-family: var(--font-display);\n      font-size: clamp(1.8rem, 3.5vw, 2.4rem);\n      font-weight: 700;\n      margin-bottom: 2rem;\n    }\n    .faq-item { padding: 1.5rem 0; border-top: 1px solid var(--seide); }\n    .faq-item:last-of-type { border-bottom: 1px solid var(--seide); }\n    .faq-item h3 {\n      font-family: var(--font-display);\n      font-size: 1.15rem;\n      font-weight: 700;\n      margin-bottom: 0.4rem;\n    }\n    .faq-item p { font-size: 0.92rem; color: #6a6a60; max-width: 620px; line-height: 1.7; }\n    .faq-item a { color: var(--mokka); }\n\n    /* ── ALPHA COOLING ── */\n    #cooling {\n      background: var(--night);\n      padding: 5rem 2.5rem;\n    }\n    #cooling .container {\n      display: grid;\n      grid-template-columns: 1fr 1fr;\n      gap: 4rem;\n      align-items: center;\n    }\n    #cooling .section-eyebrow { color: var(--leinen); }\n    #cooling h2 {\n      font-family: var(--font-display);\n      font-size: clamp(1.8rem, 3.5vw, 2.4rem);\n      font-weight: 700;\n      color: var(--white);\n      margin-bottom: 1.2rem;\n    }\n    #cooling p { color: #b0a898; margin-bottom: 1.3rem; line-height: 1.8; }\n    .btn-light {\n      display: inline-block;\n      background: var(--white);\n      color: var(--mokka);\n      padding: 0.9rem 2.2rem;\n      font-size: 0.92rem;\n      font-weight: 600;\n      letter-spacing: 0.04em;\n      text-decoration: none;\n      border-radius: 2px;\n      transition: all 0.2s;\n    }\n    .btn-light:hover { background: var(--mokka); color: var(--white); }\n    .cooling-card {\n      background: rgba(255,255,255,0.04);\n      border: 1px solid rgba(200,184,154,0.2);\n      padding: 2.5rem;\n      border-radius: 3px;\n      text-align: center;\n    }\n    .cooling-card .icon { font-size: 3.2rem; margin-bottom: 1.2rem; }\n    .cooling-card p { color: #8a8a80; font-size: 0.86rem; margin-bottom: 0; }\n\n    /* ── TERMIN CTA ── */\n    #termin-cta {\n      background: var(--mokka);\n      text-align: center;\n      padding: 5rem 2.5rem;\n    }\n    #termin-cta h2 {\n      font-family: var(--font-display);\n      font-size: clamp(1.7rem, 3.5vw, 2.4rem);\n      font-weight: 700;\n      color: var(--white);\n      margin-bottom: 1rem;\n    }\n    #termin-cta p { color: rgba(255,255,255,0.85); max-width: 460px; margin: 0 auto 2rem; }\n\n    /* ── FOOTER ── */\n    footer {\n      background: var(--night);\n      color: #8a8a80;\n      padding: 3rem 2.5rem;\n    }\n    .footer-inner {\n      max-width: 1100px; margin: 0 auto;\n      display: flex; justify-content: space-between; align-items: flex-start;\n      flex-wrap: wrap; gap: 2rem;\n    }\n    .footer-brand .nav-logo { color: var(--perg); margin-bottom: 0.5rem; display: block; }\n    .footer-brand p { font-size: 0.84rem; max-width: 260px; line-height: 1.6; }\n    .footer-contact { font-size: 0.88rem; line-height: 2; }\n    .footer-contact a { color: var(--leinen); text-decoration: none; }\n    .footer-contact a:hover { color: var(--white); }\n    .footer-bottom {\n      max-width: 1100px; margin: 2rem auto 0;\n      border-top: 1px solid #2a2a28;\n      padding-top: 1.5rem;\n      font-size: 0.78rem;\n      text-align: center;\n    }\n\n    /* ── RESPONSIVE ── */\n    @media (max-width: 768px) {\n      nav { padding: 1rem 1.2rem; }\n      .nav-links { display: none; }\n      .nav-toggle { display: inline-flex; }\n      .nav-links.open {\n        display: flex;\n        flex-direction: column;\n        position: absolute;\n        top: 100%; left: 0; right: 0;\n        background: var(--perg);\n        border-bottom: 1px solid var(--seide);\n        padding: 1.2rem;\n        gap: 1.2rem;\n      }\n      .nav-links.open a { display: block; }\n      .nav-links.open .nav-cta { text-align: center; }\n      #kopf, section { padding-left: 1.2rem; padding-right: 1.2rem; }\n      #cooling .container { grid-template-columns: 1fr; gap: 2.5rem; }\n      .preis-row { flex-direction: column; gap: 0.4rem; }\n      .footer-inner { flex-direction: column; }\n    }\n\n    /* ── SCROLL ANIMATION ── */\n    .fade-in { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease, transform 0.6s ease; }\n    .fade-in.visible { opacity: 1; transform: translateY(0); }\n  <\/style>\n<\/head>\n<body>\n\n  <!-- NAV -->\n  <nav>\n    <a href=\"index.html#hero\" class=\"nav-logo\">Great Hair<span>.<\/span>Day<\/a>\n    <button class=\"nav-toggle\" id=\"navToggle\" aria-label=\"Menü öffnen\" aria-expanded=\"false\" aria-controls=\"navLinks\">\n      <span><\/span>\n    <\/button>\n    <ul class=\"nav-links\" id=\"navLinks\">\n      <li><a href=\"index.html#ueber\">Über uns<\/a><\/li>\n      <li><a href=\"leistungen.html\" class=\"current\">Leistungen<\/a><\/li>\n      <li><a href=\"index.html#team\">Team<\/a><\/li>\n      <li><a href=\"index.html#stimmen\">Stimmen<\/a><\/li>\n      <li><a href=\"index.html#impressum\">Impressum<\/a><\/li>\n      <li><a href=\"https://stylisten.eu/pranz#online-buchung\" target=\"_blank\" class=\"nav-cta\">Termin buchen<\/a><\/li>\n    <\/ul>\n  <\/nav>\n\n  <!-- KOPF -->\n  <section id=\"kopf\" style=\"padding-bottom:0;\">\n    <p class=\"section-eyebrow\">Leistungen & Preise<\/p>\n    <h1 class=\"page-title\">{{kopf_title}}<\/h1>\n    <p class=\"page-sub\">{{kopf_sub}}<\/p>\n  <\/section>\n\n  <!-- PREISE -->\n  <section id=\"preise\">\n    <div class=\"container\">\n      <div class=\"preis-row\">\n        <div class=\"preis-info\">\n          <h3>Haarschnitt<\/h3>\n          <p>{{row_haarschnitt}}<\/p>\n        <\/div>\n        <div class=\"preis-amount\"><span class=\"von\">ab<\/span>&nbsp;{{n_haarschnitt}} €<\/div>\n      <\/div>\n      <div class=\"preis-row\">\n        <div class=\"preis-info\">\n          <h3>Farbe<\/h3>\n          <p>{{row_farbe}}<\/p>\n        <\/div>\n        <div class=\"preis-amount\"><span class=\"von\">ab<\/span>&nbsp;{{n_farbe}} €<\/div>\n      <\/div>\n      <div class=\"preis-row\">\n        <div class=\"preis-info\">\n          <h3>Strähnen<\/h3>\n          <p>{{row_straehnen}}<\/p>\n        <\/div>\n        <div class=\"preis-amount\"><span class=\"von\">ab<\/span>&nbsp;{{n_straehnen}} €<\/div>\n      <\/div>\n\n      <div class=\"zusatz-row\">\n        <span class=\"label\">Kopfmassage <span style=\"color:#a8a296;\">{{zusatz}}<\/span><\/span>\n        <span class=\"amount\">{{n_kopfmassage}} €<\/span>\n      <\/div>\n\n      <p class=\"preis-hinweis\">{{hinweis}}<\/p>\n    <\/div>\n  <\/section>\n\n  <!-- FAQ -->\n  <section id=\"faq\">\n    <div class=\"container\">\n      <p class=\"section-eyebrow\">Häufige Fragen<\/p>\n      <h2>Kurz beantwortet.<\/h2>\n{{FAQ_ITEMS}}    <\/div>\n  <\/section>\n\n  <!-- ALPHA COOLING -->\n  <section id=\"cooling\" style=\"padding-left:0; padding-right:0;\">\n    <div class=\"container\">\n      <div>\n        <p class=\"section-eyebrow\">Eigener Bereich<\/p>\n        <h2>Alpha-Cooling<\/h2>\n        <p>{{cooling_1}}<\/p>\n        <p style=\"font-size:0.85rem; color:#8a8a80; margin-bottom:1.5rem;\">{{cooling_2}}<\/p>\n        <a href=\"https://mitderkraftderkaelte.at/\" target=\"_blank\" class=\"btn-light\">Mehr über Alpha-Cooling<\/a>\n      <\/div>\n      <div class=\"cooling-card\">\n        <div class=\"icon\">❄️<\/div>\n        <p>{{cooling_card}}<\/p>\n      <\/div>\n    <\/div>\n  <\/section>\n\n  <!-- TERMIN CTA -->\n  <section id=\"termin-cta\" style=\"padding-left:0; padding-right:0;\">\n    <div class=\"container\">\n      <h2>{{cta_title}}<\/h2>\n      <p>{{cta_sub}}<\/p>\n      <a href=\"https://stylisten.eu/pranz#online-buchung\" target=\"_blank\" class=\"btn-light\">Online Termin buchen<\/a>\n    <\/div>\n  <\/section>\n\n  <!-- FOOTER -->\n  <footer>\n    <div class=\"footer-inner\">\n      <div class=\"footer-brand\">\n        <a href=\"index.html#hero\" class=\"nav-logo\">Great Hair<span style=\"color:var(--mokka)\">.<\/span>Day<\/a>\n        <p>Mirjam Walenta – Friseurmeisterin.<br>Rechte Wienzeile 47, 1050 Wien.<\/p>\n      <\/div>\n      <div class=\"footer-contact\">\n        <p>📍 Rechte Wienzeile 47, 1050 Wien<\/p>\n        <p>📞 <a href=\"tel:+4315863130\">+43 1 586 31 30<\/a><\/p>\n        <p>✉️ <a href=\"mailto:walenta@greathairday.at\">walenta@greathairday.at<\/a><\/p>\n        <p>🌐 <a href=\"https://www.greathairday.at\">www.greathairday.at<\/a><\/p>\n        <p>📅 <a href=\"https://stylisten.eu/pranz#online-buchung\" target=\"_blank\">Termin buchen<\/a><\/p>\n        <p>⭐ <a href=\"https://search.google.com/local/writereview?placeid=ChIJnyK9EIYHbUcRR4LnXOCA3OI\" target=\"_blank\">Bewertung abgeben<\/a><\/p>\n        <p>📷 <a href=\"https://www.instagram.com/m.walenta_a.great.hair.day/\" target=\"_blank\" rel=\"noopener\">Instagram<\/a><\/p>\n        <p>👍 <a href=\"https://www.facebook.com/pranz.at\" target=\"_blank\" rel=\"noopener\">Facebook<\/a><\/p>\n      <\/div>\n    <\/div>\n    <div class=\"footer-bottom\">\n      © 2026 Mirjam Walenta · Great Hair Day Wien · Alle Rechte vorbehalten. · <a href=\"index.html#impressum\" style=\"color:inherit;\">Impressum<\/a>\n    <\/div>\n  <\/footer>\n\n  <script>\n    // Mobile nav toggle\n    const navToggle = document.getElementById('navToggle');\n    const navLinks = document.getElementById('navLinks');\n    navToggle.addEventListener('click', () => {\n      const isOpen = navLinks.classList.toggle('open');\n      navToggle.setAttribute('aria-expanded', String(isOpen));\n    });\n    navLinks.querySelectorAll('a').forEach(link => {\n      link.addEventListener('click', () => {\n        navLinks.classList.remove('open');\n        navToggle.setAttribute('aria-expanded', 'false');\n      });\n    });\n\n    // Scroll-triggered fade-in\n    const observer = new IntersectionObserver((entries) => {\n      entries.forEach(e => {\n        if (e.isIntersecting) {\n          e.target.classList.add('visible');\n          observer.unobserve(e.target);\n        }\n      });\n    }, { threshold: 0.12 });\n\n    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));\n  <\/script>\n\n<\/body>\n<\/html>\n";
+const DEFAULTS = {"prices": {"haarschnitt": "55", "haarschnitt_fohn": "69", "tonung": "59", "farbe": "65", "straehnen": "75", "kopfmassage": "20"}, "texts": {"kopf_title": "Womit du ungefähr rechnen kannst.", "kopf_sub": "Die folgenden Preise sind Richtwerte. Ausschlaggebend ist vor allem der Zeitaufwand – Haarlänge, Technik und gewünschtes Finish können mit hineinspielen. Das besprechen wir vor der Behandlung kurz mit dir.", "row_haarschnitt": "Schnitt, Beratung und Pflege – in einem. Ohne Föhnen; mit Föhnen ab {haarschnitt_fohn}.", "row_farbe": "Ansatzfarbe, abgestimmt auf dein Haar. Tönung ab {tonung}.", "row_straehnen": "Von einzelnen Akzenten bis zur vollen Balayage.", "zusatz": "· kleine Ergänzung zum Termin", "hinweis": "Die Preise sind Richtwerte ab dem genannten Betrag, keine Festpreise. Entscheidend ist vor allem der tatsächliche Zeitaufwand – Haarlänge, Technik und gewünschtes Finish können mit hineinspielen. Bei Unsicherheit einfach vorab fragen, dann schätzen wir das gemeinsam ein.", "cooling_1": "Eine moderne Kälteanwendung im Salon – ein eigenständiges Angebot, das sich auch gut mit einem Friseurtermin verbinden lässt. Für Regeneration und Energie, einzeln buchbar oder direkt im Anschluss an Schnitt und Styling.", "cooling_2": "Kein Teil der Friseurleistungen – Preise dazu direkt bei Alpha-Cooling.", "cooling_card": "Kälteanwendung als eigener Bereich im Salon – auch kombinierbar mit einem Friseurtermin.", "cta_title": "Wann passt es dir?", "cta_sub": "Ein paar Klicks, dann steht der Termin."}, "faq": [{"q": "Was kostet ein Haarschnitt bei Great Hair Day?", "a": "Ein Haarschnitt inklusive Beratung und Pflege kostet ab {haarschnitt} (ohne Föhnen), mit Föhnen ab {haarschnitt_fohn}. Der genaue Preis richtet sich nach dem Zeitaufwand – Haarlänge, Technik und gewünschtes Finish spielen mit hinein. Das besprechen wir vor der Behandlung kurz mit dir."}, {"q": "Was kostet Färben oder Balayage?", "a": "Eine Tönung gibt es ab {tonung}, Ansatzfarbe ab {farbe}, Strähnen – von einzelnen Akzenten bis zur vollen Balayage – ab {straehnen}. Das sind Richtwerte, keine Festpreise."}, {"q": "Gibt es im Salon auch einen Herrenservice?", "a": "Ja. Der Herrenservice umfasst klassische und moderne Herrenschnitte sowie Bartpflege."}, {"q": "Kann ich eine Kopfmassage dazubuchen?", "a": "Ja, die Kopfmassage ist eine kleine Ergänzung zu deinem Termin und kostet {kopfmassage}."}, {"q": "Wie kann ich einen Termin buchen?", "a": "Am einfachsten online über unsere [Terminbuchung](https://stylisten.eu/pranz#online-buchung). Du erreichst uns auch telefonisch unter +43 1 586 31 30."}, {"q": "Wann hat der Salon geöffnet?", "a": "Dienstag und Mittwoch 9–18 Uhr, Donnerstag und Freitag 9–19 Uhr, Samstag 8–14 Uhr. Montag, Sonntag und an Feiertagen ist geschlossen."}, {"q": "Wo finde ich den Salon?", "a": "Great Hair Day, Rechte Wienzeile 47, 1050 Wien (5. Bezirk, Margareten)."}, {"q": "Was ist Alpha-Cooling und lässt es sich mit einem Friseurtermin kombinieren?", "a": "Alpha-Cooling ist eine moderne Kälteanwendung im Salon für Regeneration und Energie. Du kannst sie einzeln buchen oder direkt im Anschluss an Schnitt und Styling. Die Preise findest du direkt bei Alpha-Cooling."}]};
+let data = JSON.parse(JSON.stringify(DEFAULTS));
+let indexSrc = null, indexFields = {}, indexOrig = {};
+
+const PRICE_LABELS = {
+  haarschnitt: 'Haarschnitt (ohne Föhnen) ab',
+  haarschnitt_fohn: 'Haarschnitt mit Föhnen ab',
+  tonung: 'Tönung ab',
+  farbe: 'Farbe (Ansatzfarbe) ab',
+  straehnen: 'Strähnen ab',
+  kopfmassage: 'Kopfmassage'
+};
+const TEXT_LABELS = {
+  kopf_title: 'Überschrift der Seite',
+  kopf_sub: 'Text unter der Überschrift',
+  row_haarschnitt: 'Haarschnitt – Beschreibung',
+  row_farbe: 'Farbe – Beschreibung',
+  row_straehnen: 'Strähnen – Beschreibung',
+  zusatz: 'Kopfmassage – Zusatz',
+  hinweis: 'Hinweis unter den Preisen',
+  cooling_1: 'Alpha-Cooling – Text',
+  cooling_2: 'Alpha-Cooling – kleiner Hinweis',
+  cooling_card: 'Alpha-Cooling – Kasten rechts',
+  cta_title: 'Schlussbereich – Überschrift',
+  cta_sub: 'Schlussbereich – Text'
+};
+const INDEX_GROUPS = [
+  ['Start – oberer Bereich', {
+    hero_eyebrow: 'Zeile über der Überschrift', hero_sub: 'Text unter der Überschrift',
+    stat_num_1: 'Zahl 1 (z. B. 33+)', stat_label_1: 'Beschriftung 1',
+    stat_num_2: 'Zahl 2', stat_label_2: 'Beschriftung 2',
+    stat_num_3: 'Zahl 3', stat_label_3: 'Beschriftung 3' }],
+  ['Über uns', { ueber_text: 'Text „Über uns“' }],
+  ['Leistungen', {
+    leistungen_intro: 'Einleitung', card_damen: 'Damenservice', card_herren: 'Herrenservice',
+    card_faerben: 'Färben & Umformung', card_wellness: 'Massagen & Wellness',
+    card_brow: 'Brow & Lash Lifting', card_makeup: 'Make-up' }],
+  ['Alpha-Cooling', { cooling_2: 'Zweiter Absatz', cooling_card: 'Kasten rechts' }],
+  ['Team', { team_intro: 'Einleitung', team_mazen: 'Mazen', team_alina: 'Alina', team_hassan: 'Hassan', team_isa: 'Isa' }],
+  ['Stimmen', {
+    stimmen_intro: 'Einleitung',
+    review_1: 'Bewertung 1', author_1: 'Wer (Bewertung 1)',
+    review_2: 'Bewertung 2', author_2: 'Wer (Bewertung 2)',
+    review_3: 'Bewertung 3', author_3: 'Wer (Bewertung 3)' }],
+  ['Termin', { termin_sub: 'Text über dem Buchungs-Button' }]
+];
+
+/* ---------- Hilfsfunktionen ---------- */
+const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+const escAttr = s => esc(s).replace(/"/g,'&quot;');
+const priceStr = k => String(data.prices[k]).trim();
+const expand = t => String(t).replace(/\{(\w+)\}/g, (m,k) => (k in data.prices) ? priceStr(k) + ' €' : m);
+const LINK = /\[([^\]]+)\]\((https?:\/\/[^)\s]+)\)/g;
+const html = t => esc(expand(t)).replace(LINK, (m,a,b) => '<a href="' + b + '" target="_blank">' + a + '</a>');
+const plain = t => expand(t).replace(LINK, '$1');
+const num = v => parseFloat(String(v).replace(',', '.'));
+const jsonScript = (obj, type, extra) => '<script type="' + type + '"' + (extra||'') + '>' + (type==='application/ld+json'
+    ? '\n  ' + JSON.stringify(obj, null, 2).replace(/</g,'\\u003c').replace(/\n/g,'\n  ') + '\n  '
+    : JSON.stringify(obj).replace(/</g,'\\u003c')) + '<\/script>';
+
+function toast(t) { const m = document.getElementById('msg'); m.textContent = t; m.style.display = 'block'; clearTimeout(toast.t); toast.t = setTimeout(() => m.style.display = 'none', 4500); }
+
+/* ---------- Seite bauen ---------- */
+function validate() {
+  for (const k in PRICE_LABELS) {
+    if (!/^\d+([.,]\d+)?$/.test(String(data.prices[k]).trim())) { toast('Bitte bei „' + PRICE_LABELS[k] + '“ nur eine Zahl eingeben.'); return false; }
+  }
+  return true;
+}
+function ldJson() {
+  const base = 'https://www.greathairday.at', salon = base + '/#salon';
+  const off = (name, desc, key, fixed) => {
+    const o = { '@type': 'Offer', itemOffered: { '@type': 'Service', name, description: desc, provider: { '@id': salon } } };
+    if (fixed) { o.price = num(data.prices[key]); o.priceCurrency = 'EUR'; }
+    else { o.priceSpecification = { '@type': 'PriceSpecification', minPrice: num(data.prices[key]), priceCurrency: 'EUR' }; }
+    return o;
+  };
+  const g = { '@context': 'https://schema.org', '@graph': [
+    { '@type': 'HairSalon', '@id': salon, name: 'Mirjam Walenta - A great hair day', url: base + '/',
+      hasOfferCatalog: { '@type': 'OfferCatalog', name: 'Leistungen & Preise', itemListElement: [
+        off('Haarschnitt', 'Schnitt, Beratung und Pflege, ohne Föhnen.', 'haarschnitt'),
+        off('Haarschnitt & Föhnen', 'Haarschnitt inklusive Föhnen.', 'haarschnitt_fohn'),
+        off('Tönung', 'Tönung, abgestimmt auf das Haar.', 'tonung'),
+        off('Farbe', 'Ansatzfarbe, abgestimmt auf das Haar.', 'farbe'),
+        off('Strähnen', 'Von einzelnen Akzenten bis zur vollen Balayage.', 'straehnen'),
+        off('Kopfmassage', 'Kleine Ergänzung zum Friseurtermin.', 'kopfmassage', true) ] } },
+    { '@type': 'FAQPage', '@id': base + '/leistungen.html#faq',
+      mainEntity: data.faq.map(f => ({ '@type': 'Question', name: plain(f.q), acceptedAnswer: { '@type': 'Answer', text: plain(f.a) } })) }
+  ] };
+  return jsonScript(g, 'application/ld+json');
+}
+function build() {
+  const p = k => priceStr(k);
+  const metaDesc = 'Preise beim Friseur Great Hair Day in Wien 1050: Haarschnitt ab ' + p('haarschnitt') + ' €, mit Föhnen ab ' + p('haarschnitt_fohn')
+    + ' €, Tönung ab ' + p('tonung') + ' €, Farbe ab ' + p('farbe') + ' €, Strähnen ab ' + p('straehnen') + ' €.';
+  const tokens = {
+    META_DESC: escAttr(metaDesc),
+    JSONLD: ldJson(),
+    DATA: jsonScript(data, 'application/json', ' id="seite-daten"'),
+    FAQ_ITEMS: data.faq.map(f => '      <div class="faq-item">\n        <h3>' + esc(expand(f.q)) + '</h3>\n        <p>' + html(f.a) + '</p>\n      </div>\n').join('')
+  };
+  for (const k in data.texts) tokens[k] = html(data.texts[k]);
+  for (const k in data.prices) tokens['n_' + k] = esc(p(k));
+  return TEMPLATE.replace(/\{\{(\w+)\}\}/g, (m, k) => (k in tokens) ? tokens[k] : m);
+}
+function download(name, text) {
+  const b = new Blob([text], { type: 'text/html;charset=utf-8' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(b); a.download = name; document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(a.href), 3000);
+}
+function showPreview() {
+  if (!validate()) return;
+  document.getElementById('frame').srcdoc = build();
+  const pv = document.getElementById('preview'); pv.style.display = 'block'; pv.scrollIntoView({ behavior: 'smooth' });
+}
+function downloadLeistungen() {
+  if (!validate()) return;
+  download('leistungen.html', build());
+  toast('leistungen.html wurde heruntergeladen. Jetzt im Scaleway-Bucket hochladen.');
+}
+async function loadLeistungen(file) {
+  if (!file) return;
+  const txt = await file.text();
+  const m = txt.match(/<script type="application\/json" id="seite-daten">([\s\S]*?)<\/script>/);
+  if (!m) { toast('In dieser Datei fehlen die gespeicherten Werte – bitte die zuletzt mit diesem Werkzeug erzeugte leistungen.html wählen.'); return; }
+  try {
+    const d = JSON.parse(m[1]);
+    if (!d.prices || !d.texts || !d.faq) throw 0;
+    data = d; renderAll(); toast('Werte aus deiner Datei geladen.');
+  } catch (e) { toast('Die Datei konnte nicht gelesen werden.'); }
+}
+
+/* ---------- Startseite ---------- */
+function patchEdit(src, key, value) {
+  const re = new RegExp('(<([a-zA-Z0-9]+)\\b[^>]*\\sdata-edit="' + key + '"[^>]*>)([\\s\\S]*?)(</\\2>)');
+  if (!re.test(src)) throw new Error('Feld nicht gefunden: ' + key);
+  return src.replace(re, (m, open, tag, inner, close) => open + esc(value) + close);
+}
+function buildIndex() {
+  let s = indexSrc;
+  for (const k in indexFields) {
+    const v = indexFields[k].replace(/\s+/g, ' ').trim();
+    if (v !== indexOrig[k]) s = patchEdit(s, k, v);
+  }
+  s = s.replace(/("priceRange":\s*")[^"]*(")/, (m, a, b) => a + 'ab ' + priceStr('haarschnitt') + ' €' + b);
+  return s;
+}
+async function loadIndex(file) {
+  if (!file) return;
+  indexSrc = await file.text();
+  const doc = new DOMParser().parseFromString(indexSrc, 'text/html');
+  indexFields = {};
+  doc.querySelectorAll('[data-edit]').forEach(el => { indexFields[el.getAttribute('data-edit')] = el.textContent.replace(/\s+/g, ' ').trim(); });
+  indexOrig = Object.assign({}, indexFields);
+  if (!Object.keys(indexFields).length) { toast('In dieser Datei wurden keine bearbeitbaren Texte gefunden.'); indexSrc = null; return; }
+  renderIndex();
+}
+function downloadIndex() {
+  if (!indexSrc || !validate()) return;
+  try { download('index.html', buildIndex()); toast('index.html wurde heruntergeladen. Jetzt im Scaleway-Bucket hochladen.'); }
+  catch (e) { toast(e.message); }
+}
+
+/* ---------- Formulare ---------- */
+function field(label, value, onInput, rows) {
+  const wrap = document.createElement('div');
+  const l = document.createElement('label'); l.textContent = label; wrap.appendChild(l);
+  let el;
+  if (rows) { el = document.createElement('textarea'); el.rows = rows; }
+  else { el = document.createElement('input'); el.type = 'text'; }
+  el.value = value; el.addEventListener('input', () => onInput(el.value)); wrap.appendChild(el);
+  return wrap;
+}
+function renderPrices() {
+  const box = document.getElementById('prices'); box.innerHTML = '';
+  for (const k in PRICE_LABELS) {
+    const w = document.createElement('div');
+    const l = document.createElement('label'); l.textContent = PRICE_LABELS[k]; w.appendChild(l);
+    const row = document.createElement('div'); row.className = 'price-input';
+    const i = document.createElement('input'); i.type = 'text'; i.inputMode = 'decimal'; i.value = data.prices[k];
+    i.addEventListener('input', () => data.prices[k] = i.value);
+    row.appendChild(i); row.appendChild(document.createTextNode('€')); w.appendChild(row); box.appendChild(w);
+  }
+}
+function renderTexts() {
+  const box = document.getElementById('texts'); box.innerHTML = '';
+  for (const k in TEXT_LABELS) box.appendChild(field(TEXT_LABELS[k], data.texts[k], v => data.texts[k] = v, (data.texts[k].length > 70) ? 4 : 0));
+}
+function renderFaq() {
+  const box = document.getElementById('faq'); box.innerHTML = '';
+  data.faq.forEach((f, i) => {
+    const card = document.createElement('div'); card.className = 'faq-card';
+    card.appendChild(field('Frage ' + (i + 1), f.q, v => f.q = v, 0));
+    card.appendChild(field('Antwort', f.a, v => f.a = v, 4));
+    const d = document.createElement('button'); d.className = 'del'; d.textContent = 'Diese Frage löschen';
+    d.onclick = () => { if (confirm('Frage wirklich löschen?')) { data.faq.splice(i, 1); renderFaq(); } };
+    card.appendChild(d); box.appendChild(card);
+  });
+}
+function addFaq() { data.faq.push({ q: '', a: '' }); renderFaq(); }
+function renderIndex() {
+  const box = document.getElementById('indexFields'); box.innerHTML = '';
+  INDEX_GROUPS.forEach(([title, fields]) => {
+    const h = document.createElement('h3'); h.textContent = title; box.appendChild(h);
+    for (const k in fields) if (k in indexFields) box.appendChild(field(fields[k], indexFields[k], v => indexFields[k] = v, indexFields[k].length > 70 ? 4 : 0));
+  });
+  document.getElementById('indexActions').style.display = 'block';
+}
+function renderAll() { renderPrices(); renderTexts(); renderFaq(); }
+renderAll();
+</script>
+</body>
+</html>
