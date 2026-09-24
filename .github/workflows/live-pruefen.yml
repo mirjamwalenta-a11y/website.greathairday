@@ -18,4 +18,9 @@ jobs:
             echo "--- Adress-Link in der Fußzeile:"
             grep -o '📍</span> <a href="[^"]*"' seite.html || grep -o 'maps[^"]*' seite.html | head -5 || echo "(kein Maps-Link gefunden)"
             echo "--- Datenschutz-Link vorhanden: $(grep -c 'datenschutz.html' seite.html)"
+            ziel=$(grep -o '📍</span> <a href="[^"]*"' seite.html | sed 's/.*href="//; s/"$//' | sed 's/&amp;/\&/g')
+            if [ -n "$ziel" ]; then
+              echo "--- Wohin führt der Adress-Link? ($ziel)"
+              curl -sS -o /dev/null -L --max-redirs 6 -A "Mozilla/5.0 (Linux; Android 14) Mobile" -w "Endziel: %{url_effective}\n" "$ziel" || true
+            fi
           done
