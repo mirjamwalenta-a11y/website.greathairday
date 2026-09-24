@@ -5,16 +5,48 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Bewertung abgeben – Great Hair Day</title>
   <meta name="robots" content="noindex" />
-  <!-- Kurze Adresse für den QR-Code an der Kassa. Ändert Google den Link, nur hier anpassen. -->
-  <meta http-equiv="refresh" content="0; url=https://www.google.com/search?q=Mirjam+Walenta+-+A+great+hair+day&amp;kgmid=/g/1tzzt9dr&amp;hl=de-AT#lrd=0x476d078610bd229f:0xe2dc80e05ce78247,3" />
+  <!-- Kurzadresse für den QR-Code an der Kassa. Ändert Google den Link, nur hier anpassen.
+       Bewusst ein Knopf statt automatischer Weiterleitung: Google öffnet das Fenster
+       "Rezension schreiben" am Handy nur nach einem echten Tippen. -->
+  <link rel="preload" href="../fonts/playfair.woff2" as="font" type="font/woff2" crossorigin />
   <style>
-    body { margin: 0; min-height: 100vh; display: flex; align-items: center; justify-content: center; background: #F5F0E8; color: #1A1A18; font-family: system-ui, -apple-system, 'Segoe UI', sans-serif; text-align: center; padding: 1.5rem; }
-    a { color: #6f5a30; font-weight: 600; }
+    @font-face { font-family: 'Playfair Display'; font-style: normal; font-weight: 400 900; font-display: swap; src: url(../fonts/playfair.woff2) format('woff2'); }
+    @font-face { font-family: 'Playfair Display'; font-style: italic; font-weight: 400 900; font-display: swap; src: url(../fonts/playfair-italic.woff2) format('woff2'); }
+    @font-face { font-family: 'Inter'; font-style: normal; font-weight: 300 600; font-display: swap; src: url(../fonts/inter.woff2) format('woff2'); }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      min-height: 100vh; min-height: 100svh;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      background: #F5F0E8; color: #1A1A18;
+      font-family: 'Inter', system-ui, sans-serif; text-align: center;
+      padding: 2rem 1.5rem;
+    }
+    .logo { font-family: 'Playfair Display', Georgia, serif; font-weight: 700; font-size: 1.2rem; }
+    .logo span { color: #816a3c; }
+    .rule { width: 3rem; height: 1px; background: #816a3c; margin: 1.25rem auto 1.75rem; }
+    h1 { font-family: 'Playfair Display', Georgia, serif; font-weight: 700; font-size: clamp(2rem, 9vw, 2.6rem); line-height: 1.12; }
+    h1 em { color: #816a3c; font-style: italic; font-weight: 400; }
+    p { color: #4a4a42; line-height: 1.6; margin: 1rem auto 2rem; max-width: 22rem; }
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 0.6rem;
+      min-height: 56px; padding: 1rem 2.4rem;
+      background: #816a3c; color: #FDFAF5;
+      font-size: 1.05rem; font-weight: 600; letter-spacing: 0.04em; text-decoration: none;
+      border-radius: 2px; box-shadow: 0 10px 28px -12px rgba(26,26,24,0.55);
+    }
+    .btn:active { background: #1A1A18; }
+    .btn:focus-visible { outline: 2px solid #1A1A18; outline-offset: 3px; }
+    .stars { color: #816a3c; letter-spacing: 0.35em; font-size: 1.1rem; margin-top: 1.75rem; }
+    .back { margin-top: 2.5rem; font-size: 0.9rem; color: #6f5a30; }
   </style>
 </head>
 <body>
-  <p>Du wirst zu Google weitergeleitet …<br><br>
-  <a href="https://www.google.com/search?q=Mirjam+Walenta+-+A+great+hair+day&amp;kgmid=/g/1tzzt9dr&amp;hl=de-AT#lrd=0x476d078610bd229f:0xe2dc80e05ce78247,3">Hier tippen, falls es nicht automatisch weitergeht</a></p>
-  <script>location.replace(document.querySelector('a').href);</script>
+  <div class="logo">Great Hair<span>.</span>Day</div>
+  <div class="rule"></div>
+  <h1>Danke für<br><em>deinen Besuch!</em></h1>
+  <p>Wir freuen uns sehr über deine Bewertung auf Google – sie hilft anderen, uns zu finden.</p>
+  <a class="btn" href="https://www.google.com/search?q=Mirjam+Walenta+-+A+great+hair+day&amp;kgmid=/g/1tzzt9dr&amp;hl=de-AT#lrd=0x476d078610bd229f:0xe2dc80e05ce78247,3">★ Jetzt bewerten</a>
+  <div class="stars" aria-hidden="true">★★★★★</div>
+  <a class="back" href="../">zur Website greathairday.at</a>
 </body>
 </html>
