@@ -10,7 +10,7 @@
 - **Google-Links nicht selbst neu bauen.** Am Handy getestet und funktionierend (Sept. 2026):
   - Adresse/Route: `https://share.google/iNL8bMsJqvVzm0rmP` (von Google erzeugter Teilen-Link des Eintrags)
   - Kurzadresse für den QR-Code an der Kassa: `https://www.greathairday.at/bewertung/` (`bewertung/index.html` zeigt einen Knopf „Jetzt bewerten“ – bewusst keine automatische Weiterleitung, weil Google das Bewertungsfenster am Handy nur nach echtem Tippen öffnet; gedruckte QR-Codes zeigen dorthin, Adresse nie ändern)
-  - Knopf auf `/bewertung/` (QR-Code, Handy): Googles offizieller Bewertungslink aus dem Unternehmensprofil `https://g.page/r/CUYAqgo4BwtnEAE/review` – der `#lrd`-Link unten öffnet am Handy nur die normale Seite, weil die Google-App ihn abfängt
-  - Bewertung abgeben (Homepage, funktioniert am Computer): `https://www.google.com/search?q=Mirjam+Walenta+-+A+great+hair+day&kgmid=/g/1tzzt9dr&hl=de-AT#lrd=0x476d078610bd229f:0xe2dc80e05ce78247,3` (`,1` = Bewertungsliste)
+  - Bewertung abgeben (überall: `/bewertung/`-Knopf, Footer aller Seiten): Googles offizieller Bewertungslink aus dem Unternehmensprofil `https://g.page/r/CUYAqgo4BwtnEAE/review` – funktioniert am Handy und am Computer. Der frühere `#lrd=…,3`-Suchlink öffnete am Handy nur die normale Seite (Google-App fängt ihn ab).
+  - Bewertungsliste („★ 4,8 von 5“): `https://www.google.com/search?q=Mirjam+Walenta+-+A+great+hair+day&kgmid=/g/1tzzt9dr&hl=de-AT#lrd=0x476d078610bd229f:0xe2dc80e05ce78247,1`
   - Nicht funktioniert haben am Handy: `maps/place/?q=place_id:…`, `maps/dir/?api=1…`, `maps/search/?api=1…`, `maps.google.com/?cid=…` und `search.google.com/local/writereview?placeid=…` – sie zeigten das Nachbarlokal an derselben Adresse.
 - **Live prüfen:** Actions → „Live-Website prüfen“ ruft die echte Seite ab und zeigt, welcher Adress-Link ausgeliefert wird und wohin er führt.
