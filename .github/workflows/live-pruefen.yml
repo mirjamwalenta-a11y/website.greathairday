@@ -1,0 +1,21 @@
+# Ruft die Live-Website ab und zeigt, welche Version dort ausgeliefert wird.
+# Start von Hand: Actions → "Live-Website prüfen" → Run workflow.
+name: Live-Website prüfen
+
+on:
+  workflow_dispatch:
+
+jobs:
+  pruefen:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Seiten abrufen
+        run: |
+          for url in "https://www.greathairday.at/" "https://greathairday.at/" "http://greathairday.at/" "https://www.greathairday.at/index.html"; do
+            echo "=================== $url"
+            curl -sS -L -o seite.html -D kopf.txt -w "Status %{http_code}, Größe %{size_download} Bytes, Ziel %{url_effective}\n" "$url?pruefung=$(date +%s)" || true
+            grep -iE "^(HTTP|server|cache-control|expires|last-modified|age|x-cache|via|cf-cache-status|location):" kopf.txt || true
+            echo "--- Adress-Link in der Fußzeile:"
+            grep -o '📍</span> <a href="[^"]*"' seite.html || grep -o 'maps[^"]*' seite.html | head -5 || echo "(kein Maps-Link gefunden)"
+            echo "--- Datenschutz-Link vorhanden: $(grep -c 'datenschutz.html' seite.html)"
+          done
