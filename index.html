@@ -306,6 +306,19 @@
     .nav-toggle span { position: relative; }
     .nav-toggle span::before { position: absolute; top: -7px; }
     .nav-toggle span::after { position: absolute; top: 7px; }
+    /* Menü-Symbol wird beim Öffnen zum X */
+    .nav-toggle span { transition: background-color 0.15s; }
+    .nav-toggle span::before, .nav-toggle span::after { transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
+    .nav-toggle[aria-expanded="true"] span { background-color: transparent; }
+    .nav-toggle[aria-expanded="true"] span::before { transform: translateY(7px) rotate(45deg); }
+    .nav-toggle[aria-expanded="true"] span::after { transform: translateY(-7px) rotate(-45deg); }
+    @media (prefers-reduced-motion: no-preference) {
+      .nav-links.open { animation: menuIn 0.32s cubic-bezier(0.16, 1, 0.3, 1); }
+    }
+    @keyframes menuIn { from { opacity: 0; transform: translateY(-6px); } }
+    @media (prefers-reduced-motion: reduce) {
+      .nav-toggle span, .nav-toggle span::before, .nav-toggle span::after { transition: none; }
+    }
 
     /* ── NAV: kein Zeilenumbruch; Menü-Button schon ab Tablet-/Desktop-Ansicht am Handy ── */
     .nav-logo, .nav-links a { white-space: nowrap; }
@@ -722,6 +735,10 @@
       .btn-primary:hover, .leistung-card:hover { transform: none; }
     }
 
+    /* ── LEISTUNGS-ICONS: Linien zeichnen sich beim Erscheinen ein, wie die Haarsträhnen ── */
+    svg.draw * { stroke-dasharray: 1; stroke-dashoffset: 1; transition: stroke-dashoffset 1.6s cubic-bezier(0.16, 1, 0.3, 1) 0.25s; }
+    .visible svg.draw * { stroke-dashoffset: 0; }
+
     /* ── HAARSTRÄHNEN (Hero) ── */
     html { overflow-x: clip; }
     #hero { position: relative; }
@@ -1115,6 +1132,14 @@
     }, { threshold: 0.12 });
 
     document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+    // Leistungs-Icons zeichnen sich ein (nur mit JavaScript und ohne "Bewegung reduzieren")
+    if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      document.querySelectorAll('.fade-in .leistung-icon, .fade-in .cooling-icon').forEach(svg => {
+        svg.querySelectorAll('path, circle, ellipse').forEach(el => el.setAttribute('pathLength', '1'));
+        svg.classList.add('draw');
+      });
+    }
 
     // Haarsträhnen: zeichnen sich einmal ein und schwingen beim Scrollen mit
     (function () {

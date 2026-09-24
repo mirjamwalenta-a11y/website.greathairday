@@ -352,6 +352,19 @@
     .nav-toggle span { position: relative; }
     .nav-toggle span::before { position: absolute; top: -7px; }
     .nav-toggle span::after { position: absolute; top: 7px; }
+    /* Menü-Symbol wird beim Öffnen zum X */
+    .nav-toggle span { transition: background-color 0.15s; }
+    .nav-toggle span::before, .nav-toggle span::after { transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
+    .nav-toggle[aria-expanded="true"] span { background-color: transparent; }
+    .nav-toggle[aria-expanded="true"] span::before { transform: translateY(7px) rotate(45deg); }
+    .nav-toggle[aria-expanded="true"] span::after { transform: translateY(-7px) rotate(-45deg); }
+    @media (prefers-reduced-motion: no-preference) {
+      .nav-links.open { animation: menuIn 0.32s cubic-bezier(0.16, 1, 0.3, 1); }
+    }
+    @keyframes menuIn { from { opacity: 0; transform: translateY(-6px); } }
+    @media (prefers-reduced-motion: reduce) {
+      .nav-toggle span, .nav-toggle span::before, .nav-toggle span::after { transition: none; }
+    }
 
     .nav-logo, .nav-links a { white-space: nowrap; }
     @media (max-width: 1024px) {
@@ -512,6 +525,12 @@
       transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     }
     .faq-item[open] summary::after { transform: rotate(45deg); }
+    /* Antworten klappen weich auf (Browser ohne Unterstützung öffnen wie bisher) */
+    @media (prefers-reduced-motion: no-preference) {
+      .faq-liste { interpolate-size: allow-keywords; }
+      .faq-item::details-content { block-size: 0; overflow: clip; opacity: 0; transition: block-size 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease, content-visibility 0.4s allow-discrete; }
+      .faq-item[open]::details-content { block-size: auto; opacity: 1; }
+    }
     .faq-item summary:hover h3 { color: var(--mokka-deep); }
     .faq-item p { font-size: 0.95rem; color: var(--ink-muted); max-width: 620px; line-height: 1.7; padding: 0 0 1.5rem; }
     .faq-item a { color: var(--mokka-deep); }
