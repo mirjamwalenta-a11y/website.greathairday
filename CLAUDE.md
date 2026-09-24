@@ -14,3 +14,4 @@
   - Bewertungsliste („★ 4,8 von 5“): `https://www.google.com/search?q=Mirjam+Walenta+-+A+great+hair+day&kgmid=/g/1tzzt9dr&hl=de-AT#lrd=0x476d078610bd229f:0xe2dc80e05ce78247,1`
   - Nicht funktioniert haben am Handy: `maps/place/?q=place_id:…`, `maps/dir/?api=1…`, `maps/search/?api=1…`, `maps.google.com/?cid=…` und `search.google.com/local/writereview?placeid=…` – sie zeigten das Nachbarlokal an derselben Adresse.
 - **Live prüfen:** Actions → „Live-Website prüfen“ ruft die echte Seite ab und zeigt, welcher Adress-Link ausgeliefert wird und wohin er führt.
+- **Sitemap/robots:** `sitemap.xml` listet die öffentlichen Seiten (ohne `/bewertung/` – noindex – und ohne das Bearbeitungstool – noindex). Neue Seite → in `sitemap.xml` eintragen. `robots.txt` sperrt noch die Ordner der alten Joomla-Seite; nach deren Entfernung dürfen diese Zeilen raus.
