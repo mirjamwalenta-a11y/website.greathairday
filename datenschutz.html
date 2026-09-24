@@ -121,6 +121,19 @@
     .nav-toggle span { position: relative; }
     .nav-toggle span::before { position: absolute; top: -7px; }
     .nav-toggle span::after { position: absolute; top: 7px; }
+    /* Menü-Symbol wird beim Öffnen zum X */
+    .nav-toggle span { transition: background-color 0.15s; }
+    .nav-toggle span::before, .nav-toggle span::after { transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
+    .nav-toggle[aria-expanded="true"] span { background-color: transparent; }
+    .nav-toggle[aria-expanded="true"] span::before { transform: translateY(7px) rotate(45deg); }
+    .nav-toggle[aria-expanded="true"] span::after { transform: translateY(-7px) rotate(-45deg); }
+    @media (prefers-reduced-motion: no-preference) {
+      .nav-links.open { animation: menuIn 0.32s cubic-bezier(0.16, 1, 0.3, 1); }
+    }
+    @keyframes menuIn { from { opacity: 0; transform: translateY(-6px); } }
+    @media (prefers-reduced-motion: reduce) {
+      .nav-toggle span, .nav-toggle span::before, .nav-toggle span::after { transition: none; }
+    }
 
     .nav-logo, .nav-links a { white-space: nowrap; }
     @media (max-width: 1024px) {

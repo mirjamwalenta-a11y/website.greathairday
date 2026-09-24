@@ -15,3 +15,4 @@
   - Nicht funktioniert haben am Handy: `maps/place/?q=place_id:…`, `maps/dir/?api=1…`, `maps/search/?api=1…`, `maps.google.com/?cid=…` und `search.google.com/local/writereview?placeid=…` – sie zeigten das Nachbarlokal an derselben Adresse.
 - **Live prüfen:** Actions → „Live-Website prüfen“ ruft die echte Seite ab und zeigt, welcher Adress-Link ausgeliefert wird und wohin er führt.
 - **Sitemap/robots:** `sitemap.xml` listet die öffentlichen Seiten (ohne `/bewertung/` – noindex – und ohne das Bearbeitungstool – noindex). Neue Seite → in `sitemap.xml` eintragen. `robots.txt` sperrt noch die Ordner der alten Joomla-Seite; nach deren Entfernung dürfen diese Zeilen raus.
+- **Impeccable (Design-Skill):** liegt in `.claude/`; Produktwissen in `PRODUCT.md`. Beides wird nicht hochgeladen (Ausschlüsse im Workflow). Animationen immer mit `prefers-reduced-motion`-Weg.

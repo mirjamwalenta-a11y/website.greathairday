@@ -58,3 +58,7 @@ jobs:
             .github/**
             README.md
             CLAUDE.md
+            PRODUCT.md
+            DESIGN.md
+            .claude/**
+            .impeccable/**
