@@ -16,3 +16,4 @@
 - **Live prüfen:** Actions → „Live-Website prüfen“ ruft die echte Seite ab und zeigt, welcher Adress-Link ausgeliefert wird und wohin er führt.
 - **Sitemap/robots:** `sitemap.xml` listet die öffentlichen Seiten (ohne `/bewertung/` – noindex – und ohne das Bearbeitungstool – noindex). Neue Seite → in `sitemap.xml` eintragen. `robots.txt` sperrt noch die Ordner der alten Joomla-Seite; nach deren Entfernung dürfen diese Zeilen raus.
 - **Impeccable (Design-Skill):** liegt in `.claude/`; Produktwissen in `PRODUCT.md`. Beides wird nicht hochgeladen (Ausschlüsse im Workflow). Animationen immer mit `prefers-reduced-motion`-Weg.
+- **Google Search Console:** `googlea06e6959b94a8dbc.html` im Stammordner ist Googles Bestätigungsdatei für die Inhaberschaft. Nie löschen oder umbenennen, sonst verliert die Search Console den Zugriff.
