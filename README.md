@@ -8,6 +8,7 @@ Website von **Great Hair Day**, Friseursalon Mirjam Walenta, Rechte Wienzeile 47
 |---|---|
 | `index.html` | Startseite |
 | `leistungen.html` | Leistungen & Preise (wird vom Bearbeitungswerkzeug erzeugt) |
+| `haarkompass/` | HaarKompass – Pflege-Guide für Kundinnen und Kunden (7 Fragen, ehrliche Empfehlung, läuft komplett im Browser) |
 | `datenschutz.html` | Datenschutzerklärung (**Entwurf – rechtlich prüfen lassen**) |
 | `Preise-und-Texte-bearbeiten.html` | Werkzeug zum Ändern von Preisen und Texten, läuft im Browser |
 | `bilder/` | Salonfotos und Vorschaubild für WhatsApp/Facebook |
