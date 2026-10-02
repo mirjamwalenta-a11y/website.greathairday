@@ -1,0 +1,745 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>HaarKompass · Great Hair Day</title>
+<link rel="canonical" href="https://www.greathairday.at/haarkompass/">
+<meta property="og:title" content="HaarKompass – der ehrliche Pflege-Guide von Great Hair Day">
+<meta property="og:description" content="Welche Pflege braucht dein Haar wirklich? 7 kurze Fragen, eine ehrliche Empfehlung – ohne Login, ohne Verkaufsdruck.">
+<meta property="og:image" content="https://www.greathairday.at/bilder/vorschau.jpg">
+<meta name="description" content="Welche Pflege braucht dein Haar wirklich? 7 kurze Fragen, eine ehrliche Empfehlung – ohne Login, ohne Verkaufsdruck.">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='10' fill='%23F5F0E8'/%3E%3Ctext x='32' y='46' font-family='Georgia,serif' font-size='44' font-weight='700' text-anchor='middle' fill='%23816a3c'%3EG%3C/text%3E%3C/svg%3E">
+<style>
+/* Schriften lokal wie auf greathairday.at (keine Verbindung zu Google) */
+@font-face{font-family:"Playfair Display";font-style:normal;font-weight:400 900;font-display:swap;src:url(../fonts/playfair.woff2) format("woff2")}
+@font-face{font-family:"Inter";font-style:normal;font-weight:300 600;font-display:swap;src:url(../fonts/inter.woff2) format("woff2")}
+:root{
+  --bg:#F5F0E8; --surface:#FDFAF5; --surface-2:#EDE6DA; --ink:#1A1A18; --muted:#66604F; --line:#E2D9CA;
+  --accent:#7A6337; --accent-ink:#FFFFFF; --accent-soft:#EFE6D3; --plum:#6D2E7F; --plum-soft:#F1E4F6;
+  --good:#2F7D55; --good-soft:#E3F2EA; --skip:#8A5A12; --skip-soft:#FBF0DC;
+  --shadow:0 1px 2px rgba(42,33,28,.06),0 6px 20px rgba(42,33,28,.07);
+  --f-display:"Playfair Display",Georgia,serif;
+  --f-body:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --bg:#17120F; --surface:#221B17; --surface-2:#2D241F; --ink:#F2EAE4; --muted:#B3A499; --line:#3D322B;
+    --accent:#D2BC8E; --accent-ink:#1A1A18; --accent-soft:#3A3122; --plum:#CFA2E0; --plum-soft:#352840;
+    --good:#6CC196; --good-soft:#1D3328; --skip:#E3B45C; --skip-soft:#3A2E16;
+    --shadow:0 1px 2px rgba(0,0,0,.3),0 6px 20px rgba(0,0,0,.25);
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#17120F; --surface:#221B17; --surface-2:#2D241F; --ink:#F2EAE4; --muted:#B3A499; --line:#3D322B;
+  --accent:#D2BC8E; --accent-ink:#1A1A18; --accent-soft:#3A3122; --plum:#CFA2E0; --plum-soft:#352840;
+  --good:#6CC196; --good-soft:#1D3328; --skip:#E3B45C; --skip-soft:#3A2E16;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 6px 20px rgba(0,0,0,.25);
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:17px;line-height:1.55}
+button{font:inherit;color:inherit}
+b,strong{font-weight:600}
+h1,h2,h3{font-family:var(--f-display);line-height:1.15;text-wrap:balance;margin:0}
+h1{font-size:clamp(1.9rem,6vw,2.8rem);font-weight:700;letter-spacing:-.005em}
+h2{font-size:clamp(1.35rem,4vw,1.7rem);font-weight:700}
+h3{font-size:1.1rem;font-weight:600}
+p{margin:0}
+ul{margin:0;padding-left:1.15em}
+a{color:var(--accent)}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px;border-radius:8px}
+[hidden]{display:none!important}
+
+.wrap{max-width:760px;margin:0 auto;padding-inline:16px}
+header.top{border-bottom:1px solid var(--line)}
+.top .wrap{display:flex;align-items:center;gap:12px;min-height:60px}
+.brand{display:flex;align-items:baseline;gap:10px;background:none;border:0;padding:0;cursor:pointer;min-width:0}
+.logo{font-family:var(--f-display);font-size:1.2rem;font-weight:700;letter-spacing:.02em;color:var(--ink);white-space:nowrap}
+.logo span{color:var(--accent)}
+.brand small{font-family:var(--f-body);font-weight:500;font-size:.8rem;color:var(--muted);white-space:nowrap;border-left:1px solid var(--line);padding-left:10px}
+
+main{padding-block:28px 56px}
+.view{display:flex;flex-direction:column;gap:24px}
+.eyebrow{text-transform:uppercase;letter-spacing:.09em;font-size:.75rem;font-weight:600;color:var(--muted)}
+.lead{color:var(--muted);font-size:1.08rem;max-width:58ch}
+.muted{color:var(--muted)}
+.small{font-size:.88rem}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:20px;box-shadow:var(--shadow)}
+
+.btn{border:1px solid var(--line);background:var(--surface);border-radius:12px;padding:12px 20px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:8px;justify-content:center;min-height:48px;text-decoration:none;color:var(--ink)}
+.btn:hover{border-color:var(--accent)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.btn.primary:hover{filter:brightness(1.07)}
+.btn.ghost{background:none;border-color:transparent;color:var(--accent);padding-inline:10px}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.btn svg{width:18px;height:18px}
+.actions{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+
+/* Start */
+.promise{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px}
+.promise div{display:flex;gap:10px;align-items:flex-start}
+.promise b{display:block}
+.promise svg{flex:none;width:22px;height:22px;color:var(--accent);margin-top:2px}
+.saved{display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap;background:var(--accent-soft);border-radius:14px;padding:14px 16px}
+
+/* Quiz */
+.progress{display:flex;align-items:center;gap:12px}
+.progress .bar{flex:1;height:6px;background:var(--surface-2);border-radius:99px;overflow:hidden}
+.progress .bar i{display:block;height:100%;background:var(--accent);border-radius:99px;transition:width .25s ease}
+.progress span{font-variant-numeric:tabular-nums;color:var(--muted);font-size:.88rem;font-weight:600;white-space:nowrap}
+.q-head{display:flex;flex-direction:column;gap:6px}
+.options{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+.opt{display:flex;gap:12px;align-items:flex-start;text-align:left;border:1.5px solid var(--line);background:var(--surface);border-radius:14px;padding:14px 16px;cursor:pointer;min-height:64px;transition:border-color .12s,background .12s}
+.opt:hover{border-color:var(--accent)}
+.opt[aria-checked="true"]{border-color:var(--accent);background:var(--accent-soft)}
+.opt .mark{flex:none;width:22px;height:22px;border:2px solid var(--line);border-radius:50%;margin-top:1px;display:grid;place-items:center}
+.opt.multi .mark{border-radius:6px}
+.opt[aria-checked="true"] .mark{border-color:var(--accent);background:var(--accent)}
+.opt[aria-checked="true"] .mark::after{content:"";width:6px;height:11px;border:solid var(--accent-ink);border-width:0 2.5px 2.5px 0;transform:translateY(-1px) rotate(45deg)}
+.opt b{display:block;line-height:1.3}
+.opt small{display:block;color:var(--muted);font-size:.86rem;line-height:1.4;margin-top:2px}
+.q-nav{display:flex;justify-content:space-between;gap:10px;align-items:center}
+
+/* Ergebnis */
+.result-head{display:flex;flex-direction:column;gap:10px}
+.profile{display:flex;flex-wrap:wrap;gap:6px}
+.chip{display:inline-flex;padding:4px 11px;border-radius:999px;background:var(--surface-2);color:var(--muted);font-size:.84rem;font-weight:600}
+.block{display:flex;flex-direction:column;gap:14px}
+.block-title{display:flex;align-items:center;gap:12px}
+.block-title .num{flex:none;width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font-family:var(--f-display);font-weight:800;background:var(--accent);color:var(--accent-ink)}
+.block.special .num{background:var(--plum);color:#fff}
+:root[data-theme="dark"] .block.special .num{color:#1C1422}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .block.special .num{color:#1C1422}}
+.block.skip .num{background:var(--skip);color:var(--accent-ink)}
+.item{border-left:3px solid var(--accent);padding:2px 0 2px 14px;display:flex;flex-direction:column;gap:6px}
+.block.special .item{border-color:var(--plum)}
+.block.skip .item{border-color:var(--skip)}
+.item h3 .tag{font-family:var(--f-body);font-size:.75rem;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-left:6px}
+.why{font-size:.92rem;color:var(--muted)}
+.why b{color:var(--ink)}
+.how{font-size:.92rem;background:var(--surface-2);border-radius:10px;padding:8px 12px}
+.because{display:flex;flex-wrap:wrap;gap:6px;font-size:.8rem}
+.because span{padding:2px 9px;border-radius:999px;background:var(--accent-soft);color:var(--accent);font-weight:600}
+.block.special .because span{background:var(--plum-soft);color:var(--plum)}
+.block.skip .because span{background:var(--skip-soft);color:var(--skip)}
+.tips li{margin-bottom:6px}
+.note{font-size:.85rem;color:var(--muted);border-top:1px solid var(--line);padding-top:14px}
+
+/* Termin */
+.book{display:flex;gap:16px;align-items:center;justify-content:space-between;flex-wrap:wrap;background:var(--ink);color:var(--bg);border-radius:16px;padding:20px}
+.book h2{color:var(--bg)}
+.book p{color:color-mix(in srgb,var(--bg) 78%,transparent);font-size:.95rem;margin-top:4px;max-width:46ch}
+.book .btn{background:var(--bg);border-color:var(--bg);color:var(--ink)}
+.book .btn:hover{filter:brightness(.95)}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+footer.foot{border-top:1px solid var(--line);padding-block:20px 32px;font-size:.88rem;color:var(--muted)}
+footer.foot .wrap{display:flex;gap:8px 18px;flex-wrap:wrap;align-items:baseline}
+footer.foot .logo{font-size:1rem}
+footer.foot a{color:var(--muted)}
+
+
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 18px;border-radius:999px;font-weight:600;font-size:.9rem;box-shadow:var(--shadow);z-index:50}
+
+@media (max-width:520px){
+  .card{padding:16px}
+  .options{grid-template-columns:1fr}
+}
+@media print{
+  header.top,.actions,.no-print,footer.foot{display:none!important}
+  .book{background:none;color:#000;border:1px solid #999}
+  .book h2,.book p{color:#000}
+  body{background:#fff;color:#000;font-size:12pt}
+  .card{box-shadow:none;break-inside:avoid}
+}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <button class="brand" id="home" aria-label="Great Hair Day HaarKompass – zur Startseite">
+      <span class="logo">Great Hair<span>.</span>Day</span><small>HaarKompass</small>
+    </button>
+  </div>
+</header>
+
+<main class="wrap">
+  <!-- Start -->
+  <section class="view" id="v-start">
+    <div class="eyebrow">In unter 2 Minuten</div>
+    <h1>Welche Pflege braucht dein Haar wirklich?</h1>
+    <p class="lead">7 kurze Fragen zu Haar, Kopfhaut und Alltag. Danach weißt du, was wirklich nötig ist, welches Extra einen Unterschied macht und worauf du ehrlich verzichten kannst.</p>
+    <div id="saved" class="saved" hidden>
+      <span><b>Deine letzte Empfehlung</b> <span class="muted small" id="saved-date"></span></span>
+      <button class="btn" id="open-saved">Wieder ansehen</button>
+    </div>
+    <div class="actions"><button class="btn primary" id="go">Los geht's
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button></div>
+    <div class="card promise">
+      <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0"/><path d="M4 4l16 16"/></svg><span><b>Kein Login</b><span class="muted small">Deine Antworten bleiben auf deinem Gerät.</span></span></div>
+      <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 12h18M12 3v18"/><circle cx="12" cy="12" r="9"/></svg><span><b>Nur Produktarten</b><span class="muted small">Keine Marken, kein Katalog.</span></span></div>
+      <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg><span><b>Mit Begründung</b><span class="muted small">Jede Empfehlung zeigt, warum.</span></span></div>
+    </div>
+  </section>
+
+  <!-- Quiz -->
+  <section class="view" id="v-quiz" hidden>
+    <div class="progress"><div class="bar"><i id="pbar"></i></div><span id="pnum"></span></div>
+    <div class="q-head">
+      <div class="eyebrow" id="q-eyebrow"></div>
+      <h2 id="q-title" tabindex="-1"></h2>
+      <p class="muted" id="q-hint"></p>
+    </div>
+    <div class="options" id="q-options"></div>
+    <div class="q-nav">
+      <button class="btn ghost" id="q-back">Zurück</button>
+      <button class="btn primary" id="q-next">Weiter</button>
+    </div>
+  </section>
+
+  <!-- Ergebnis -->
+  <section class="view" id="v-result" hidden>
+    <div class="result-head">
+      <div class="eyebrow">Deine Empfehlung</div>
+      <h1 id="r-title" tabindex="-1">So einfach kann gute Pflege sein</h1>
+      <div class="profile" id="r-profile"></div>
+    </div>
+
+    <div class="card block basis">
+      <div class="block-title"><span class="num">1</span><div><h2>Die Basis-Routine</h2><p class="muted small">Das, was dein Haar wirklich braucht.</p></div></div>
+      <div id="r-basis" class="block"></div>
+    </div>
+
+    <div class="card block special">
+      <div class="block-title"><span class="num">2</span><div><h2>Der Spezial-Impuls</h2><p class="muted small">Das eine Extra, das bei dir einen Unterschied macht.</p></div></div>
+      <div id="r-special" class="block"></div>
+    </div>
+
+    <div class="card block skip">
+      <div class="block-title"><span class="num">3</span><div><h2>Was du weglassen kannst</h2><p class="muted small">Ehrlich gesagt: Das brauchst du nicht.</p></div></div>
+      <div id="r-skip" class="block"></div>
+    </div>
+
+    <div class="card block" id="r-tips-card">
+      <h2>Kleine Gewohnheiten, große Wirkung</h2>
+      <ul class="tips" id="r-tips"></ul>
+    </div>
+
+    <div class="book">
+      <div><h2>Lieber persönlich beraten lassen?</h2><p>Wir schauen uns dein Haar am Stuhl an und stimmen die Routine genau auf dich ab, ganz ohne Verkaufsdruck.</p></div>
+      <a class="btn" data-book href="https://stylisten.eu/pranz#online-buchung" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>Termin buchen<span class="sr-only"> (öffnet neues Fenster)</span></a>
+    </div>
+
+    <p class="note">Diese Empfehlung ersetzt keine Beratung am Stuhl und keine ärztliche Diagnose. Bei anhaltendem Jucken, Rötungen, starken Schuppen oder Haarausfall bitte zum Hautarzt. Gern schauen wir uns dein Haar beim nächsten Termin persönlich an.</p>
+
+    <div class="actions no-print">
+      <button class="btn primary" id="share">Link speichern / teilen</button>
+      <button class="btn" id="print">Drucken / PDF</button>
+      <button class="btn ghost" id="restart">Neu starten</button>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <span class="logo">Great Hair<span>.</span>Day</span>
+    <a href="../">greathairday.at</a>
+    <a href="https://stylisten.eu/pranz#online-buchung" target="_blank" rel="noopener">Online Termin buchen<span class="sr-only"> (öffnet neues Fenster)</span></a>
+    <a href="../#impressum">Impressum</a>
+    <a href="../datenschutz.html">Datenschutz</a>
+  </div>
+</footer>
+
+<div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+
+<script>
+"use strict";
+
+/* ------------------------------------------------------------------
+   Fragen
+------------------------------------------------------------------ */
+const QUESTIONS = [
+  { id:"staerke", eyebrow:"Haarstruktur", title:"Wie fühlt sich ein einzelnes Haar an?", hint:"Nimm ein Haar zwischen Daumen und Zeigefinger.", type:"single", options:[
+    {v:"fein", l:"Fein", d:"Kaum spürbar, Frisur fällt schnell zusammen"},
+    {v:"normal", l:"Normal", d:"Gut spürbar, weder dünn noch dick"},
+    {v:"kraeftig", l:"Kräftig", d:"Deutlich spürbar, eher drahtig, viel Haar"} ]},
+  { id:"form", eyebrow:"Haarform", title:"Wie fällt dein Haar, wenn es an der Luft trocknet?", type:"single", options:[
+    {v:"glatt", l:"Glatt", d:"Fällt gerade"},
+    {v:"wellig", l:"Wellig", d:"Leichte S-Wellen"},
+    {v:"lockig", l:"Lockig", d:"Deutliche Locken oder Kringel"},
+    {v:"kraus", l:"Sehr lockig / kraus", d:"Enge Locken, Zickzack-Struktur"} ]},
+  { id:"zustand", eyebrow:"Zustand der Längen", title:"Was hat dein Haar schon erlebt?", hint:"Wähle das, was am stärksten zutrifft.", type:"single", options:[
+    {v:"natur", l:"Naturbelassen", d:"Keine Farbe, keine Chemie"},
+    {v:"coloriert", l:"Coloriert oder getönt", d:"Farbe, Tönung, Grauabdeckung"},
+    {v:"blondiert", l:"Blondiert oder Strähnen", d:"Aufgehellt, Balayage, Highlights"},
+    {v:"strapaziert", l:"Strapaziert", d:"Dauerwelle, Glättung oder spröde Spitzen"} ]},
+  { id:"kopfhaut", eyebrow:"Kopfhaut", title:"Wie geht es deiner Kopfhaut?", type:"single", options:[
+    {v:"normal", l:"Unauffällig", d:"Keine Beschwerden"},
+    {v:"trocken", l:"Trocken", d:"Spannt, feine trockene Schüppchen"},
+    {v:"sensibel", l:"Empfindlich", d:"Juckt, rötet sich, reagiert auf Produkte"},
+    {v:"fettend", l:"Schnell fettend", d:"Ansatz ist nach 1–2 Tagen fettig"},
+    {v:"schuppen", l:"Schuppen", d:"Sichtbare, eher größere Schuppen"} ]},
+  { id:"wasch", eyebrow:"Waschrhythmus", title:"Wie oft wäschst du deine Haare?", type:"single", options:[
+    {v:"taeglich", l:"Täglich"},
+    {v:"zweidrei", l:"Alle 2–3 Tage"},
+    {v:"woche", l:"1–2× pro Woche"},
+    {v:"selten", l:"Seltener"} ]},
+  { id:"alltag", eyebrow:"Alltag & Gewohnheiten", title:"Was gehört zu deinem Alltag?", hint:"Mehrere Antworten möglich.", type:"multi", none:"nichts", options:[
+    {v:"hitze", l:"Föhn, Glätteisen oder Lockenstab", d:"Fast täglich"},
+    {v:"sonne", l:"Viel Sonne, Chlor oder Salzwasser", d:"Draußen, Schwimmen, Urlaub"},
+    {v:"sport", l:"Viel Sport", d:"Schwitzen, öfter waschen"},
+    {v:"zopf", l:"Oft Zopf oder hochgesteckt", d:"Gummi, Klammern, Dutt"},
+    {v:"nichts", l:"Nichts davon", d:"Meist lufttrocknen, wenig Styling"} ]},
+  { id:"wunsch", eyebrow:"Hauptwunsch", title:"Was wünschst du dir am meisten?", hint:"Wähle bis zu 2.", type:"multi", max:2, options:[
+    {v:"volumen", l:"Mehr Volumen"},
+    {v:"glanz", l:"Glanz & Geschmeidigkeit"},
+    {v:"frizz", l:"Weniger Frizz"},
+    {v:"locken", l:"Definierte Locken"},
+    {v:"farbe", l:"Farbe soll länger halten"},
+    {v:"spliss", l:"Weniger Spliss & Haarbruch"},
+    {v:"fett", l:"Ansatz bleibt länger frisch"},
+    {v:"kopfhaut", l:"Kopfhaut in Balance"} ]}
+];
+const Q = Object.fromEntries(QUESTIONS.map(q => [q.id, q]));
+const label = (qid, v) => (Q[qid].options.find(o => o.v === v) || {}).l || v;
+
+/* ------------------------------------------------------------------
+   Regelwerk
+   a = { staerke, form, zustand, kopfhaut, wasch, alltag:Set, wunsch:Set }
+------------------------------------------------------------------ */
+const has = (set, v) => set.has(v);
+const isCurly = a => a.form === "lockig" || a.form === "kraus";
+const damage = a =>
+  ({natur:0, coloriert:1, blondiert:3, strapaziert:2})[a.zustand]
+  + (has(a.alltag,"hitze") ? 1 : 0) + (has(a.alltag,"sonne") ? 1 : 0) + (has(a.wunsch,"spliss") ? 1 : 0);
+
+// Grund-Kärtchen ("weil: ...")
+const R = {
+  staerke:a => label("staerke", a.staerke) + "es Haar",
+  form:a => ({glatt:"Glattes Haar", wellig:"Welliges Haar", lockig:"Lockiges Haar", kraus:"Sehr lockiges Haar"})[a.form],
+  zustand:a => label("zustand", a.zustand),
+  kopfhaut:a => "Kopfhaut: " + label("kopfhaut", a.kopfhaut).toLowerCase(),
+  wasch:a => "Waschen: " + label("wasch", a.wasch).toLowerCase(),
+  alltag:v => label("alltag", v),
+  wunsch:v => "Wunsch: " + label("wunsch", v)
+};
+
+function shampoo(a){
+  const how = "Nur auf der Kopfhaut aufschäumen. Die Längen werden beim Ausspülen mitgereinigt.";
+  const because = [R.kopfhaut(a)];
+  switch (a.kopfhaut){
+    case "schuppen": return { name:"Anti-Schuppen-Shampoo, im Wechsel mit einem milden Shampoo", because,
+      why:"Echte Schuppen brauchen einen Wirkstoff (z. B. Zinkpyrithion, Piroctone Olamine oder Ketoconazol). Zwei Mal pro Woche reicht, an den anderen Tagen wäschst du mild.",
+      how:"Das Wirkstoff-Shampoo 2–3 Minuten einwirken lassen, dann gründlich ausspülen." };
+    case "sensibel": return { name:"Sehr mildes, parfümfreies Shampoo", because,
+      why:"Duftstoffe und starke Tenside lösen am häufigsten Reizungen aus. Je kürzer die Inhaltsliste, desto besser.", how };
+    case "fettend": {
+      const b = a.wasch === "taeglich" ? [...because, R.wasch(a)] : because;
+      return { name:"Mildes, leichtes Shampoo ohne pflegende Öle", because:b,
+        why:"Öle und Silikone im Shampoo landen genau am Ansatz, wo du sie nicht willst. Ein sanftes, klärendes Shampoo reinigt, ohne die Kopfhaut zu reizen."
+          + (a.wasch === "taeglich" ? " Tägliches Waschen ist in Ordnung, wenn das Shampoo mild ist." : ""), how };
+    }
+    case "trocken": return { name:"Mildes, feuchtigkeitsspendendes Shampoo", because,
+      why:"Sanfte Tenside entfetten die Kopfhaut weniger. Dann spannt sie nicht mehr so.", how };
+  }
+  // Kopfhaut unauffällig: die Längen entscheiden mit
+  if (isCurly(a)) return { name:"Mildes, sulfatfreies Shampoo", because:[R.form(a)],
+    why:"Locken sind von Natur aus trockener. Ein sanftes Shampoo nimmt ihnen nicht die Feuchtigkeit, die sie für ihre Form brauchen.", how };
+  if (a.zustand === "coloriert" || a.zustand === "blondiert") return { name:"Mildes, farbschonendes Shampoo", because:[R.zustand(a)],
+    why:"Starke Tenside waschen Farbpigmente schneller aus. Mild heißt: Die Farbe hält länger.", how };
+  if (a.staerke === "fein") return { name:"Leichtes Shampoo ohne schwere Pflegestoffe", because:[R.staerke(a)],
+    why:"Feines Haar wird von reichhaltigen Shampoos schnell platt. Leicht reinigen, pflegen macht der Conditioner.", how };
+  return { name:"Ein mildes Basis-Shampoo", because:[R.kopfhaut(a)],
+    why:"Deine Kopfhaut ist ausgeglichen. Ein einfaches, mildes Shampoo reicht völlig, Spezialshampoos braucht es nicht.", how };
+}
+
+function conditioner(a){
+  const d = damage(a), because = [];
+  let name, why;
+  if (d >= 3){
+    name = "Reparierender Conditioner, dazu 1× pro Woche eine Maske";
+    why = "Dein Haar ist durch Chemie, Hitze oder Sonne deutlich beansprucht. Der Conditioner glättet nach jeder Wäsche, die Maske pflegt einmal pro Woche tiefer.";
+    because.push(R.zustand(a));
+    if (has(a.alltag,"hitze")) because.push(R.alltag("hitze"));
+    if (has(a.alltag,"sonne")) because.push(R.alltag("sonne"));
+  } else if (a.staerke === "kraeftig" || isCurly(a)){
+    name = "Reichhaltiger Conditioner";
+    why = "Kräftiges oder lockiges Haar nimmt Pflege gut auf und braucht sie auch, damit es geschmeidig bleibt und weniger kraust.";
+    because.push(a.staerke === "kraeftig" ? R.staerke(a) : R.form(a));
+  } else if (a.staerke === "fein"){
+    name = "Leichter Conditioner (oder Sprüh-Conditioner)";
+    why = "Feines Haar braucht Pflege zum Entwirren, aber nichts, was es beschwert.";
+    because.push(R.staerke(a));
+  } else {
+    name = "Conditioner nach jeder Wäsche";
+    why = "Der Conditioner schließt die Schuppenschicht. Das Haar lässt sich besser kämmen und glänzt mehr.";
+    because.push(R.staerke(a));
+  }
+  if (a.zustand === "coloriert"){
+    why += " Achte auf einen sauren pH-Wert (oft steht „Color“ oder „pH 4–5“ drauf). Er schließt die Haaroberfläche und die Farbe hält länger.";
+    if (!because.includes(R.zustand(a))) because.push(R.zustand(a));
+  }
+  let how = "Nur in Längen und Spitzen, den Ansatz frei lassen. 1–2 Minuten einwirken lassen.";
+  if (isCurly(a)) how = "Ins nasse Haar kneten und mit den Fingern oder einem grobzinkigen Kamm entwirren, solange der Conditioner drin ist.";
+  else if (a.kopfhaut === "fettend" || a.staerke === "fein") how = "Erst ab Kinnhöhe einarbeiten, der Ansatz bleibt frei. Gut ausspülen.";
+  return { name, why, how, because };
+}
+
+function hitzeschutz(a){
+  if (!has(a.alltag,"hitze")) return null;
+  return { name:"Hitzeschutz vor jedem Föhnen oder Glätten", because:[R.alltag("hitze")],
+    why:"Glätteisen und Lockenstab erreichen 180–230 °C. Hitzeschutz verringert den Schaden deutlich. Wer fast täglich mit Hitze stylt, sollte nicht darauf verzichten.",
+    how: a.staerke === "fein" ? "Leichtes Spray, ins handtuchtrockene Haar. Glätteisen bei feinem Haar höchstens 180 °C."
+                              : "Ins handtuchtrockene Haar sprühen, gleichmäßig durchkämmen." };
+}
+
+/* Spezial-Impulse: jedes Extra sammelt Punkte. pts: [Punkte, Bedingung, Grund-Kärtchen|null, Kurzbeschreibung] */
+const SPECIAL_MIN = 3, SPECIAL_OPT = 4;
+const SPECIALS = [
+  { id:"kopfhautserum", name:a => ({
+      trocken:"Feuchtigkeitsspendendes Kopfhaut-Serum",
+      sensibel:"Beruhigendes Kopfhaut-Serum (parfümfrei)",
+      fettend:"Ausgleichendes Kopfhaut-Tonikum",
+      schuppen:"Beruhigendes Kopfhaut-Serum" })[a.kopfhaut] || "Kopfhaut-Serum",
+    why:"Ein Serum wirkt direkt auf der Kopfhaut und bleibt dort, anders als ein Shampoo, das nach einer Minute ausgespült wird. Für Kopfhaut-Themen ist es das wirksamste Extra.",
+    how:"2–3 Mal pro Woche nach dem Waschen scheitelweise auf die Kopfhaut geben und sanft einmassieren.",
+    pts:[ [3, a=>a.kopfhaut==="trocken", a=>R.kopfhaut(a), "Kopfhaut trocken"],
+          [3, a=>a.kopfhaut==="sensibel", a=>R.kopfhaut(a), "Kopfhaut empfindlich"],
+          [2, a=>a.kopfhaut==="fettend", a=>R.kopfhaut(a), "Kopfhaut fettend"],
+          [1, a=>a.kopfhaut==="schuppen", a=>R.kopfhaut(a), "Schuppen"],
+          [3, a=>has(a.wunsch,"kopfhaut"), ()=>R.wunsch("kopfhaut"), "Wunsch Kopfhaut-Balance"] ]},
+  { id:"peeling", name:()=>"Kopfhaut-Peeling, alle 1–2 Wochen",
+    why:"Ein Peeling löst Talg- und Produktreste am Ansatz. Danach bleibt das Haar oft spürbar länger frisch.",
+    how:"Vor der Haarwäsche auf die feuchte Kopfhaut geben, sanft massieren, dann wie gewohnt waschen.",
+    pts:[ [2, a=>a.kopfhaut==="fettend", a=>R.kopfhaut(a), "Kopfhaut fettend"],
+          [2, a=>has(a.wunsch,"fett"), ()=>R.wunsch("fett"), "Wunsch frischer Ansatz"],
+          [1, a=>has(a.alltag,"sport"), ()=>R.alltag("sport"), "Viel Sport"],
+          [-5, a=>a.kopfhaut==="sensibel" || a.kopfhaut==="trocken", null, "Kopfhaut empfindlich/trocken (ausgeschlossen)"] ]},
+  { id:"bond", name:()=>"Bond-Repair-Pflege",
+    why:"Blondierung und Dauerwelle brechen die inneren Verbindungen im Haar auf. Bond-Repair-Produkte setzen genau dort an, nicht nur an der Oberfläche wie ein Conditioner.",
+    how:"Nach Anleitung einmal pro Woche, meist vor der Haarwäsche ins Haar geben. Besonders wirksam ist die Behandlung bei uns im Salon direkt beim Färben.",
+    pts:[ [5, a=>a.zustand==="blondiert", a=>R.zustand(a), "Blondiert"],
+          [3, a=>a.zustand==="strapaziert", a=>R.zustand(a), "Strapaziert"],
+          [1, a=>has(a.wunsch,"spliss"), ()=>R.wunsch("spliss"), "Wunsch weniger Haarbruch"],
+          [1, a=>has(a.alltag,"hitze") && a.zustand!=="natur", ()=>R.alltag("hitze"), "Hitze + chemisch behandelt"] ]},
+  { id:"lockencreme", name:a => a.staerke==="fein" ? "Leichte Lockenmousse oder Leave-in-Spray" : "Leave-in-Conditioner oder Lockencreme",
+    why:"Locken brauchen Feuchtigkeit, die im Haar bleibt. Ein Leave-in bündelt die Locken, sie halten ihre Form und krausen weniger.",
+    how:"Ins nasse, noch tropfende Haar kneten (nicht kämmen), dann lufttrocknen oder mit Diffusor föhnen.",
+    pts:[ [3, a=>a.form==="lockig", a=>R.form(a), "Lockig"],
+          [4, a=>a.form==="kraus", a=>R.form(a), "Sehr lockig/kraus"],
+          [1, a=>a.form==="wellig", a=>R.form(a), "Wellig"],
+          [3, a=>has(a.wunsch,"locken") && a.form!=="glatt", ()=>R.wunsch("locken"), "Wunsch definierte Locken"],
+          [1, a=>has(a.wunsch,"frizz") && a.form!=="glatt", ()=>R.wunsch("frizz"), "Frizz + Wellen/Locken"] ]},
+  { id:"detangler", name:()=>"Leichter Leave-in-Spray",
+    why:"Ein Leave-in-Spray legt einen leichten Film ums Haar. Das bändigt Frizz und erleichtert das Kämmen, ohne glattes Haar zu beschweren.",
+    how:"Ins handtuchtrockene Haar sprühen, nur in die Längen.",
+    pts:[ [2, a=>has(a.wunsch,"frizz") && (a.form==="glatt"||a.form==="wellig"), ()=>R.wunsch("frizz"), "Frizz bei glattem/welligem Haar"],
+          [1, a=>has(a.alltag,"zopf"), ()=>R.alltag("zopf"), "Oft Zopf"],
+          [1, a=>a.zustand!=="natur" && !isCurly(a), a=>R.zustand(a), "Chemisch behandelt, nicht lockig"] ]},
+  { id:"oel", name:()=>"Ein paar Tropfen Haaröl für die Spitzen",
+    why:"Öl glättet die Oberfläche der Spitzen. Das bringt sofort Glanz und weniger Frizz, besonders bei kräftigem Haar.",
+    how:"1–3 Tropfen in den Handflächen verreiben und nur in die Spitzen geben. Weniger ist mehr.",
+    pts:[ [2, a=>has(a.wunsch,"glanz"), ()=>R.wunsch("glanz"), "Wunsch Glanz"],
+          [2, a=>has(a.wunsch,"frizz"), ()=>R.wunsch("frizz"), "Wunsch weniger Frizz"],
+          [1, a=>a.staerke==="kraeftig", a=>R.staerke(a), "Kräftiges Haar"],
+          [1, a=>a.form==="kraus", a=>R.form(a), "Sehr lockig/kraus"],
+          [-3, a=>a.staerke==="fein", null, "Feines Haar (Abzug)"],
+          [-2, a=>a.kopfhaut==="fettend", null, "Fettende Kopfhaut (Abzug)"] ]},
+  { id:"glanz", name:()=>"Saure Glanzspülung (1× pro Woche)",
+    why:"Ein saurer pH-Wert schließt die Haaroberfläche. Glattes Haar reflektiert mehr Licht und glänzt, ohne dass etwas Schweres im Haar bleibt.",
+    how:"Nach dem Conditioner ins Haar geben, kurz einwirken lassen, mit kühlem Wasser ausspülen.",
+    pts:[ [3, a=>has(a.wunsch,"glanz"), ()=>R.wunsch("glanz"), "Wunsch Glanz"],
+          [1, a=>a.staerke==="fein", a=>R.staerke(a), "Feines Haar"],
+          [1, a=>a.zustand==="coloriert", a=>R.zustand(a), "Coloriert"],
+          [-1, a=>a.staerke==="kraeftig", null, "Kräftiges Haar (Abzug)"] ]},
+  { id:"volumen", name:()=>"Ansatz-Volumenspray oder leichter Föhnschaum",
+    why:"Volumen entsteht am Ansatz. Ein leichtes Produkt dort hebt das Haar an. Pflege in den Längen bringt dafür nichts.",
+    how:"Ins handtuchtrockene Haar direkt an den Ansatz geben und kopfüber oder mit Rundbürste föhnen.",
+    pts:[ [3, a=>has(a.wunsch,"volumen"), ()=>R.wunsch("volumen"), "Wunsch Volumen"],
+          [2, a=>a.staerke==="fein", a=>R.staerke(a), "Feines Haar"],
+          [-3, a=>a.staerke==="kraeftig", null, "Kräftiges Haar (Abzug)"],
+          [-2, a=>isCurly(a), null, "Lockig/kraus (Abzug)"] ]},
+  { id:"uv", name:()=>"UV-Schutz-Spray für die Haare",
+    why:"Sonne, Chlor und Salzwasser bleichen Farbe aus und machen die Längen spröde. Ein UV-Spray ist für Haare das, was Sonnencreme für die Haut ist.",
+    how:"Vor dem Rausgehen oder Schwimmen in die Längen sprühen. Nach Chlor- oder Salzwasser die Haare mit klarem Wasser ausspülen.",
+    pts:[ [3, a=>has(a.alltag,"sonne"), ()=>R.alltag("sonne"), "Viel Sonne/Chlor"],
+          [1, a=>has(a.alltag,"sonne") && (a.zustand==="coloriert"||a.zustand==="blondiert"), a=>R.zustand(a), "+ coloriert/blondiert"] ]},
+  { id:"farbe", name:a => a.zustand==="blondiert" ? "Silber-Pflege gegen Gelbstich (1× pro Woche)" : "Farbauffrischende Pflege (Color-Conditioner)",
+    why:"Pigmentierte Pflege frischt den Farbton zwischen zwei Salonterminen auf. So sieht die Farbe länger aus wie frisch gemacht.",
+    how:"Statt deines normalen Conditioners einmal pro Woche, Einwirkzeit genau einhalten.",
+    pts:[ [3, a=>has(a.wunsch,"farbe"), ()=>R.wunsch("farbe"), "Wunsch Farbe hält länger"],
+          [1, a=>a.zustand==="coloriert"||a.zustand==="blondiert", a=>R.zustand(a), "Coloriert/blondiert"],
+          [-5, a=>a.zustand==="natur"||a.zustand==="strapaziert", null, "Nicht coloriert (ausgeschlossen)"] ]},
+  { id:"trockenshampoo", name:()=>"Trockenshampoo für den Tag dazwischen",
+    why:"Trockenshampoo nimmt Fett am Ansatz auf. So kommst du einen Tag länger ohne Haarwäsche aus, und es gibt sogar etwas Volumen.",
+    how:"Mit ca. 20 cm Abstand auf den Ansatz sprühen, kurz warten, ausbürsten. Nicht mehrere Tage hintereinander verwenden.",
+    pts:[ [2, a=>has(a.wunsch,"fett"), ()=>R.wunsch("fett"), "Wunsch frischer Ansatz"],
+          [2, a=>a.kopfhaut==="fettend", a=>R.kopfhaut(a), "Kopfhaut fettend"],
+          [1, a=>has(a.alltag,"sport"), ()=>R.alltag("sport"), "Viel Sport"],
+          [-3, a=>a.kopfhaut==="sensibel"||a.kopfhaut==="trocken"||a.kopfhaut==="schuppen", null, "Kopfhaut empfindlich/trocken/Schuppen (Abzug)"] ]}
+];
+
+function scoreSpecials(a){
+  return SPECIALS.map(s => {
+    let score = 0; const because = [];
+    for (const [p, cond, reason] of s.pts){
+      if (cond(a)){ score += p; if (p > 0 && reason) { const r = reason(a); if (!because.includes(r)) because.push(r); } }
+    }
+    return { id:s.id, score, name:s.name(a), why:s.why, how:s.how, because };
+  }).sort((x, y) => y.score - x.score);
+}
+
+/* Weglassen: in Reihenfolge, max. 4 */
+const SKIPS = [
+  { id:"oel", name:"Haaröl und schwere Seren", crit:"Feines Haar oder fettende Kopfhaut",
+    when:a => a.staerke==="fein" || a.kopfhaut==="fettend",
+    why:a => a.staerke==="fein" ? "Sie beschweren feines Haar sofort, es hängt dann platt und strähnig." : "Öl wandert über die Hände und das Kämmen zum Ansatz. Der wird dann noch schneller fettig.",
+    because:a => [a.staerke==="fein" ? R.staerke(a) : R.kopfhaut(a)] },
+  { id:"antischuppen", name:"Anti-Schuppen-Shampoo", crit:"Keine Schuppen",
+    when:a => a.kopfhaut!=="schuppen",
+    why:()=>"Ohne echte Schuppen bringt es nichts. Die Wirkstoffe können eine gesunde Kopfhaut sogar reizen. Trockene Schüppchen sind keine Schuppen.",
+    because:a => [R.kopfhaut(a)] },
+  { id:"detox", name:"Regelmäßiges Detox- oder Tiefenreinigungs-Shampoo", crit:"Coloriert/blondiert oder Kopfhaut trocken/empfindlich",
+    when:a => a.zustand==="coloriert" || a.zustand==="blondiert" || a.kopfhaut==="trocken" || a.kopfhaut==="sensibel",
+    why:a => (a.zustand==="coloriert"||a.zustand==="blondiert") ? "Es wäscht Farbpigmente aus und trocknet die Längen aus. Wenn überhaupt, dann höchstens einmal im Monat." : "Es entfettet die Kopfhaut stark und kann sie zusätzlich austrocknen und reizen.",
+    because:a => [(a.zustand==="coloriert"||a.zustand==="blondiert") ? R.zustand(a) : R.kopfhaut(a)] },
+  { id:"bond", name:"Bond-Repair- und Plex-Produkte", crit:"Naturbelassen und kein tägliches Hitzestyling",
+    when:a => a.zustand==="natur" && !has(a.alltag,"hitze"),
+    why:()=>"Sie reparieren Verbindungen, die durch Blondierung oder Dauerwelle gebrochen sind. Naturbelassenes Haar hat diese Schäden nicht.",
+    because:a => [R.zustand(a)] },
+  { id:"silber", name:"Silbershampoo", crit:"Nicht blondiert",
+    when:a => a.zustand!=="blondiert",
+    why:()=>"Es neutralisiert Gelbstich in aufgehelltem Haar. In anderem Haar hat es keinen Effekt oder macht es fahl.",
+    because:a => [R.zustand(a)] },
+  { id:"trockenshampoo", name:"Trockenshampoo", crit:"Kopfhaut trocken/empfindlich/Schuppen",
+    when:a => a.kopfhaut==="trocken" || a.kopfhaut==="sensibel" || a.kopfhaut==="schuppen",
+    why:()=>"Es entzieht der Kopfhaut zusätzlich Feuchtigkeit und bleibt als Rückstand liegen. Für deine Kopfhaut eher ungünstig.",
+    because:a => [R.kopfhaut(a)] },
+  { id:"volumen", name:"Volumen-Schaum und Volumen-Shampoo", crit:"Kräftiges oder sehr lockiges Haar",
+    when:a => a.staerke==="kraeftig" || a.form==="kraus",
+    why:()=>"Dein Haar hat von Natur aus Fülle. Volumenprodukte machen es eher trocken und störrisch.",
+    because:a => [a.staerke==="kraeftig" ? R.staerke(a) : R.form(a)] },
+  { id:"twoinone", name:"2-in-1-Shampoo mit Spülung", crit:"Coloriert/blondiert/strapaziert, kräftig oder lockig",
+    when:a => a.zustand!=="natur" || a.staerke==="kraeftig" || isCurly(a),
+    why:()=>"Es pflegt die Längen zu wenig und reinigt die Kopfhaut zu schwach. Zwei getrennte Produkte machen beide Aufgaben besser.",
+    because:a => [a.zustand!=="natur" ? R.zustand(a) : (isCurly(a) ? R.form(a) : R.staerke(a))] },
+  { id:"maske", name:"Wöchentliche Haarmaske", crit:"Naturbelassen, fein oder glatt, keine Belastung durch Hitze/Sonne",
+    when:a => damage(a)===0 && (a.staerke==="fein" || a.form==="glatt"),
+    why:()=>"Gesundes Haar ohne Chemie braucht keine Intensivkur. Dein Conditioner reicht, eine Maske würde es eher beschweren.",
+    because:a => [R.zustand(a)] },
+  { id:"hitzeschutz", name:"Hitzeschutz", crit:"Kein tägliches Hitzestyling",
+    when:a => !has(a.alltag,"hitze"),
+    why:()=>"Wenn du deine Haare meist lufttrocknen lässt, brauchst du keinen. Beim gelegentlichen Föhnen reicht die mittlere Stufe mit etwas Abstand.",
+    because:()=>["Kein Hitzestyling"] }
+];
+
+function tips(a){
+  const t = [];
+  if (has(a.wunsch,"spliss") || a.zustand==="strapaziert") t.push("<b>Spliss kann man nicht reparieren, nur schneiden.</b> Alle 8–12 Wochen die Spitzen schneiden lassen bringt mehr als jedes Produkt.");
+  if (has(a.alltag,"zopf")) t.push("Weiche Spiral- oder Stoffgummis statt Metallclips. Den Zopf nicht immer an derselben Stelle binden, sonst bricht das Haar dort.");
+  if (isCurly(a) || has(a.wunsch,"frizz")) t.push("Mikrofasertuch oder altes Baumwoll-T-Shirt statt Frottee. Haare ausdrücken, nicht rubbeln, das spart viel Frizz.");
+  if (has(a.alltag,"hitze")) t.push("Den Föhn auf mittlere Temperatur stellen und die letzten 10 % kalt föhnen, das schließt die Oberfläche und bringt Glanz.");
+  if (a.wasch==="taeglich" && (a.kopfhaut==="trocken"||a.kopfhaut==="sensibel")) t.push("Versuch, den Waschrhythmus langsam auf alle 2 Tage zu strecken. Deine Kopfhaut wird es dir danken.");
+  if (a.kopfhaut==="fettend") t.push("Nicht zu heiß waschen und den Ansatz möglichst wenig mit den Händen berühren. Beides regt die Talgproduktion an.");
+  if (has(a.alltag,"sport") && a.kopfhaut!=="fettend") t.push("Nach dem Sport reicht oft lauwarmes Wasser und Conditioner in den Längen. Nicht jedes Mal muss ein Shampoo sein.");
+  if (a.zustand==="coloriert"||a.zustand==="blondiert") t.push("In den ersten 48 Stunden nach dem Färben nicht waschen, dann hält die Farbe deutlich länger.");
+  if (has(a.wunsch,"glanz")) t.push("Zum Schluss kühl ausspülen. Das schließt die Haaroberfläche und bringt sichtbar mehr Glanz, kostenlos.");
+  if (a.kopfhaut==="schuppen"||a.kopfhaut==="sensibel") t.push("Wenn sich deine Kopfhaut nach 4 Wochen nicht bessert: Lass es beim Hautarzt abklären. Hinter hartnäckigen Beschwerden kann mehr stecken als ein Pflegethema.");
+  if (!t.length) t.push("Dein Haar ist unkompliziert. Weniger Produkte sind hier wirklich mehr.");
+  return t.slice(0, 4);
+}
+
+function recommend(a){
+  const basis = [shampoo(a), conditioner(a), hitzeschutz(a)].filter(Boolean);
+  const ranked = scoreSpecials(a);
+  const special = [];
+  if (ranked[0].score >= SPECIAL_MIN) special.push(ranked[0]);
+  if (special.length && ranked[1].score >= SPECIAL_OPT) special.push({ ...ranked[1], optional:true });
+  const recommendedIds = new Set(special.map(s => s.id));
+  if (has(a.alltag,"hitze")) recommendedIds.add("hitzeschutz");
+  if (a.kopfhaut === "schuppen") recommendedIds.add("antischuppen");
+  if (damage(a) >= 3) recommendedIds.add("maske");
+  const skip = SKIPS.filter(s => !recommendedIds.has(s.id) && s.when(a)).slice(0, 4)
+    .map(s => ({ name:s.name, why:s.why(a), because:s.because(a) }));
+  return { basis, special, skip, tips:tips(a) };
+}
+
+/* ------------------------------------------------------------------
+   Zustand, Speichern im Link (#r=…), Rendering
+------------------------------------------------------------------ */
+const answers = { alltag:new Set(), wunsch:new Set() };
+let step = 0;
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"})[c]);
+
+function encode(a){
+  return QUESTIONS.map(q => q.type === "multi" ? [...a[q.id]].join("+") || "-" : a[q.id]).join(".");
+}
+function decode(str){
+  const parts = String(str || "").split(".");
+  if (parts.length !== QUESTIONS.length) return null;
+  const a = {};
+  for (let i = 0; i < QUESTIONS.length; i++){
+    const q = QUESTIONS[i], valid = new Set(q.options.map(o => o.v));
+    if (q.type === "multi"){
+      const vals = parts[i] === "-" ? [] : parts[i].split("+");
+      if (!vals.every(v => valid.has(v))) return null;
+      a[q.id] = new Set(vals.slice(0, q.max || vals.length));
+    } else {
+      if (!valid.has(parts[i])) return null;
+      a[q.id] = parts[i];
+    }
+  }
+  return a;
+}
+function store(key, val){ try { localStorage.setItem(key, val); } catch (e) {} }
+function load(key){ try { return localStorage.getItem(key); } catch (e) { return null; } }
+
+function show(view){
+  for (const v of ["start","quiz","result"]) $("#v-" + v).hidden = v !== view;
+  window.scrollTo({ top:0 });
+}
+
+function isAnswered(q){
+  return q.type === "multi" ? answers[q.id].size > 0 : !!answers[q.id];
+}
+
+function renderQuestion(){
+  const q = QUESTIONS[step];
+  $("#pbar").style.width = ((step + 1) / QUESTIONS.length * 100) + "%";
+  $("#pnum").textContent = "Frage " + (step + 1) + " von " + QUESTIONS.length;
+  $("#q-eyebrow").textContent = q.eyebrow;
+  $("#q-title").textContent = q.title;
+  $("#q-hint").textContent = q.hint || "";
+  $("#q-hint").hidden = !q.hint;
+  const box = $("#q-options");
+  box.setAttribute("role", q.type === "multi" ? "group" : "radiogroup");
+  box.setAttribute("aria-labelledby", "q-title");
+  box.innerHTML = q.options.map(o => {
+    const on = q.type === "multi" ? answers[q.id].has(o.v) : answers[q.id] === o.v;
+    return `<button class="opt ${q.type === "multi" ? "multi" : ""}" role="${q.type === "multi" ? "checkbox" : "radio"}" aria-checked="${on}" data-v="${o.v}">
+      <span class="mark" aria-hidden="true"></span><span><b>${esc(o.l)}</b>${o.d ? `<small>${esc(o.d)}</small>` : ""}</span></button>`;
+  }).join("");
+  $("#q-next").textContent = step === QUESTIONS.length - 1 ? "Empfehlung zeigen" : "Weiter";
+  $("#q-next").disabled = !isAnswered(q);
+  $("#q-back").textContent = step === 0 ? "Abbrechen" : "Zurück";
+  $("#q-title").focus({ preventScroll:true });
+}
+
+$("#q-options").addEventListener("click", e => {
+  const btn = e.target.closest(".opt"); if (!btn) return;
+  const q = QUESTIONS[step], v = btn.dataset.v;
+  if (q.type === "single"){
+    answers[q.id] = v;
+    renderQuestion();
+    setTimeout(next, 220);
+    return;
+  }
+  const set = answers[q.id];
+  if (set.has(v)) set.delete(v);
+  else {
+    if (q.none === v) set.clear();
+    else if (q.none) set.delete(q.none);
+    if (q.max && set.size >= q.max) set.delete([...set][0]);
+    set.add(v);
+  }
+  renderQuestion();
+  const again = $(`#q-options [data-v="${v}"]`); if (again) again.focus();
+});
+
+function next(){
+  if (!isAnswered(QUESTIONS[step])) return;
+  if (step < QUESTIONS.length - 1){ step++; renderQuestion(); }
+  else finish();
+}
+$("#q-next").addEventListener("click", next);
+$("#q-back").addEventListener("click", () => {
+  if (step === 0){ show("start"); return; }
+  step--; renderQuestion();
+});
+
+function finish(){
+  const code = encode(answers);
+  history.replaceState(null, "", "#r=" + code);
+  store("haarkompass.last", JSON.stringify({ code, at:new Date().toISOString() }));
+  renderResult(answers);
+}
+
+const because = list => list.length ? `<div class="because"><span class="muted" style="background:none;padding:0">weil:</span>${list.map(b => `<span>${esc(b)}</span>`).join("")}</div>` : "";
+const item = (x, tag) => `<div class="item"><h3>${esc(x.name)}${tag ? `<span class="tag">${esc(tag)}</span>` : ""}</h3>
+  <p class="why">${esc(x.why)}</p>${x.how ? `<p class="how"><b>So geht's:</b> ${esc(x.how)}</p>` : ""}${because(x.because || [])}</div>`;
+
+function renderResult(a){
+  const r = recommend(a);
+  const prof = [label("staerke",a.staerke), label("form",a.form), label("zustand",a.zustand), "Kopfhaut " + label("kopfhaut",a.kopfhaut).toLowerCase()]
+    .concat([...a.wunsch].map(w => label("wunsch", w)));
+  $("#r-profile").innerHTML = prof.map(p => `<span class="chip">${esc(p)}</span>`).join("");
+  $("#r-title").textContent = r.basis.length + (r.special.filter(s => !s.optional).length) <= 3
+    ? "Weniger ist bei dir mehr" : "Deine Routine, klar und ehrlich";
+  $("#r-basis").innerHTML = r.basis.map(x => item(x)).join("");
+  $("#r-special").innerHTML = r.special.length
+    ? r.special.map(x => item(x, x.optional ? "optional" : "")).join("")
+    : `<div class="item"><h3>Kein Extra nötig</h3><p class="why">Ehrlich: Zu deinen Angaben passt kein Zusatzprodukt so gut, dass es sich lohnt. Mit der Basis-Routine ist dein Haar bestens versorgt.</p></div>`;
+  $("#r-skip").innerHTML = r.skip.length ? r.skip.map(x => item(x)).join("")
+    : `<p class="muted">Deine Routine ist schon schlank. Hier gibt es nichts zu streichen.</p>`;
+  $("#r-tips").innerHTML = r.tips.map(t => `<li>${t}</li>`).join("");
+  show("result");
+  $("#r-title").focus({ preventScroll:true });
+}
+
+function start(){
+  for (const q of QUESTIONS) answers[q.id] = q.type === "multi" ? new Set() : undefined;
+  step = 0;
+  history.replaceState(null, "", location.pathname + location.search);
+  show("quiz"); renderQuestion();
+}
+
+function openFromCode(code){
+  const a = decode(code); if (!a) return false;
+  Object.assign(answers, a);
+  renderResult(a); return true;
+}
+
+/* ------------------------------------------------------------------
+   Verkabelung
+------------------------------------------------------------------ */
+function toast(msg){
+  const t = $("#toast"); t.textContent = msg; t.hidden = false;
+  clearTimeout(toast.t); toast.t = setTimeout(() => { t.hidden = true; }, 2600);
+}
+
+$("#go").addEventListener("click", start);
+$("#restart").addEventListener("click", start);
+$("#home").addEventListener("click", () => { refreshSaved(); show("start"); });
+$("#print").addEventListener("click", () => window.print());
+$("#share").addEventListener("click", async () => {
+  const url = location.href;
+  if (navigator.share){
+    try { await navigator.share({ title:"Meine HaarKompass-Empfehlung", url }); return; } catch (e) { if (e && e.name === "AbortError") return; }
+  }
+  try { await navigator.clipboard.writeText(url); toast("Link kopiert. Speichere ihn als Lesezeichen."); }
+  catch (e) { prompt("Diesen Link speichern:", url); }
+});
+$("#open-saved").addEventListener("click", () => {
+  const s = JSON.parse(load("haarkompass.last") || "null");
+  if (s && openFromCode(s.code)) history.replaceState(null, "", "#r=" + s.code);
+});
+
+function refreshSaved(){
+  let s = null;
+  try { s = JSON.parse(load("haarkompass.last") || "null"); } catch (e) {}
+  const ok = s && decode(s.code);
+  $("#saved").hidden = !ok;
+  if (ok){
+    const d = new Date(s.at);
+    $("#saved-date").textContent = isNaN(d) ? "" : "vom " + d.toLocaleDateString("de-AT", { day:"numeric", month:"long", year:"numeric" });
+  }
+}
+
+const m = location.hash.match(/^#r=([\w.+\-]+)$/);
+if (!(m && openFromCode(m[1]))) { refreshSaved(); show("start"); }
+</script>
+</body>
+</html>
