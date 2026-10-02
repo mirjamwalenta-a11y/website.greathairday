@@ -60,9 +60,6 @@ header.top{border-bottom:1px solid var(--line)}
 .logo{font-family:var(--f-display);font-size:1.2rem;font-weight:700;letter-spacing:.02em;color:var(--ink);white-space:nowrap}
 .logo span{color:var(--accent)}
 .brand small{font-family:var(--f-body);font-weight:500;font-size:.8rem;color:var(--muted);white-space:nowrap;border-left:1px solid var(--line);padding-left:10px}
-.top nav{margin-left:auto;display:flex;gap:4px}
-.top nav button{white-space:nowrap;border:0;background:none;padding:8px 12px;border-radius:999px;cursor:pointer;color:var(--muted);font-weight:600;font-size:.9rem}
-.top nav button[aria-current="page"]{background:var(--accent-soft);color:var(--accent)}
 
 main{padding-block:28px 56px}
 .view{display:flex;flex-direction:column;gap:24px}
@@ -143,20 +140,10 @@ footer.foot .wrap{display:flex;gap:8px 18px;flex-wrap:wrap;align-items:baseline}
 footer.foot .logo{font-size:1rem}
 footer.foot a{color:var(--muted)}
 
-/* Team */
-table{width:100%;border-collapse:collapse;font-size:.9rem}
-th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}
-th{font-size:.75rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
-.table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
-.principles{display:grid;gap:10px}
-.principles li{margin-bottom:4px}
 
 .toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 18px;border-radius:999px;font-weight:600;font-size:.9rem;box-shadow:var(--shadow);z-index:50}
 
 @media (max-width:520px){
-  .brand small{display:none}
-  .top nav button{padding:8px 10px}
-  .top nav .long{display:none}
   .card{padding:16px}
   .options{grid-template-columns:1fr}
 }
@@ -175,10 +162,6 @@ th{font-size:.75rem;text-transform:uppercase;letter-spacing:.06em;color:var(--mu
     <button class="brand" id="home" aria-label="Great Hair Day HaarKompass – zur Startseite">
       <span class="logo">Great Hair<span>.</span>Day</span><small>HaarKompass</small>
     </button>
-    <nav aria-label="Bereiche">
-      <button data-nav="start" aria-current="page">Guide</button>
-      <button data-nav="team"><span class="long">Für das </span>Team</button>
-    </nav>
   </div>
 </header>
 
@@ -255,37 +238,6 @@ th{font-size:.75rem;text-transform:uppercase;letter-spacing:.06em;color:var(--mu
       <button class="btn primary" id="share">Link speichern / teilen</button>
       <button class="btn" id="print">Drucken / PDF</button>
       <button class="btn ghost" id="restart">Neu starten</button>
-    </div>
-  </section>
-
-  <!-- Team -->
-  <section class="view" id="v-team" hidden>
-    <div class="eyebrow">Für das Salon-Team</div>
-    <h1>So entscheidet der HaarKompass</h1>
-    <p class="lead">Alle Empfehlungen folgen festen, nachvollziehbaren Regeln, für alle Kundinnen und Kunden gleich. So beraten Guide und Team mit denselben Kriterien.</p>
-    <div class="card principles">
-      <h2>Grundprinzipien</h2>
-      <ul>
-        <li><b>Shampoo ist für die Kopfhaut, Conditioner für die Längen.</b> Das Shampoo richtet sich nach dem Kopfhaut-Bedürfnis, der Conditioner nach Haarstärke, Form und Strapazierung.</li>
-        <li><b>Höchstens ein Spezial-Impuls</b> (plus höchstens eine Option). Wenn kein Extra deutlich passt, sagt der Guide ehrlich: „Deine Basis reicht.“</li>
-        <li><b>Weglassen ist eine Empfehlung.</b> Produkte, die bei diesem Profil nichts bringen oder schaden, werden aktiv genannt.</li>
-        <li><b>Grenzen benennen:</b> Spliss kann man nur schneiden, Kopfhaut-Probleme, die nicht weggehen, gehören zum Hautarzt.</li>
-        <li>Keine Marken, keine Preise, kein Login. Es werden keine Daten an einen Server gesendet.</li>
-      </ul>
-    </div>
-    <div class="card block">
-      <h2>Basis-Routine</h2>
-      <div class="table-wrap"><table id="t-basis"><thead><tr><th>Baustein</th><th>Regel</th></tr></thead><tbody></tbody></table></div>
-    </div>
-    <div class="card block">
-      <h2>Spezial-Impulse</h2>
-      <p class="muted small">Jedes Extra sammelt Punkte. Das mit den meisten Punkten wird empfohlen, wenn es mindestens <b id="t-min"></b> Punkte hat. Ein zweites wird als Option gezeigt, wenn es mindestens <b id="t-opt"></b> Punkte hat.</p>
-      <div class="table-wrap"><table id="t-special"><thead><tr><th>Extra</th><th>Punkte</th></tr></thead><tbody></tbody></table></div>
-    </div>
-    <div class="card block">
-      <h2>Weglassen</h2>
-      <p class="muted small">Es werden höchstens 4 Punkte gezeigt, in dieser Reihenfolge. Was als Extra empfohlen wurde, steht nie auf der Weglassen-Liste.</p>
-      <div class="table-wrap"><table id="t-skip"><thead><tr><th>Produkt</th><th>Wann weglassen</th></tr></thead><tbody></tbody></table></div>
     </div>
   </section>
 </main>
@@ -443,7 +395,7 @@ function hitzeschutz(a){
                               : "Ins handtuchtrockene Haar sprühen, gleichmäßig durchkämmen." };
 }
 
-/* Spezial-Impulse: jedes Extra sammelt Punkte. pts: [Punkte, Bedingung, Grund-Kärtchen|null, Text für Team-Ansicht] */
+/* Spezial-Impulse: jedes Extra sammelt Punkte. pts: [Punkte, Bedingung, Grund-Kärtchen|null, Kurzbeschreibung] */
 const SPECIAL_MIN = 3, SPECIAL_OPT = 4;
 const SPECIALS = [
   { id:"kopfhautserum", name:a => ({
@@ -646,9 +598,7 @@ function store(key, val){ try { localStorage.setItem(key, val); } catch (e) {} }
 function load(key){ try { return localStorage.getItem(key); } catch (e) { return null; } }
 
 function show(view){
-  for (const v of ["start","quiz","result","team"]) $("#v-" + v).hidden = v !== view;
-  for (const b of document.querySelectorAll("[data-nav]"))
-    b.setAttribute("aria-current", (b.dataset.nav === "team") === (view === "team") ? "page" : "false");
+  for (const v of ["start","quiz","result"]) $("#v-" + v).hidden = v !== view;
   window.scrollTo({ top:0 });
 }
 
@@ -753,22 +703,6 @@ function openFromCode(code){
 }
 
 /* ------------------------------------------------------------------
-   Team-Ansicht: Tabellen direkt aus dem Regelwerk erzeugt
------------------------------------------------------------------- */
-function renderTeam(){
-  $("#t-min").textContent = SPECIAL_MIN;
-  $("#t-opt").textContent = SPECIAL_OPT;
-  $("#t-basis tbody").innerHTML = [
-    ["Shampoo", "Richtet sich nach der Kopfhaut: Schuppen → Wirkstoff-Shampoo im Wechsel mit mildem; empfindlich → parfümfrei; fettend → mild ohne Öle; trocken → feuchtigkeitsspendend. Bei unauffälliger Kopfhaut entscheiden die Längen: lockig → sulfatfrei, coloriert/blondiert → farbschonend, fein → leicht, sonst mildes Basis-Shampoo."],
-    ["Conditioner", "Belastungs-Wert = Zustand (natur 0, coloriert 1, strapaziert 2, blondiert 3) + 1 bei Hitze + 1 bei Sonne + 1 bei Wunsch Spliss. Ab 3 → reparierend + Maske 1×/Woche; sonst kräftig/lockig → reichhaltig; fein → leicht; sonst Standard. Coloriert: zusätzlich saurer pH."],
-    ["Hitzeschutz", "Gehört zur Basis, sobald fast täglich mit Hitze gestylt wird."]
-  ].map(([k, v]) => `<tr><td><b>${esc(k)}</b></td><td>${esc(v)}</td></tr>`).join("");
-  $("#t-special tbody").innerHTML = SPECIALS.map(s =>
-    `<tr><td><b>${esc(s.name({kopfhaut:"", staerke:"", zustand:""}))}</b></td><td>${s.pts.map(([p,, , t]) => `${p > 0 ? "+" : ""}${p} ${esc(t)}`).join("<br>")}</td></tr>`).join("");
-  $("#t-skip tbody").innerHTML = SKIPS.map(s => `<tr><td><b>${esc(s.name)}</b></td><td>${esc(s.crit)}</td></tr>`).join("");
-}
-
-/* ------------------------------------------------------------------
    Verkabelung
 ------------------------------------------------------------------ */
 function toast(msg){
@@ -787,10 +721,6 @@ $("#share").addEventListener("click", async () => {
   }
   try { await navigator.clipboard.writeText(url); toast("Link kopiert. Speichere ihn als Lesezeichen."); }
   catch (e) { prompt("Diesen Link speichern:", url); }
-});
-for (const b of document.querySelectorAll("[data-nav]")) b.addEventListener("click", () => {
-  if (b.dataset.nav === "team"){ renderTeam(); show("team"); }
-  else { refreshSaved(); show("start"); }
 });
 $("#open-saved").addEventListener("click", () => {
   const s = JSON.parse(load("haarkompass.last") || "null");
