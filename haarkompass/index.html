@@ -331,7 +331,7 @@ function shampoo(a){
   const because = [R.kopfhaut(a)];
   switch (a.kopfhaut){
     case "schuppen": return { name:"Anti-Schuppen-Shampoo, im Wechsel mit einem milden Shampoo", because,
-      why:"Echte Schuppen brauchen einen Wirkstoff (z. B. Zinkpyrithion, Piroctone Olamine oder Ketoconazol). Zwei Mal pro Woche reicht, an den anderen Tagen wäschst du mild.",
+      why:"Echte Schuppen brauchen ein Shampoo mit Anti-Schuppen-Wirkstoff, zum Beispiel Piroctone Olamine. Zwei Mal pro Woche reicht, an den anderen Tagen wäschst du mild.",
       how:"Das Wirkstoff-Shampoo 2–3 Minuten einwirken lassen, dann gründlich ausspülen." };
     case "sensibel": return { name:"Sehr mildes, parfümfreies Shampoo", because,
       why:"Duftstoffe und starke Tenside lösen am häufigsten Reizungen aus. Je kürzer die Inhaltsliste, desto besser.", how };
@@ -417,8 +417,8 @@ const SPECIALS = [
           [2, a=>has(a.wunsch,"fett"), ()=>R.wunsch("fett"), "Wunsch frischer Ansatz"],
           [1, a=>has(a.alltag,"sport"), ()=>R.alltag("sport"), "Viel Sport"],
           [-5, a=>a.kopfhaut==="sensibel" || a.kopfhaut==="trocken", null, "Kopfhaut empfindlich/trocken (ausgeschlossen)"] ]},
-  { id:"bond", name:()=>"Bond-Repair-Pflege",
-    why:"Blondierung und Dauerwelle brechen die inneren Verbindungen im Haar auf. Bond-Repair-Produkte setzen genau dort an, nicht nur an der Oberfläche wie ein Conditioner.",
+  { id:"bond", name:()=>"Molecular-Repair-Pflege",
+    why:"Blondierung und Dauerwelle brechen die inneren Verbindungen im Haar auf. Diese Pflege setzt genau dort an, nicht nur an der Oberfläche wie ein Conditioner.",
     how:"Nach Anleitung einmal pro Woche, meist vor der Haarwäsche ins Haar geben. Besonders wirksam ist die Behandlung bei uns im Salon direkt beim Färben.",
     pts:[ [5, a=>a.zustand==="blondiert", a=>R.zustand(a), "Blondiert"],
           [3, a=>a.zustand==="strapaziert", a=>R.zustand(a), "Strapaziert"],
@@ -505,7 +505,7 @@ const SKIPS = [
     when:a => a.zustand==="coloriert" || a.zustand==="blondiert" || a.kopfhaut==="trocken" || a.kopfhaut==="sensibel",
     why:a => (a.zustand==="coloriert"||a.zustand==="blondiert") ? "Es wäscht Farbpigmente aus und trocknet die Längen aus. Wenn überhaupt, dann höchstens einmal im Monat." : "Es entfettet die Kopfhaut stark und kann sie zusätzlich austrocknen und reizen.",
     because:a => [(a.zustand==="coloriert"||a.zustand==="blondiert") ? R.zustand(a) : R.kopfhaut(a)] },
-  { id:"bond", name:"Bond-Repair- und Plex-Produkte", crit:"Naturbelassen und kein tägliches Hitzestyling",
+  { id:"bond", name:"Molecular-Repair-Pflege", crit:"Naturbelassen und kein tägliches Hitzestyling",
     when:a => a.zustand==="natur" && !has(a.alltag,"hitze"),
     why:()=>"Sie reparieren Verbindungen, die durch Blondierung oder Dauerwelle gebrochen sind. Naturbelassenes Haar hat diese Schäden nicht.",
     because:a => [R.zustand(a)] },
