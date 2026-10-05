@@ -507,7 +507,7 @@ const SKIPS = [
     because:a => [(a.zustand==="coloriert"||a.zustand==="blondiert") ? R.zustand(a) : R.kopfhaut(a)] },
   { id:"bond", name:"Molecular-Repair-Pflege", crit:"Naturbelassen und kein tägliches Hitzestyling",
     when:a => a.zustand==="natur" && !has(a.alltag,"hitze"),
-    why:()=>"Sie reparieren Verbindungen, die durch Blondierung oder Dauerwelle gebrochen sind. Naturbelassenes Haar hat diese Schäden nicht.",
+    why:()=>"Sie repariert Verbindungen, die durch Blondierung oder Dauerwelle gebrochen sind. Naturbelassenes Haar hat diese Schäden nicht.",
     because:a => [R.zustand(a)] },
   { id:"silber", name:"Silbershampoo", crit:"Nicht blondiert",
     when:a => a.zustand!=="blondiert",
