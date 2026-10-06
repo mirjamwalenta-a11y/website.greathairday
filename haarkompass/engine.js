@@ -293,7 +293,7 @@ const SKIPS = [
 
 function tips(a){
   const t = [];
-  if (has(a.wunsch,"spliss") || a.zustand==="strapaziert") t.push("<b>Spliss kann man nicht reparieren, nur schneiden.</b> Alle 8–12 Wochen die Spitzen schneiden lassen bringt mehr als jedes Produkt.");
+  if (has(a.wunsch,"spliss") || a.zustand==="strapaziert") t.push("<b>Spliss kann man nicht dauerhaft reparieren, nur schneiden.</b> Pflege kann die Spitzen kurzfristig glätten und neuem Spliss vorbeugen, aber alle 8–12 Wochen die Spitzen schneiden lassen bringt mehr als jedes Produkt.");
   if (has(a.alltag,"zopf")) t.push("Weiche Spiral- oder Stoffgummis statt Metallclips. Den Zopf nicht immer an derselben Stelle binden, sonst bricht das Haar dort.");
   if (isCurly(a) || has(a.wunsch,"frizz")) t.push("Mikrofasertuch oder altes Baumwoll-T-Shirt statt Frottee. Haare ausdrücken, nicht rubbeln, das spart viel Frizz.");
   if (has(a.alltag,"hitze")) t.push("Den Föhn auf mittlere Temperatur stellen und die letzten 10 % kalt föhnen, das schließt die Oberfläche und bringt Glanz.");
