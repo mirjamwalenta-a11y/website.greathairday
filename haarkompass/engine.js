@@ -307,6 +307,97 @@ function tips(a){
   return t.slice(0, 4);
 }
 
+/* ------------------------------------------------------------------
+   Deine Wünsche: Jeder gewählte Hauptwunsch bekommt GENAU eine Antwort.
+   status: "covered" = ein Spezial-Impuls erfüllt ihn
+           "tip"     = so erreichst du es
+           "honest"  = ehrlich gesagt: Pflege allein schafft das nicht
+   uses:   Produktarten (IDs aus SPECIALS/SKIPS), die die Antwort empfiehlt.
+           Der automatische Test (tests/haarkompass.test.js) prüft, dass
+           davon nie etwas unter "Was du weglassen kannst" steht.
+------------------------------------------------------------------ */
+const WISH_COVER = {
+  volumen:["volumen"], glanz:["glanz","oel"], frizz:["lockencreme","detangler","oel"],
+  locken:["lockencreme"], farbe:["farbe","uv"], spliss:["bond"],
+  fett:["peeling","trockenshampoo"], kopfhaut:["kopfhautserum"]
+};
+const scalpDry = a => a.kopfhaut==="trocken" || a.kopfhaut==="sensibel" || a.kopfhaut==="schuppen";
+const nextExtra = special => special.length ? "das nächste Extra nach deinem Spezial-Impuls" : "ein sinnvolles Extra";
+
+const WISH_ANSWERS = {
+  volumen:(a, sp) => {
+    if (isCurly(a)) return { status:"honest", text:"Locken haben ihre Fülle schon, Volumenprodukte machen sie eher trocken. Mehr Fülle am Ansatz entsteht bei dir über die Form: mit dem Diffusor kopfüber föhnen und mit einem Stufenschnitt, der den Locken Gewicht nimmt." };
+    if (a.staerke === "kraeftig") return { status:"honest", text:"Dein Haar ist kräftig und hat schon viel Fülle. Mehr Volumen kommt hier vom Schnitt, nicht aus der Flasche: Stufen nehmen Gewicht heraus, dann hebt sich der Ansatz von selbst." };
+    return { status:"tip", uses:["volumen"], text:"Volumen entsteht am Ansatz: Conditioner nur in die Längen, dann kopfüber oder mit der Rundbürste föhnen. Wenn du ein Produkt ergänzen willst, ist ein leichter Föhnschaum am Ansatz " + nextExtra(sp) + "." };
+  },
+  glanz:a => {
+    if (a.staerke === "fein" || a.kopfhaut === "fettend") return { status:"tip", uses:["glanz"], text:"Haaröl wäre für dich zu schwer. Glanz bekommst du trotzdem: zum Schluss kühl ausspülen und einmal pro Woche eine saure Glanzspülung. Beides glättet die Haaroberfläche, ohne etwas Schweres im Haar zu lassen." };
+    return { status:"tip", uses:["oel"], text:"Zum Schluss kühl ausspülen und den Conditioner nach jeder Wäsche verwenden. Wenn du mehr willst: 1–2 Tropfen Haaröl nur in die Spitzen." };
+  },
+  frizz:a => {
+    if (a.staerke === "fein") return { status:"tip", uses:["detangler"], text:"Haare mit einem Mikrofasertuch ausdrücken statt rubbeln und einen leichten Leave-in-Spray in die Längen geben. Schwere Cremes und Öle würden feines Haar platt machen." };
+    return { status:"tip", text:"Haare mit einem Mikrofasertuch ausdrücken statt rubbeln und nicht trocken bürsten" + (has(a.alltag,"hitze") ? ", zum Schluss kalt föhnen" : "") + ". Das bringt bei Frizz oft mehr als ein weiteres Produkt." };
+  },
+  locken:a => {
+    if (a.form === "glatt") return { status:"honest", text:"Glattes Haar lässt sich nicht in Locken pflegen, das kann kein Produkt. Für Locken auf Zeit helfen Lockenstab oder Lockenwickler. Dauerhafte Locken gehen nur mit einer Umformung im Salon. Die beansprucht das Haar, deshalb beraten wir dich dazu gern persönlich." };
+    return { status:"tip", uses:["lockencreme"], text:"Eine leichte Lockencreme oder ein Leave-in ins nasse, noch tropfende Haar kneten, danach nicht mehr kämmen und mit dem Diffusor oder an der Luft trocknen. Je weniger du die Locken beim Trocknen berührst, desto definierter bleiben sie." };
+  },
+  farbe:(a, sp) => {
+    if (a.zustand === "natur") return { status:"honest", text:"Du hast angegeben, dass dein Haar nicht gefärbt ist. Farbpflege bringt bei ungefärbtem Haar nichts. Auch Naturhaar bleicht in der Sonne aus, dagegen hilft ein UV-Schutz-Spray, wenn du viel draußen bist." };
+    if (a.zustand === "strapaziert") return { status:"tip", text:"Farbe hält länger mit mildem Shampoo, lauwarmem statt heißem Wasser und wenn du in den ersten 48 Stunden nach dem Färben nicht wäschst. Ist dein Haar auch gefärbt, frag uns beim nächsten Termin nach farbauffrischender Pflege." };
+    return { status:"tip", uses:["farbe"], text:"Farbe hält länger mit mildem Shampoo, lauwarmem statt heißem Wasser und wenn du in den ersten 48 Stunden nach dem Färben nicht wäschst. Eine farbauffrischende Pflege einmal pro Woche wäre " + nextExtra(sp) + "." };
+  },
+  spliss:a => ({ status:"honest", text:"Gespaltene Spitzen lassen sich nicht reparieren, nur schneiden: alle 8–12 Wochen die Spitzen nachschneiden lassen. Vorbeugen kannst du mit Conditioner nach jeder Wäsche und indem du nasses Haar von unten nach oben entwirrst" + (has(a.alltag,"hitze") ? ". Und mit Hitzeschutz vor jedem Styling." : ".") }),
+  fett:a => {
+    if (scalpDry(a)) return { status:"tip", text:"Trockenshampoo und Peeling wären für deine Kopfhaut zu viel. Was hilft: lauwarm statt heiß waschen, Conditioner erst ab Kinnhöhe, den Ansatz wenig mit den Händen berühren und die Bürste regelmäßig reinigen." };
+    return { status:"tip", uses:["trockenshampoo"], text:"Conditioner und Öl vom Ansatz fernhalten, lauwarm waschen und die Bürste regelmäßig reinigen. Am Tag zwischen zwei Wäschen darf es ein Trockenshampoo sein, aber nicht mehrere Tage hintereinander." };
+  },
+  kopfhaut:(a, sp) => {
+    if (a.kopfhaut === "schuppen") return { status:"tip", text:"Das Anti-Schuppen-Shampoo aus deiner Basis-Routine ist dein wichtigster Schritt. Gib ihm 4 Wochen. Wird es nicht besser, lass deine Kopfhaut beim Hautarzt anschauen." };
+    if (a.kopfhaut === "normal") return { status:"tip", text:"Deine Kopfhaut ist unauffällig. Damit das so bleibt: mild und nicht zu heiß waschen und nicht ständig neue Produkte ausprobieren. Ein Extra brauchst du dafür nicht." };
+    return { status:"tip", uses:["kopfhautserum"], text:"Ein Kopfhaut-Serum wäre " + nextExtra(sp) + ". Bis dahin helfen die milde Basis-Routine und lauwarmes statt heißes Wasser." };
+  }
+};
+
+function wishes(a, special){
+  const byId = Object.fromEntries(special.map(s => [s.id, s]));
+  return [...a.wunsch].map(w => {
+    const base = { wish:w, label:label("wunsch", w) };
+    const hit = WISH_COVER[w].find(id => byId[id]);
+    if (hit) return { ...base, status:"covered", uses:[hit],
+      text:"Dafür ist dein Spezial-Impuls da: " + byId[hit].name + (byId[hit].optional ? " (optional)." : ".") };
+    const ans = WISH_ANSWERS[w](a, special);
+    return { ...base, status:ans.status, text:ans.text, uses:ans.uses || [] };
+  });
+}
+
+/* ------------------------------------------------------------------
+   Ersteinschätzung ganz oben (wie eine Ampel)
+   level: "kopfhaut" | "aufbau" | "wenig" | "routine"
+------------------------------------------------------------------ */
+const VERDICT_TAG = { kopfhaut:"Kopfhaut zuerst", aufbau:"Aufbau nötig", wenig:"Pflegeleicht", routine:"Gut versorgt" };
+function verdict(a, basis, special, skip){
+  const extras = special.filter(s => !s.optional).length;
+  const summary = basis.length + " Basis-Schritt" + (basis.length === 1 ? "" : "e")
+    + (extras ? ", 1 Extra, das sich lohnt" : ", kein Extra nötig")
+    + (skip.length ? ", " + skip.length + (skip.length === 1 ? " Produkt" : " Produkte") + " zum Weglassen." : ".");
+  let level, title, text;
+  if (a.kopfhaut === "schuppen" || a.kopfhaut === "sensibel"){
+    level = "kopfhaut"; title = "Bei dir zuerst die Kopfhaut";
+    text = "Deine Kopfhaut braucht gerade die meiste Aufmerksamkeit. Wenn sie zur Ruhe kommt, profitiert auch dein Haar. Fang deshalb nicht mit Extras für die Längen an.";
+  } else if (damage(a) >= 3){
+    level = "aufbau"; title = "Dein Haar braucht Aufbau";
+    text = "Chemie, Hitze oder Sonne haben deinem Haar zugesetzt. Mit regelmäßiger Pflege und den richtigen Gewohnheiten erholen sich die Längen spürbar. Spitzen, die schon gespalten sind, kann nur die Schere retten.";
+  } else if (basis.length + extras <= 3){
+    level = "wenig"; title = "Dein Haar braucht wenig";
+    text = "Gute Nachricht: Dein Haar ist unkompliziert. Mehr Produkte machen es hier nicht besser.";
+  } else {
+    level = "routine"; title = "Eine klare Routine reicht";
+    text = "Mit den passenden Grundprodukten und einem gezielten Extra ist dein Haar gut versorgt.";
+  }
+  return { level, tag:VERDICT_TAG[level], title, text, summary };
+}
+
 function recommend(a){
   const basis = [shampoo(a), conditioner(a), hitzeschutz(a)].filter(Boolean);
   const ranked = scoreSpecials(a);
@@ -318,6 +409,8 @@ function recommend(a){
   if (a.kopfhaut === "schuppen") recommendedIds.add("antischuppen");
   if (damage(a) >= 3) recommendedIds.add("maske");
   const skip = SKIPS.filter(s => !recommendedIds.has(s.id) && s.when(a)).slice(0, 4)
-    .map(s => ({ name:s.name, why:s.why(a), because:s.because(a) }));
-  return { basis, special, skip, tips:tips(a) };
+    .map(s => ({ id:s.id, name:s.name, why:s.why(a), because:s.because(a) }));
+  // basis/special/skip/tips: Form nicht ändern (Post-Generator liest sie).
+  // wishes und verdict sind reine Zusätze für die Ergebnisseite.
+  return { basis, special, skip, tips:tips(a), wishes:wishes(a, special), verdict:verdict(a, basis, special, skip) };
 }

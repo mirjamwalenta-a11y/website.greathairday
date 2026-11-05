@@ -44,6 +44,9 @@ jobs:
             exit 1
           fi
 
+      - name: HaarKompass-Regelwerk prüfen (bei Fehler wird nichts hochgeladen)
+        run: node tests/haarkompass.test.js
+
       - name: Zu World4You hochladen
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
@@ -62,3 +65,4 @@ jobs:
             DESIGN.md
             .claude/**
             .impeccable/**
+            tests/**
