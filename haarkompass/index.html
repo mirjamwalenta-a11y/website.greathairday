@@ -126,6 +126,26 @@ main{padding-block:28px 56px}
 .block.special .because span{background:var(--plum-soft);color:var(--plum)}
 .block.skip .because span{background:var(--skip-soft);color:var(--skip)}
 .tips li{margin-bottom:6px}
+
+/* Ersteinschätzung (Ampel) */
+.verdict{border-left:6px solid var(--v,var(--accent));display:flex;flex-direction:column;gap:8px}
+.verdict[data-level="wenig"]{--v:var(--good);--v-soft:var(--good-soft)}
+.verdict[data-level="routine"]{--v:var(--accent);--v-soft:var(--accent-soft)}
+.verdict[data-level="aufbau"]{--v:var(--skip);--v-soft:var(--skip-soft)}
+.verdict[data-level="kopfhaut"]{--v:var(--plum);--v-soft:var(--plum-soft)}
+.verdict .v-tag{align-self:flex-start;display:inline-flex;align-items:center;gap:7px;padding:3px 11px;border-radius:999px;background:var(--v-soft,var(--accent-soft));color:var(--v,var(--accent));font-size:.75rem;font-weight:600;text-transform:uppercase;letter-spacing:.08em}
+.verdict .v-tag::before{content:"";width:9px;height:9px;border-radius:50%;background:currentColor}
+.verdict .v-sum{font-weight:600}
+.verdict .v-text{color:var(--muted);font-size:.95rem}
+
+/* Deine Wünsche */
+.wish{border-left:3px solid var(--w,var(--accent));padding:2px 0 2px 14px;display:flex;flex-direction:column;gap:6px}
+.wish[data-status="covered"]{--w:var(--good);--w-soft:var(--good-soft)}
+.wish[data-status="tip"]{--w:var(--accent);--w-soft:var(--accent-soft)}
+.wish[data-status="honest"]{--w:var(--skip);--w-soft:var(--skip-soft)}
+.wish h3{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 8px}
+.wish .w-status{font-family:var(--f-body);font-size:.72rem;font-weight:600;text-transform:uppercase;letter-spacing:.06em;padding:2px 9px;border-radius:999px;background:var(--w-soft);color:var(--w)}
+.wish p{font-size:.92rem;color:var(--muted)}
 .note{font-size:.85rem;color:var(--muted);border-top:1px solid var(--line);padding-top:14px}
 
 /* Termin */
@@ -207,6 +227,12 @@ footer.foot a{color:var(--muted)}
       <div class="profile" id="r-profile"></div>
     </div>
 
+    <div class="card verdict" id="r-verdict" hidden>
+      <span class="v-tag" id="r-v-tag"></span>
+      <p class="v-sum" id="r-v-sum"></p>
+      <p class="v-text" id="r-v-text"></p>
+    </div>
+
     <div class="card block basis">
       <div class="block-title"><span class="num">1</span><div><h2>Die Basis-Routine</h2><p class="muted small">Das, was dein Haar wirklich braucht.</p></div></div>
       <div id="r-basis" class="block"></div>
@@ -215,6 +241,11 @@ footer.foot a{color:var(--muted)}
     <div class="card block special">
       <div class="block-title"><span class="num">2</span><div><h2>Der Spezial-Impuls</h2><p class="muted small">Das eine Extra, das bei dir einen Unterschied macht.</p></div></div>
       <div id="r-special" class="block"></div>
+    </div>
+
+    <div class="card block" id="r-wishes-card" hidden>
+      <div><h2>Deine Wünsche, ehrlich beantwortet</h2><p class="muted small">Was bei dir wirklich hilft, und was Pflege allein nicht schafft.</p></div>
+      <div id="r-wishes" class="block"></div>
     </div>
 
     <div class="card block skip">
@@ -368,8 +399,19 @@ function renderResult(a){
   const prof = [label("staerke",a.staerke), label("form",a.form), label("zustand",a.zustand), "Kopfhaut " + label("kopfhaut",a.kopfhaut).toLowerCase()]
     .concat([...a.wunsch].map(w => label("wunsch", w)));
   $("#r-profile").innerHTML = prof.map(p => `<span class="chip">${esc(p)}</span>`).join("");
-  $("#r-title").textContent = r.basis.length + (r.special.filter(s => !s.optional).length) <= 3
-    ? "Weniger ist bei dir mehr" : "Deine Routine, klar und ehrlich";
+  const v = r.verdict;
+  $("#r-title").textContent = v ? v.title : "Deine Routine, klar und ehrlich";
+  $("#r-verdict").hidden = !v;
+  if (v){
+    $("#r-verdict").dataset.level = v.level;
+    $("#r-v-tag").textContent = "Ersteinschätzung · " + v.tag;
+    $("#r-v-sum").textContent = v.summary;
+    $("#r-v-text").textContent = v.text;
+  }
+  const W_STATUS = { covered:"Erfüllt", tip:"So klappt's", honest:"Ehrlich gesagt" };
+  const ws = r.wishes || [];
+  $("#r-wishes-card").hidden = !ws.length;
+  $("#r-wishes").innerHTML = ws.map(w => `<div class="wish" data-status="${esc(w.status)}"><h3>${esc(w.label)}<span class="w-status">${esc(W_STATUS[w.status] || "")}</span></h3><p>${esc(w.text)}</p></div>`).join("");
   $("#r-basis").innerHTML = r.basis.map(x => item(x)).join("");
   $("#r-special").innerHTML = r.special.length
     ? r.special.map(x => item(x, x.optional ? "optional" : "")).join("")

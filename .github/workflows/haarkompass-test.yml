@@ -1,0 +1,24 @@
+# Prüft das HaarKompass-Regelwerk (haarkompass/engine.js) mit allen
+# möglichen Antwort-Kombinationen. Läuft bei jedem Pull Request und jeder
+# Änderung am HaarKompass. Rot = eine Regel ist verletzt; Details im Log.
+# Lokal: node tests/haarkompass.test.js
+name: HaarKompass prüfen
+
+on:
+  pull_request:
+    paths: ["haarkompass/**", "tests/**", ".github/workflows/haarkompass-test.yml"]
+  push:
+    branches-ignore: [main]
+    paths: ["haarkompass/**", "tests/**", ".github/workflows/haarkompass-test.yml"]
+  workflow_dispatch:
+
+jobs:
+  pruefen:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Alle Antwort-Kombinationen durchrechnen
+        run: node tests/haarkompass.test.js
