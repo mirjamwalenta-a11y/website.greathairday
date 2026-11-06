@@ -27,11 +27,21 @@ function fail(regel, a, detail){
   if (!e.beispiel) e.beispiel = profil(a) + (detail ? "  →  " + detail : "");
   fehler.set(regel, e);
 }
-const profil = a => QUESTIONS.map(q => q.id + "=" + (q.type === "multi" ? [...a[q.id]].join("+") : a[q.id])).join(" ");
+const profil = a => QUESTIONS.filter(q => a[q.id] !== undefined)
+  .map(q => q.id + "=" + (q.type === "multi" ? [...a[q.id]].join("+") : a[q.id])).join(" ") || "(allgemein)";
 
 /* ---- 1. Post-Generator braucht diese globalen Namen ---- */
 for (const name of ["QUESTIONS", "SPECIALS", "SKIPS", "recommend", "tips"]){
   if (typeof ctx.__api[name] === "undefined") fail("Globaler Name fehlt (Post-Generator bricht)", {}, name);
+}
+
+/* ---- Hilfen "Nicht sicher?" vollständig ---- */
+for (const q of QUESTIONS){
+  if (q.help && (typeof q.help.title !== "string" || !q.help.title.trim() || typeof q.help.text !== "string" || !q.help.text.trim()))
+    fail("Hilfe-Text bei einer Frage leer", {}, q.id);
+}
+for (const id of ["staerke", "kopfhaut"]){
+  if (!QUESTIONS.find(q => q.id === id).help) fail("Hilfe fehlt bei wichtiger Frage", {}, id);
 }
 
 /* ---- 2. Alle Kombinationen erzeugen ---- */
@@ -112,6 +122,30 @@ function pruefe(a){
     fail("Naturhaar + Wunsch Farbe: keine Farbpflege empfehlen", a);
   if (a.wunsch.has("volumen") && skipIds.has("volumen") && ans("volumen").status === "tip")
     fail("Volumen weggelassen, aber als Tipp empfohlen", a);
+
+  // Das solltest du selbst abwägen
+  if (!Array.isArray(r.weigh) || r.weigh.length > 3) fail("weigh: höchstens 3", a);
+  else for (const x of r.weigh) if (!textOk(x.title) || !textOk(x.text) || !textOk(x.forYou)) fail("Abwägen-Text leer", a, x.id);
+
+  // So kommt die Empfehlung zustande: muss genau zur Empfehlung passen
+  const ex = r.explain;
+  if (!ex || typeof ex.min !== "number" || !Array.isArray(ex.ranked)) fail("Erklärung fehlt", a);
+  else {
+    const chosen = ex.ranked.filter(x => x.chosen).map(x => x.id).sort().join();
+    if (chosen !== r.special.map(s => s.id).sort().join()) fail("Erklärung zeigt andere Extras als empfohlen", a, chosen);
+    for (const x of ex.ranked){
+      if (x.score !== x.points.reduce((n, q) => n + q.p, 0)) fail("Erklärung: Punktesumme falsch", a, x.id);
+      if (!x.points.every(q => textOk(q.text))) fail("Erklärung: leerer Punkt-Text", a, x.id);
+      const s = r.special.find(y => y.id === x.id);
+      if (s && s.score !== x.score) fail("Erklärung: andere Punkte als die Empfehlung", a, x.id);
+    }
+    for (let i = 1; i < ex.ranked.length; i++)
+      if (ex.ranked[i - 1].score < ex.ranked[i].score) fail("Erklärung: falsch sortiert", a);
+    for (const s of r.special){
+      const need = s.optional ? ex.opt : ex.min;
+      if (s.score < need) fail("Extra empfohlen unter der Punktgrenze", a, s.id);
+    }
+  }
 
   // Ersteinschätzung
   const v = r.verdict;

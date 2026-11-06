@@ -146,6 +146,28 @@ main{padding-block:28px 56px}
 .wish h3{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 8px}
 .wish .w-status{font-family:var(--f-body);font-size:.72rem;font-weight:600;text-transform:uppercase;letter-spacing:.06em;padding:2px 9px;border-radius:999px;background:var(--w-soft);color:var(--w)}
 .wish p{font-size:.92rem;color:var(--muted)}
+
+/* Aufklappbare Hilfe und Erklärung */
+details.help{background:var(--surface-2);border-radius:12px;padding:10px 14px;font-size:.92rem}
+details.help summary{cursor:pointer;font-weight:600;color:var(--accent);list-style:none;display:flex;align-items:center;gap:8px}
+details.help summary::-webkit-details-marker{display:none}
+details.help summary::before{content:"+";display:inline-grid;place-items:center;width:20px;height:20px;border-radius:50%;border:1.5px solid currentColor;font-size:.9rem;line-height:1;flex:none}
+details.help[open] summary::before{content:"–"}
+details.help p{margin-top:8px;color:var(--ink)}
+.weigh-item{border-left:3px solid var(--accent);padding:2px 0 2px 14px;display:flex;flex-direction:column;gap:6px}
+.weigh-item p{font-size:.92rem;color:var(--muted)}
+.weigh-item .for-you{font-size:.92rem;background:var(--surface-2);border-radius:10px;padding:8px 12px;color:var(--ink)}
+.explain{display:flex;flex-direction:column;gap:12px;margin-top:10px}
+.ex-row{display:flex;flex-direction:column;gap:6px;padding-bottom:10px;border-bottom:1px solid var(--line)}
+.ex-row:last-child{border-bottom:0;padding-bottom:0}
+.ex-head{display:flex;justify-content:space-between;gap:10px;align-items:baseline}
+.ex-head b{font-weight:600}
+.ex-score{flex:none;font-weight:700;font-variant-numeric:tabular-nums}
+.ex-row.chosen .ex-score{color:var(--plum)}
+.ex-pts{display:flex;flex-wrap:wrap;gap:6px;font-size:.8rem}
+.ex-pts span{padding:2px 9px;border-radius:999px;background:var(--good-soft);color:var(--good);font-weight:600}
+.ex-pts span.minus{background:var(--skip-soft);color:var(--skip)}
+.ex-row .tag{font-size:.72rem;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--plum);margin-left:6px}
 .note{font-size:.85rem;color:var(--muted);border-top:1px solid var(--line);padding-top:14px}
 
 /* Termin */
@@ -211,6 +233,7 @@ footer.foot a{color:var(--muted)}
       <div class="eyebrow" id="q-eyebrow"></div>
       <h2 id="q-title" tabindex="-1"></h2>
       <p class="muted" id="q-hint"></p>
+      <details class="help" id="q-help" hidden><summary>Nicht sicher? So findest du es heraus</summary><p><b id="q-help-title"></b><br><span id="q-help-text"></span></p></details>
     </div>
     <div class="options" id="q-options"></div>
     <div class="q-nav">
@@ -253,10 +276,21 @@ footer.foot a{color:var(--muted)}
       <div id="r-skip" class="block"></div>
     </div>
 
+    <div class="card block" id="r-weigh-card" hidden>
+      <div><h2>Das solltest du selbst abwägen</h2><p class="muted small">Hier gibt es kein klares Richtig. Das Für und Wider, damit du selbst entscheiden kannst.</p></div>
+      <div id="r-weigh" class="block"></div>
+    </div>
+
     <div class="card block" id="r-tips-card">
       <h2>Kleine Gewohnheiten, große Wirkung</h2>
       <ul class="tips" id="r-tips"></ul>
     </div>
+
+    <details class="help no-print" id="r-explain-box">
+      <summary>So kommt die Empfehlung zustande</summary>
+      <p>Shampoo und Conditioner folgen festen Regeln: Deine Kopfhaut bestimmt das Shampoo, Haarstärke, Haarform und Zustand bestimmen den Conditioner. Jedes mögliche Extra sammelt Punkte aus deinen Antworten. Das Extra mit den meisten Punkten wird ab <b id="r-ex-min"></b> Punkten dein Spezial-Impuls, das zweitbeste ab <b id="r-ex-opt"></b> Punkten als optionales Extra. Mehr als zwei Extras gibt es nie, damit deine Routine schlank bleibt. Abzüge gibt es, wenn ein Produkt zu deinem Haar nicht passt.</p>
+      <div class="explain" id="r-explain"></div>
+    </details>
 
     <div class="book">
       <div><h2>Lieber persönlich beraten lassen?</h2><p>Wir schauen uns dein Haar am Stuhl an und stimmen die Routine genau auf dich ab, ganz ohne Verkaufsdruck.</p></div>
@@ -337,6 +371,9 @@ function renderQuestion(){
   $("#q-title").textContent = q.title;
   $("#q-hint").textContent = q.hint || "";
   $("#q-hint").hidden = !q.hint;
+  $("#q-help").hidden = !q.help;
+  $("#q-help").open = false;
+  if (q.help){ $("#q-help-title").textContent = q.help.title; $("#q-help-text").textContent = q.help.text; }
   const box = $("#q-options");
   box.setAttribute("role", q.type === "multi" ? "group" : "radiogroup");
   box.setAttribute("aria-labelledby", "q-title");
@@ -418,6 +455,20 @@ function renderResult(a){
     : `<div class="item"><h3>Kein Extra nötig</h3><p class="why">Ehrlich: Zu deinen Angaben passt kein Zusatzprodukt so gut, dass es sich lohnt. Mit der Basis-Routine ist dein Haar bestens versorgt.</p></div>`;
   $("#r-skip").innerHTML = r.skip.length ? r.skip.map(x => item(x)).join("")
     : `<p class="muted">Deine Routine ist schon schlank. Hier gibt es nichts zu streichen.</p>`;
+  const wg = r.weigh || [];
+  $("#r-weigh-card").hidden = !wg.length;
+  $("#r-weigh").innerHTML = wg.map(w => `<div class="weigh-item"><h3>${esc(w.title)}</h3><p>${esc(w.text)}</p><p class="for-you"><b>Für dich:</b> ${esc(w.forYou)}</p></div>`).join("");
+  const ex = r.explain;
+  $("#r-explain-box").hidden = !ex;
+  if (ex){
+    $("#r-explain-box").open = false;
+    $("#r-ex-min").textContent = ex.min; $("#r-ex-opt").textContent = ex.opt;
+    const pts = n => (n > 0 ? "+" : "−") + Math.abs(n);
+    $("#r-explain").innerHTML = ex.ranked.length ? ex.ranked.map(x => `<div class="ex-row${x.chosen ? " chosen" : ""}">
+      <div class="ex-head"><b>${esc(x.name)}${x.chosen ? `<span class="tag">empfohlen</span>` : ""}</b><span class="ex-score">${x.score < 0 ? "−" + Math.abs(x.score) : x.score} ${Math.abs(x.score) === 1 ? "Punkt" : "Punkte"}</span></div>
+      <div class="ex-pts">${x.points.map(q => `<span class="${q.p < 0 ? "minus" : ""}">${pts(q.p)} ${esc(q.text)}</span>`).join("")}</div></div>`).join("")
+      : `<p class="muted">Zu deinen Antworten hat kein Extra Punkte gesammelt.</p>`;
+  }
   $("#r-tips").innerHTML = r.tips.map(t => `<li>${t}</li>`).join("");
   show("result");
   $("#r-title").focus({ preventScroll:true });
