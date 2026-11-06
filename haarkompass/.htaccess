@@ -1,0 +1,9 @@
+# HaarKompass: Browser sollen bei jedem Aufruf kurz nachfragen, ob es eine
+# neue Version gibt (sonst zeigen Handys nach einem Update tagelang die
+# alte Kopie). Unveränderte Dateien werden trotzdem nicht neu geladen,
+# der Server antwortet dann nur mit "304 Not Modified".
+<IfModule mod_headers.c>
+  <FilesMatch "\.(html|js)$">
+    Header set Cache-Control "no-cache"
+  </FilesMatch>
+</IfModule>
