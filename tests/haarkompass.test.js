@@ -16,9 +16,14 @@ const vm = require("vm");
 
 // engine.js so laden, wie der Browser es tut (globale Namen)
 const src = fs.readFileSync(path.join(__dirname, "..", "haarkompass", "engine.js"), "utf8");
+const srcEn = fs.readFileSync(path.join(__dirname, "..", "haarkompass", "en.js"), "utf8");
 const ctx = vm.createContext({});
 vm.runInContext(src + "\n;this.__api = { QUESTIONS, SPECIALS, SKIPS, recommend, tips, label };", ctx);
 const { QUESTIONS, SPECIALS, SKIPS, recommend } = ctx.__api;
+// Englisch getrennt laden: die Übersetzung darf das Regelwerk nicht beeinflussen
+const ctxEn = vm.createContext({});
+vm.runInContext(srcEn + "\n;this.__en = { HK_EN, hkTStrict };", ctxEn);
+const { HK_EN, hkTStrict } = ctxEn.__en;
 
 const fehler = new Map();   // Regel -> { anzahl, beispiel }
 function fail(regel, a, detail){
@@ -42,6 +47,25 @@ for (const q of QUESTIONS){
 }
 for (const id of ["staerke", "kopfhaut"]){
   if (!QUESTIONS.find(q => q.id === id).help) fail("Hilfe fehlt bei wichtiger Frage", {}, id);
+}
+
+/* ---- Englische Übersetzung ----
+   Jeder Text, der auf der Seite erscheinen kann, braucht eine Übersetzung. */
+const geprueft = new Set(), benutzt = new Set();
+const FREMD = new Set(["id", "level", "status", "wish", "uses", "optional", "chosen", "score", "p", "min", "opt"]);
+function uebersetzt(x, a){
+  if (typeof x === "string"){
+    if (geprueft.has(x)) return;
+    geprueft.add(x);
+    const en = hkTStrict(x);
+    if (en == null) return fail("Englische Übersetzung fehlt", a, JSON.stringify(x));
+    if (/[äöüßÄÖÜ]/.test(en)) fail("Englischer Text enthält deutsche Umlaute", a, JSON.stringify(en));
+    if (Object.prototype.hasOwnProperty.call(HK_EN, x)) benutzt.add(x);
+  } else if (Array.isArray(x)) x.forEach(y => uebersetzt(y, a));
+  else if (x && typeof x === "object") for (const [k, v] of Object.entries(x)) if (!FREMD.has(k)) uebersetzt(v, a);
+}
+for (const q of QUESTIONS){
+  uebersetzt([q.eyebrow, q.title, q.hint || [], q.help ? [q.help.title, q.help.text] : [], q.options.map(o => [o.l, o.d || []])], {});
 }
 
 /* ---- 2. Alle Kombinationen erzeugen ---- */
@@ -95,6 +119,9 @@ function pruefe(a){
     if (skipIds.has(s.id)) fail("Spezial-Impuls steht auch unter Weglassen", a, s.id);
   }
   if (a.alltag.has("hitze") && skipIds.has("hitzeschutz")) fail("Hitzeschutz empfohlen und weggelassen", a);
+
+  // Alles muss auf Englisch übersetzbar sein
+  uebersetzt(r, a);
 
   // Jeder Wunsch bekommt genau eine Antwort
   const w = r.wishes;
@@ -175,6 +202,12 @@ console.log(`HaarKompass: ${anzahl.toLocaleString("de-AT")} Kombinationen geprü
 console.log(`  Ersteinschätzung: ${JSON.stringify(statistik.level)}`);
 console.log(`  Wunsch-Antworten: ${JSON.stringify(statistik.status)}`);
 console.log(`  Ohne Spezial-Impuls: ${statistik.ohneExtra}`);
+
+// Hinweis (kein Fehler): Übersetzungen, die nie gebraucht werden
+for (const k of Object.keys(HK_EN)) if (!benutzt.has(k) && !geprueft.has(k)) {
+  // Teile zusammengesetzter Texte (z. B. Produktnamen in "Dafür ist …") zählen als benutzt
+  if (![...geprueft].some(t => t.includes(k))) console.log("  Hinweis: Übersetzung wird nie gebraucht: " + JSON.stringify(k.slice(0, 70)));
+}
 
 if (fehler.size){
   console.error(`\n✗ ${fehler.size} Regel(n) verletzt:`);
