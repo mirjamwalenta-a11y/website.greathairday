@@ -58,6 +58,15 @@ const QUESTIONS = [
     {v:"fett", l:"Ansatz bleibt länger frisch"},
     {v:"kopfhaut", l:"Kopfhaut in Balance"} ]}
 ];
+/* "Nicht sicher? So findest du es heraus" – aufklappbare Hilfe bei einer Frage */
+const QUESTION_HELP = {
+  staerke:{ title:"Der Faden-Test", text:"Nimm ein ausgefallenes Haar aus den Längen und leg es neben einen normalen Nähfaden. Deutlich dünner als der Faden: fein. Ungefähr gleich: normal. Gleich dick oder dicker und eher drahtig: kräftig." },
+  form:{ title:"Ohne Styling anschauen", text:"Wasch deine Haare, drück sie nur mit dem Handtuch aus und lass sie ohne Produkt und ohne Föhn an der Luft trocknen. So, wie sie dann fallen, ist deine natürliche Haarform. Wellen nur in den Spitzen zählen als wellig." },
+  zustand:{ title:"Was zählt hier?", text:"Es zählt alles, was noch in deinen Längen steckt, auch wenn es Monate her ist. Erst wenn die behandelten Längen herausgeschnitten sind, gilt das Haar wieder als naturbelassen. Strähnen, Balayage und Highlights zählen als blondiert, Pflanzenfarbe und Henna als coloriert." },
+  kopfhaut:{ title:"Schuppen oder trockene Kopfhaut?", text:"Trockene Kopfhaut: kleine, weiße, puderfeine Schüppchen, die eher abrieseln. Die Kopfhaut spannt, oft im Winter oder nach heißem Waschen. Schuppen: größere, oft gelbliche und leicht fettige Schuppen, die an der Kopfhaut haften, schnell wiederkommen und oft jucken. Bist du unsicher, oder ist die Kopfhaut stark gerötet? Dann schauen wir sie uns beim nächsten Termin gemeinsam an." }
+};
+for (const q of QUESTIONS) if (QUESTION_HELP[q.id]) q.help = QUESTION_HELP[q.id];
+
 const Q = Object.fromEntries(QUESTIONS.map(q => [q.id, q]));
 const label = (qid, v) => (Q[qid].options.find(o => o.v === v) || {}).l || v;
 
@@ -237,6 +246,16 @@ const SPECIALS = [
           [-3, a=>a.kopfhaut==="sensibel"||a.kopfhaut==="trocken"||a.kopfhaut==="schuppen", null, "Kopfhaut empfindlich/trocken/Schuppen (Abzug)"] ]}
 ];
 
+/* "So kommt die Empfehlung zustande": alle Extras mit ihren Punkten */
+function explain(a, special){
+  const chosen = new Set(special.map(s => s.id));
+  const ranked = SPECIALS.map(s => {
+    const points = s.pts.filter(([, cond]) => cond(a)).map(([p, , , txt]) => ({ p, text:txt.replace(/\s*\(Abzug\)$/, "") }));
+    return { id:s.id, name:s.name(a), score:points.reduce((n, x) => n + x.p, 0), points, chosen:chosen.has(s.id) };
+  }).filter(x => x.points.length).sort((x, y) => y.score - x.score);
+  return { min:SPECIAL_MIN, opt:SPECIAL_OPT, ranked };
+}
+
 function scoreSpecials(a){
   return SPECIALS.map(s => {
     let score = 0; const because = [];
@@ -372,6 +391,35 @@ function wishes(a, special){
 }
 
 /* ------------------------------------------------------------------
+   "Das solltest du selbst abwägen": ehrliche Für-und-Wider-Fragen,
+   bei denen es kein klares Richtig gibt. Höchstens 3, in dieser Reihenfolge.
+------------------------------------------------------------------ */
+const WEIGH = [
+  { id:"bond", title:"Molecular-Repair daheim oder im Salon?",
+    when:a => a.zustand==="blondiert" || a.zustand==="strapaziert",
+    text:()=>"Daheim kannst du die Pflege regelmäßig anwenden, sie ist aber schwächer dosiert. Im Salon ist sie höher konzentriert und wirkt am besten direkt beim Blondieren oder Umformen, weil die Verbindungen im Haar dann gerade aufgebrochen werden.",
+    forYou:()=>"Viele kombinieren beides: im Salon beim Färben, daheim zum Erhalten. Wie oft es bei dir sinnvoll ist, besprechen wir gern beim nächsten Termin." },
+  { id:"silikone", title:"Silikone: ja oder nein?",
+    when:a => a.staerke==="fein" || a.staerke==="kraeftig" || isCurly(a) || has(a.alltag,"hitze") || has(a.wunsch,"frizz") || has(a.wunsch,"glanz"),
+    text:()=>"Silikone legen einen glatten Film ums Haar. Es glänzt, kraust weniger und ist vor Hitze etwas geschützt. Der Nachteil: Schwere Silikone können sich mit der Zeit ablagern. Das Haar wirkt dann schwer oder stumpf.",
+    forYou:a => a.staerke==="fein" ? "Bei feinem Haar eher leichte Produkte ohne schwere Silikone wählen, sonst fällt es schnell zusammen."
+      : (has(a.alltag,"hitze") || has(a.wunsch,"frizz") || a.staerke==="kraeftig") ? "Bei dir können Silikone helfen, gegen Frizz und als Schutz beim Föhnen. Wird das Haar mit der Zeit schwer oder stumpf, gelegentlich eine Wäsche mit einem klärenden Shampoo einplanen."
+      : isCurly(a) ? "Bei Locken greifen viele lieber zu leichten Produkten, damit die Locken nicht beschwert werden. Fühlen sich deine Locken gepflegt an, gibt es keinen Grund zu wechseln."
+      : "Für mehr Glanz können leichte Silikone helfen. Wird das Haar mit der Zeit schwer oder stumpf, gelegentlich mit einem klärenden Shampoo waschen." },
+  { id:"maske", title:"Lohnt sich eine Haarmaske?",
+    when:a => damage(a) >= 1 && damage(a) <= 2,
+    text:()=>"Dein Haar ist leicht beansprucht. Eine Maske alle 1–2 Wochen kann gut tun, nötig ist sie aber nicht. Dein Conditioner macht die tägliche Arbeit.",
+    forYou:()=>"Probier es aus: Fühlen sich die Längen nach dem Conditioner noch trocken an, hilft eine Maske. Wird das Haar schwer oder strähnig, lass sie wieder weg." },
+  { id:"waschen", title:"Täglich waschen oder strecken?",
+    when:a => a.wasch==="taeglich" && (a.kopfhaut==="normal" || a.kopfhaut==="fettend"),
+    text:()=>"Mit einem milden Shampoo ist tägliches Waschen für die Kopfhaut in Ordnung. Dass sich die Kopfhaut an seltenes Waschen „gewöhnt“ und weniger fettet, ist nicht sicher belegt.",
+    forYou:()=>"Entscheide nach Gefühl und Zeit. Seltener waschen schont vor allem die Längen und spart Zeit beim Styling. Mit Zwang durchhalten musst du es nicht." }
+];
+function weigh(a){
+  return WEIGH.filter(w => w.when(a)).slice(0, 3).map(w => ({ id:w.id, title:w.title, text:w.text(a), forYou:w.forYou(a) }));
+}
+
+/* ------------------------------------------------------------------
    Ersteinschätzung ganz oben (wie eine Ampel)
    level: "kopfhaut" | "aufbau" | "wenig" | "routine"
 ------------------------------------------------------------------ */
@@ -411,6 +459,7 @@ function recommend(a){
   const skip = SKIPS.filter(s => !recommendedIds.has(s.id) && s.when(a)).slice(0, 4)
     .map(s => ({ id:s.id, name:s.name, why:s.why(a), because:s.because(a) }));
   // basis/special/skip/tips: Form nicht ändern (Post-Generator liest sie).
-  // wishes und verdict sind reine Zusätze für die Ergebnisseite.
-  return { basis, special, skip, tips:tips(a), wishes:wishes(a, special), verdict:verdict(a, basis, special, skip) };
+  // wishes, verdict, weigh und explain sind reine Zusätze für die Ergebnisseite.
+  return { basis, special, skip, tips:tips(a), wishes:wishes(a, special),
+    verdict:verdict(a, basis, special, skip), weigh:weigh(a), explain:explain(a, special) };
 }
