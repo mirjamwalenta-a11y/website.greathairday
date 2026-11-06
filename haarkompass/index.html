@@ -59,6 +59,8 @@ header.top{border-bottom:1px solid var(--line)}
 .brand{display:flex;align-items:baseline;gap:10px;background:none;border:0;padding:0;cursor:pointer;min-width:0}
 .logo{font-family:var(--f-display);font-size:1.2rem;font-weight:700;letter-spacing:.02em;color:var(--ink);white-space:nowrap}
 .logo span{color:var(--accent)}
+.lang-switch{margin-left:auto;flex:none;background:none;border:1px solid var(--line);border-radius:999px;padding:5px 12px;font:600 .8rem var(--f-body);color:var(--muted);cursor:pointer;min-height:32px}
+.lang-switch:hover{border-color:var(--accent);color:var(--ink)}
 .brand small{font-family:var(--f-body);font-weight:500;font-size:.8rem;color:var(--muted);white-space:nowrap;border-left:1px solid var(--line);padding-left:10px}
 
 main{padding-block:28px 56px}
@@ -201,28 +203,29 @@ footer.foot a{color:var(--muted)}
 <body>
 <header class="top">
   <div class="wrap">
-    <button class="brand" id="home" aria-label="Great Hair Day HaarKompass – zur Startseite">
+    <button class="brand" id="home" aria-label="Great Hair Day HaarKompass – zur Startseite" data-en-aria="Great Hair Day HaarKompass – back to start">
       <span class="logo">Great Hair<span>.</span>Day</span><small>HaarKompass</small>
     </button>
+    <button class="lang-switch" id="lang" type="button" lang="en" aria-label="Switch to English">English</button>
   </div>
 </header>
 
 <main class="wrap">
   <!-- Start -->
   <section class="view" id="v-start">
-    <div class="eyebrow">In unter 2 Minuten</div>
-    <h1>Welche Pflege braucht dein Haar wirklich?</h1>
-    <p class="lead">7 kurze Fragen zu Haar, Kopfhaut und Alltag. Danach weißt du, was wirklich nötig ist, welches Extra einen Unterschied macht und worauf du ehrlich verzichten kannst.</p>
+    <div class="eyebrow" data-en="In under 2 minutes">In unter 2 Minuten</div>
+    <h1 data-en="What care does your hair really need?">Welche Pflege braucht dein Haar wirklich?</h1>
+    <p class="lead" data-en="7 short questions about your hair, scalp and everyday life. Afterwards you'll know what is really necessary, which extra makes a difference and what you can honestly do without.">7 kurze Fragen zu Haar, Kopfhaut und Alltag. Danach weißt du, was wirklich nötig ist, welches Extra einen Unterschied macht und worauf du ehrlich verzichten kannst.</p>
     <div id="saved" class="saved" hidden>
-      <span><b>Deine letzte Empfehlung</b> <span class="muted small" id="saved-date"></span></span>
-      <button class="btn" id="open-saved">Wieder ansehen</button>
+      <span><b data-en="Your last recommendation">Deine letzte Empfehlung</b> <span class="muted small" id="saved-date"></span></span>
+      <button class="btn" id="open-saved" data-en="View again">Wieder ansehen</button>
     </div>
-    <div class="actions"><button class="btn primary" id="go">Los geht's
+    <div class="actions"><button class="btn primary" id="go"><span data-en="Let's go">Los geht's</span>
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button></div>
     <div class="card promise">
-      <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0"/><path d="M4 4l16 16"/></svg><span><b>Kein Login</b><span class="muted small">Deine Antworten bleiben auf deinem Gerät.</span></span></div>
-      <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 12h18M12 3v18"/><circle cx="12" cy="12" r="9"/></svg><span><b>Nur Produktarten</b><span class="muted small">Keine Marken, kein Katalog.</span></span></div>
-      <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg><span><b>Mit Begründung</b><span class="muted small">Jede Empfehlung zeigt, warum.</span></span></div>
+      <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0"/><path d="M4 4l16 16"/></svg><span><b data-en="No login">Kein Login</b><span class="muted small" data-en="Your answers stay on your device.">Deine Antworten bleiben auf deinem Gerät.</span></span></div>
+      <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 12h18M12 3v18"/><circle cx="12" cy="12" r="9"/></svg><span><b data-en="Product types only">Nur Produktarten</b><span class="muted small" data-en="No brands, no catalogue.">Keine Marken, kein Katalog.</span></span></div>
+      <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg><span><b data-en="With reasons">Mit Begründung</b><span class="muted small" data-en="Every recommendation shows why.">Jede Empfehlung zeigt, warum.</span></span></div>
     </div>
   </section>
 
@@ -233,7 +236,7 @@ footer.foot a{color:var(--muted)}
       <div class="eyebrow" id="q-eyebrow"></div>
       <h2 id="q-title" tabindex="-1"></h2>
       <p class="muted" id="q-hint"></p>
-      <details class="help" id="q-help" hidden><summary>Nicht sicher? So findest du es heraus</summary><p><b id="q-help-title"></b><br><span id="q-help-text"></span></p></details>
+      <details class="help" id="q-help" hidden><summary data-en="Not sure? Here's how to find out">Nicht sicher? So findest du es heraus</summary><p><b id="q-help-title"></b><br><span id="q-help-text"></span></p></details>
     </div>
     <div class="options" id="q-options"></div>
     <div class="q-nav">
@@ -245,7 +248,7 @@ footer.foot a{color:var(--muted)}
   <!-- Ergebnis -->
   <section class="view" id="v-result" hidden>
     <div class="result-head">
-      <div class="eyebrow">Deine Empfehlung</div>
+      <div class="eyebrow" data-en="Your recommendation">Deine Empfehlung</div>
       <h1 id="r-title" tabindex="-1">So einfach kann gute Pflege sein</h1>
       <div class="profile" id="r-profile"></div>
     </div>
@@ -257,52 +260,52 @@ footer.foot a{color:var(--muted)}
     </div>
 
     <div class="card block basis">
-      <div class="block-title"><span class="num">1</span><div><h2>Die Basis-Routine</h2><p class="muted small">Das, was dein Haar wirklich braucht.</p></div></div>
+      <div class="block-title"><span class="num">1</span><div><h2 data-en="The basic routine">Die Basis-Routine</h2><p class="muted small" data-en="What your hair really needs.">Das, was dein Haar wirklich braucht.</p></div></div>
       <div id="r-basis" class="block"></div>
     </div>
 
     <div class="card block special">
-      <div class="block-title"><span class="num">2</span><div><h2>Der Spezial-Impuls</h2><p class="muted small">Das eine Extra, das bei dir einen Unterschied macht.</p></div></div>
+      <div class="block-title"><span class="num">2</span><div><h2 data-en="The special boost">Der Spezial-Impuls</h2><p class="muted small" data-en="The one extra that makes a difference for you.">Das eine Extra, das bei dir einen Unterschied macht.</p></div></div>
       <div id="r-special" class="block"></div>
     </div>
 
     <div class="card block" id="r-wishes-card" hidden>
-      <div><h2>Deine Wünsche, ehrlich beantwortet</h2><p class="muted small">Was bei dir wirklich hilft, und was Pflege allein nicht schafft.</p></div>
+      <div><h2 data-en="Your goals, honestly answered">Deine Wünsche, ehrlich beantwortet</h2><p class="muted small" data-en="What really helps you, and what care alone can't do.">Was bei dir wirklich hilft, und was Pflege allein nicht schafft.</p></div>
       <div id="r-wishes" class="block"></div>
     </div>
 
     <div class="card block skip">
-      <div class="block-title"><span class="num">3</span><div><h2>Was du weglassen kannst</h2><p class="muted small">Ehrlich gesagt: Das brauchst du nicht.</p></div></div>
+      <div class="block-title"><span class="num">3</span><div><h2 data-en="What you can leave out">Was du weglassen kannst</h2><p class="muted small" data-en="To be honest: you don't need this.">Ehrlich gesagt: Das brauchst du nicht.</p></div></div>
       <div id="r-skip" class="block"></div>
     </div>
 
     <div class="card block" id="r-weigh-card" hidden>
-      <div><h2>Das solltest du selbst abwägen</h2><p class="muted small">Hier gibt es kein klares Richtig. Das Für und Wider, damit du selbst entscheiden kannst.</p></div>
+      <div><h2 data-en="Worth weighing up yourself">Das solltest du selbst abwägen</h2><p class="muted small" data-en="There is no clear right answer here. The pros and cons, so you can decide for yourself.">Hier gibt es kein klares Richtig. Das Für und Wider, damit du selbst entscheiden kannst.</p></div>
       <div id="r-weigh" class="block"></div>
     </div>
 
     <div class="card block" id="r-tips-card">
-      <h2>Kleine Gewohnheiten, große Wirkung</h2>
+      <h2 data-en="Small habits, big impact">Kleine Gewohnheiten, große Wirkung</h2>
       <ul class="tips" id="r-tips"></ul>
     </div>
 
     <details class="help no-print" id="r-explain-box">
-      <summary>So kommt die Empfehlung zustande</summary>
-      <p>Shampoo und Conditioner folgen festen Regeln: Deine Kopfhaut bestimmt das Shampoo, Haarstärke, Haarform und Zustand bestimmen den Conditioner. Jedes mögliche Extra sammelt Punkte aus deinen Antworten. Das Extra mit den meisten Punkten wird ab <b id="r-ex-min"></b> Punkten dein Spezial-Impuls, das zweitbeste ab <b id="r-ex-opt"></b> Punkten als optionales Extra. Mehr als zwei Extras gibt es nie, damit deine Routine schlank bleibt. Abzüge gibt es, wenn ein Produkt zu deinem Haar nicht passt.</p>
+      <summary data-en="How this recommendation comes about">So kommt die Empfehlung zustande</summary>
+      <p data-en-html="Shampoo and conditioner follow fixed rules: your scalp determines the shampoo, hair texture, hair type and condition determine the conditioner. Every possible extra collects points from your answers. The extra with the most points becomes your special boost from <b class=&quot;ex-min&quot;></b> points, the runner-up becomes an optional extra from <b class=&quot;ex-opt&quot;></b> points. There are never more than two extras, so your routine stays lean. Points are deducted when a product doesn't suit your hair.">Shampoo und Conditioner folgen festen Regeln: Deine Kopfhaut bestimmt das Shampoo, Haarstärke, Haarform und Zustand bestimmen den Conditioner. Jedes mögliche Extra sammelt Punkte aus deinen Antworten. Das Extra mit den meisten Punkten wird ab <b class="ex-min"></b> Punkten dein Spezial-Impuls, das zweitbeste ab <b class="ex-opt"></b> Punkten als optionales Extra. Mehr als zwei Extras gibt es nie, damit deine Routine schlank bleibt. Abzüge gibt es, wenn ein Produkt zu deinem Haar nicht passt.</p>
       <div class="explain" id="r-explain"></div>
     </details>
 
     <div class="book">
-      <div><h2>Lieber persönlich beraten lassen?</h2><p>Wir schauen uns dein Haar am Stuhl an und stimmen die Routine genau auf dich ab, ganz ohne Verkaufsdruck.</p></div>
-      <a class="btn" data-book href="https://stylisten.eu/pranz#online-buchung" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>Termin buchen<span class="sr-only"> (öffnet neues Fenster)</span></a>
+      <div data-en="Prefer personal advice?"><h2>Lieber persönlich beraten lassen?</h2><p data-en="We look at your hair in the chair and tailor the routine exactly to you, with no sales pressure.">Wir schauen uns dein Haar am Stuhl an und stimmen die Routine genau auf dich ab, ganz ohne Verkaufsdruck.</p></div>
+      <a class="btn" data-book href="https://stylisten.eu/pranz#online-buchung" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg><span data-en="Book an appointment">Termin buchen</span><span class="sr-only" data-en=" (opens in a new window)"> (öffnet neues Fenster)</span></a>
     </div>
 
-    <p class="note">Diese Empfehlung ersetzt keine Beratung am Stuhl und keine ärztliche Diagnose. Bei anhaltendem Jucken, Rötungen, starken Schuppen oder Haarausfall bitte zum Hautarzt. Gern schauen wir uns dein Haar beim nächsten Termin persönlich an.</p>
+    <p class="note" data-en="This recommendation does not replace a consultation in the salon or a medical diagnosis. If itching, redness, heavy dandruff or hair loss persist, please see a dermatologist. We're happy to look at your hair in person at your next appointment.">Diese Empfehlung ersetzt keine Beratung am Stuhl und keine ärztliche Diagnose. Bei anhaltendem Jucken, Rötungen, starken Schuppen oder Haarausfall bitte zum Hautarzt. Gern schauen wir uns dein Haar beim nächsten Termin persönlich an.</p>
 
     <div class="actions no-print">
-      <button class="btn primary" id="share">Link speichern / teilen</button>
-      <button class="btn" id="print">Drucken / PDF</button>
-      <button class="btn ghost" id="restart">Neu starten</button>
+      <button class="btn primary" id="share" data-en="Save / share link">Link speichern / teilen</button>
+      <button class="btn" id="print" data-en="Print / PDF">Drucken / PDF</button>
+      <button class="btn ghost" id="restart" data-en="Start over">Neu starten</button>
     </div>
   </section>
 </main>
@@ -311,21 +314,76 @@ footer.foot a{color:var(--muted)}
   <div class="wrap">
     <span class="logo">Great Hair<span>.</span>Day</span>
     <a href="../">greathairday.at</a>
-    <a href="https://stylisten.eu/pranz#online-buchung" target="_blank" rel="noopener">Online Termin buchen<span class="sr-only"> (öffnet neues Fenster)</span></a>
-    <a href="../#impressum">Impressum</a>
-    <a href="../datenschutz.html">Datenschutz</a>
+    <a href="https://stylisten.eu/pranz#online-buchung" target="_blank" rel="noopener"><span data-en="Book online">Online Termin buchen</span><span class="sr-only" data-en=" (opens in a new window)"> (öffnet neues Fenster)</span></a>
+    <a href="../#impressum" data-en="Legal notice">Impressum</a>
+    <a href="../datenschutz.html" data-en="Privacy">Datenschutz</a>
   </div>
 </footer>
 
 <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
 
 <script src="/haarkompass/engine.js"></script>
+<script src="/haarkompass/en.js"></script>
 <script>
 "use strict";
 
 /* ------------------------------------------------------------------
    Zustand, Speichern im Link (#r=…), Rendering
 ------------------------------------------------------------------ */
+/* ---- Sprache: Deutsch (Standard) oder Englisch ----
+   Reihenfolge: ?lang=en|de im Link > gespeicherte Wahl > Sprache des Browsers */
+const UI = {
+  de:{ q:(i,n) => "Frage " + i + " von " + n, show:"Empfehlung zeigen", next:"Weiter", cancel:"Abbrechen", back:"Zurück",
+       because:"weil:", how:"So geht's:", optional:"optional", fallbackTitle:"Deine Routine, klar und ehrlich", first:"Ersteinschätzung · ",
+       scalp:"Kopfhaut ", status:{ covered:"Erfüllt", tip:"So klappt's", honest:"Ehrlich gesagt" },
+       noExtraT:"Kein Extra nötig", noExtra:"Ehrlich: Zu deinen Angaben passt kein Zusatzprodukt so gut, dass es sich lohnt. Mit der Basis-Routine ist dein Haar bestens versorgt.",
+       noSkip:"Deine Routine ist schon schlank. Hier gibt es nichts zu streichen.", forYou:"Für dich:", rec:"empfohlen",
+       pts:n => Math.abs(n) === 1 ? "Punkt" : "Punkte", noPts:"Zu deinen Antworten hat kein Extra Punkte gesammelt.",
+       shareTitle:"Meine HaarKompass-Empfehlung", copied:"Link kopiert. Speichere ihn als Lesezeichen.", savePrompt:"Diesen Link speichern:",
+       from:"vom ", locale:"de-AT", switchTo:"English", switchLabel:"Switch to English", switchLang:"en",
+       title:"HaarKompass · Great Hair Day" },
+  en:{ q:(i,n) => "Question " + i + " of " + n, show:"Show recommendation", next:"Next", cancel:"Cancel", back:"Back",
+       because:"because:", how:"How to:", optional:"optional", fallbackTitle:"Your routine, clear and honest", first:"First assessment · ",
+       scalp:"Scalp: ", status:{ covered:"Covered", tip:"How it works", honest:"To be honest" },
+       noExtraT:"No extra needed", noExtra:"Honestly: based on your answers, no additional product is a good enough fit to be worth it. Your basic routine takes great care of your hair.",
+       noSkip:"Your routine is already lean. There is nothing to cut here.", forYou:"For you:", rec:"recommended",
+       pts:n => Math.abs(n) === 1 ? "point" : "points", noPts:"None of the extras collected points from your answers.",
+       shareTitle:"My HaarKompass recommendation", copied:"Link copied. Save it as a bookmark.", savePrompt:"Save this link:",
+       from:"from ", locale:"en-GB", switchTo:"Deutsch", switchLabel:"Auf Deutsch umschalten", switchLang:"de",
+       title:"HaarKompass (English) · Great Hair Day" }
+};
+function pickLang(){
+  const q = new URLSearchParams(location.search).get("lang");
+  if (q === "en" || q === "de") return q;
+  const saved = load("haarkompass.lang");
+  if (saved === "en" || saved === "de") return saved;
+  const nav = (navigator.languages && navigator.languages[0]) || navigator.language || "de";
+  return /^de\b/i.test(nav) ? "de" : "en";
+}
+let lang = "de";
+const L = () => UI[lang];
+const T = s => lang === "en" && typeof hkT === "function" ? hkT(s) : s;
+const TL = (qid, v) => T(label(qid, v));
+
+function applyStatic(){
+  document.documentElement.lang = lang;
+  document.title = L().title;
+  for (const el of document.querySelectorAll("[data-en]")){
+    if (el.dataset.de === undefined) el.dataset.de = el.textContent;
+    el.textContent = lang === "en" ? el.dataset.en : el.dataset.de;
+  }
+  for (const el of document.querySelectorAll("[data-en-html]")){
+    if (el.dataset.deHtml === undefined) el.dataset.deHtml = el.innerHTML;
+    el.innerHTML = lang === "en" ? el.dataset.enHtml : el.dataset.deHtml;
+  }
+  for (const el of document.querySelectorAll("[data-en-aria]")){
+    if (el.dataset.deAria === undefined) el.dataset.deAria = el.getAttribute("aria-label");
+    el.setAttribute("aria-label", lang === "en" ? el.dataset.enAria : el.dataset.deAria);
+  }
+  const b = $("#lang");
+  b.textContent = L().switchTo; b.lang = L().switchLang; b.setAttribute("aria-label", L().switchLabel);
+}
+
 const answers = { alltag:new Set(), wunsch:new Set() };
 let step = 0;
 const $ = s => document.querySelector(s);
@@ -366,25 +424,25 @@ function isAnswered(q){
 function renderQuestion(){
   const q = QUESTIONS[step];
   $("#pbar").style.width = ((step + 1) / QUESTIONS.length * 100) + "%";
-  $("#pnum").textContent = "Frage " + (step + 1) + " von " + QUESTIONS.length;
-  $("#q-eyebrow").textContent = q.eyebrow;
-  $("#q-title").textContent = q.title;
-  $("#q-hint").textContent = q.hint || "";
+  $("#pnum").textContent = L().q(step + 1, QUESTIONS.length);
+  $("#q-eyebrow").textContent = T(q.eyebrow);
+  $("#q-title").textContent = T(q.title);
+  $("#q-hint").textContent = q.hint ? T(q.hint) : "";
   $("#q-hint").hidden = !q.hint;
   $("#q-help").hidden = !q.help;
   $("#q-help").open = false;
-  if (q.help){ $("#q-help-title").textContent = q.help.title; $("#q-help-text").textContent = q.help.text; }
+  if (q.help){ $("#q-help-title").textContent = T(q.help.title); $("#q-help-text").textContent = T(q.help.text); }
   const box = $("#q-options");
   box.setAttribute("role", q.type === "multi" ? "group" : "radiogroup");
   box.setAttribute("aria-labelledby", "q-title");
   box.innerHTML = q.options.map(o => {
     const on = q.type === "multi" ? answers[q.id].has(o.v) : answers[q.id] === o.v;
     return `<button class="opt ${q.type === "multi" ? "multi" : ""}" role="${q.type === "multi" ? "checkbox" : "radio"}" aria-checked="${on}" data-v="${o.v}">
-      <span class="mark" aria-hidden="true"></span><span><b>${esc(o.l)}</b>${o.d ? `<small>${esc(o.d)}</small>` : ""}</span></button>`;
+      <span class="mark" aria-hidden="true"></span><span><b>${esc(T(o.l))}</b>${o.d ? `<small>${esc(T(o.d))}</small>` : ""}</span></button>`;
   }).join("");
-  $("#q-next").textContent = step === QUESTIONS.length - 1 ? "Empfehlung zeigen" : "Weiter";
+  $("#q-next").textContent = step === QUESTIONS.length - 1 ? L().show : L().next;
   $("#q-next").disabled = !isAnswered(q);
-  $("#q-back").textContent = step === 0 ? "Abbrechen" : "Zurück";
+  $("#q-back").textContent = step === 0 ? L().cancel : L().back;
   $("#q-title").focus({ preventScroll:true });
 }
 
@@ -427,49 +485,50 @@ function finish(){
   renderResult(answers);
 }
 
-const because = list => list.length ? `<div class="because"><span class="muted" style="background:none;padding:0">weil:</span>${list.map(b => `<span>${esc(b)}</span>`).join("")}</div>` : "";
-const item = (x, tag) => `<div class="item"><h3>${esc(x.name)}${tag ? `<span class="tag">${esc(tag)}</span>` : ""}</h3>
-  <p class="why">${esc(x.why)}</p>${x.how ? `<p class="how"><b>So geht's:</b> ${esc(x.how)}</p>` : ""}${because(x.because || [])}</div>`;
+const because = list => list.length ? `<div class="because"><span class="muted" style="background:none;padding:0">${esc(L().because)}</span>${list.map(b => `<span>${esc(T(b))}</span>`).join("")}</div>` : "";
+const item = (x, tag) => `<div class="item"><h3>${esc(T(x.name))}${tag ? `<span class="tag">${esc(tag)}</span>` : ""}</h3>
+  <p class="why">${esc(T(x.why))}</p>${x.how ? `<p class="how"><b>${esc(L().how)}</b> ${esc(T(x.how))}</p>` : ""}${because(x.because || [])}</div>`;
 
 function renderResult(a){
   const r = recommend(a);
-  const prof = [label("staerke",a.staerke), label("form",a.form), label("zustand",a.zustand), "Kopfhaut " + label("kopfhaut",a.kopfhaut).toLowerCase()]
-    .concat([...a.wunsch].map(w => label("wunsch", w)));
+  const prof = [TL("staerke",a.staerke), TL("form",a.form), TL("zustand",a.zustand), L().scalp + TL("kopfhaut",a.kopfhaut).toLowerCase()]
+    .concat([...a.wunsch].map(w => TL("wunsch", w)));
   $("#r-profile").innerHTML = prof.map(p => `<span class="chip">${esc(p)}</span>`).join("");
   const v = r.verdict;
-  $("#r-title").textContent = v ? v.title : "Deine Routine, klar und ehrlich";
+  $("#r-title").textContent = v ? T(v.title) : L().fallbackTitle;
   $("#r-verdict").hidden = !v;
   if (v){
     $("#r-verdict").dataset.level = v.level;
-    $("#r-v-tag").textContent = "Ersteinschätzung · " + v.tag;
-    $("#r-v-sum").textContent = v.summary;
-    $("#r-v-text").textContent = v.text;
+    $("#r-v-tag").textContent = L().first + T(v.tag);
+    $("#r-v-sum").textContent = T(v.summary);
+    $("#r-v-text").textContent = T(v.text);
   }
-  const W_STATUS = { covered:"Erfüllt", tip:"So klappt's", honest:"Ehrlich gesagt" };
+  const W_STATUS = L().status;
   const ws = r.wishes || [];
   $("#r-wishes-card").hidden = !ws.length;
-  $("#r-wishes").innerHTML = ws.map(w => `<div class="wish" data-status="${esc(w.status)}"><h3>${esc(w.label)}<span class="w-status">${esc(W_STATUS[w.status] || "")}</span></h3><p>${esc(w.text)}</p></div>`).join("");
+  $("#r-wishes").innerHTML = ws.map(w => `<div class="wish" data-status="${esc(w.status)}"><h3>${esc(T(w.label))}<span class="w-status">${esc(W_STATUS[w.status] || "")}</span></h3><p>${esc(T(w.text))}</p></div>`).join("");
   $("#r-basis").innerHTML = r.basis.map(x => item(x)).join("");
   $("#r-special").innerHTML = r.special.length
-    ? r.special.map(x => item(x, x.optional ? "optional" : "")).join("")
-    : `<div class="item"><h3>Kein Extra nötig</h3><p class="why">Ehrlich: Zu deinen Angaben passt kein Zusatzprodukt so gut, dass es sich lohnt. Mit der Basis-Routine ist dein Haar bestens versorgt.</p></div>`;
+    ? r.special.map(x => item(x, x.optional ? L().optional : "")).join("")
+    : `<div class="item"><h3>${esc(L().noExtraT)}</h3><p class="why">${esc(L().noExtra)}</p></div>`;
   $("#r-skip").innerHTML = r.skip.length ? r.skip.map(x => item(x)).join("")
-    : `<p class="muted">Deine Routine ist schon schlank. Hier gibt es nichts zu streichen.</p>`;
+    : `<p class="muted">${esc(L().noSkip)}</p>`;
   const wg = r.weigh || [];
   $("#r-weigh-card").hidden = !wg.length;
-  $("#r-weigh").innerHTML = wg.map(w => `<div class="weigh-item"><h3>${esc(w.title)}</h3><p>${esc(w.text)}</p><p class="for-you"><b>Für dich:</b> ${esc(w.forYou)}</p></div>`).join("");
+  $("#r-weigh").innerHTML = wg.map(w => `<div class="weigh-item"><h3>${esc(T(w.title))}</h3><p>${esc(T(w.text))}</p><p class="for-you"><b>${esc(L().forYou)}</b> ${esc(T(w.forYou))}</p></div>`).join("");
   const ex = r.explain;
   $("#r-explain-box").hidden = !ex;
   if (ex){
     $("#r-explain-box").open = false;
-    $("#r-ex-min").textContent = ex.min; $("#r-ex-opt").textContent = ex.opt;
+    for (const b of document.querySelectorAll(".ex-min")) b.textContent = ex.min;
+    for (const b of document.querySelectorAll(".ex-opt")) b.textContent = ex.opt;
     const pts = n => (n > 0 ? "+" : "−") + Math.abs(n);
     $("#r-explain").innerHTML = ex.ranked.length ? ex.ranked.map(x => `<div class="ex-row${x.chosen ? " chosen" : ""}">
-      <div class="ex-head"><b>${esc(x.name)}${x.chosen ? `<span class="tag">empfohlen</span>` : ""}</b><span class="ex-score">${x.score < 0 ? "−" + Math.abs(x.score) : x.score} ${Math.abs(x.score) === 1 ? "Punkt" : "Punkte"}</span></div>
-      <div class="ex-pts">${x.points.map(q => `<span class="${q.p < 0 ? "minus" : ""}">${pts(q.p)} ${esc(q.text)}</span>`).join("")}</div></div>`).join("")
-      : `<p class="muted">Zu deinen Antworten hat kein Extra Punkte gesammelt.</p>`;
+      <div class="ex-head"><b>${esc(T(x.name))}${x.chosen ? `<span class="tag">${esc(L().rec)}</span>` : ""}</b><span class="ex-score">${x.score < 0 ? "−" + Math.abs(x.score) : x.score} ${L().pts(x.score)}</span></div>
+      <div class="ex-pts">${x.points.map(q => `<span class="${q.p < 0 ? "minus" : ""}">${pts(q.p)} ${esc(T(q.text))}</span>`).join("")}</div></div>`).join("")
+      : `<p class="muted">${esc(L().noPts)}</p>`;
   }
-  $("#r-tips").innerHTML = r.tips.map(t => `<li>${t}</li>`).join("");
+  $("#r-tips").innerHTML = r.tips.map(t => `<li>${T(t)}</li>`).join("");
   show("result");
   $("#r-title").focus({ preventScroll:true });
 }
@@ -502,10 +561,10 @@ $("#print").addEventListener("click", () => window.print());
 $("#share").addEventListener("click", async () => {
   const url = location.href;
   if (navigator.share){
-    try { await navigator.share({ title:"Meine HaarKompass-Empfehlung", url }); return; } catch (e) { if (e && e.name === "AbortError") return; }
+    try { await navigator.share({ title:L().shareTitle, url }); return; } catch (e) { if (e && e.name === "AbortError") return; }
   }
-  try { await navigator.clipboard.writeText(url); toast("Link kopiert. Speichere ihn als Lesezeichen."); }
-  catch (e) { prompt("Diesen Link speichern:", url); }
+  try { await navigator.clipboard.writeText(url); toast(L().copied); }
+  catch (e) { prompt(L().savePrompt, url); }
 });
 $("#open-saved").addEventListener("click", () => {
   const s = JSON.parse(load("haarkompass.last") || "null");
@@ -519,10 +578,27 @@ function refreshSaved(){
   $("#saved").hidden = !ok;
   if (ok){
     const d = new Date(s.at);
-    $("#saved-date").textContent = isNaN(d) ? "" : "vom " + d.toLocaleDateString("de-AT", { day:"numeric", month:"long", year:"numeric" });
+    $("#saved-date").textContent = isNaN(d) ? "" : L().from + d.toLocaleDateString(L().locale, { day:"numeric", month:"long", year:"numeric" });
   }
 }
 
+function setLang(l, remember){
+  lang = l;
+  if (remember) store("haarkompass.lang", l);
+  const u = new URL(location.href);
+  if (l === "en") u.searchParams.set("lang", "en"); else u.searchParams.delete("lang");
+  history.replaceState(null, "", u.pathname + u.search + u.hash);
+  applyStatic();
+}
+$("#lang").addEventListener("click", () => {
+  setLang(lang === "en" ? "de" : "en", true);
+  if (!$("#v-quiz").hidden) renderQuestion();
+  else if (!$("#v-result").hidden) { renderResult(answers); }
+  else refreshSaved();
+});
+
+lang = pickLang();
+applyStatic();
 const m = location.hash.match(/^#r=([\w.+\-]+)$/);
 if (!(m && openFromCode(m[1]))) { refreshSaved(); show("start"); }
 </script>
