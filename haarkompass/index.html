@@ -129,6 +129,20 @@ main{padding-block:28px 56px}
 .block.skip .because span{background:var(--skip-soft);color:var(--skip)}
 .tips li{margin-bottom:6px}
 
+/* Wasserhärte */
+.water-form{display:flex;gap:8px;flex-wrap:wrap}
+.water-form input{flex:1;min-width:0;max-width:200px;padding:10px 14px;border:1.5px solid var(--line);border-radius:12px;background:var(--surface);color:var(--ink);font:inherit;font-size:1rem}
+.water-form input:focus-visible{border-color:var(--accent)}
+.water-out{display:flex;flex-direction:column;gap:8px}
+.water-val{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.water-val b{font-family:var(--f-display);font-size:1.6rem}
+.water-chip{padding:2px 10px;border-radius:999px;font-size:.78rem;font-weight:600;background:var(--good-soft);color:var(--good)}
+.water-chip.mittel{background:var(--accent-soft);color:var(--accent)}
+.water-chip.hart{background:var(--skip-soft);color:var(--skip)}
+.water-out p{font-size:.92rem;color:var(--muted)}
+.water-src{font-size:.78rem;color:var(--muted)}
+.water-src a{color:var(--muted)}
+
 /* Ersteinschätzung (Ampel) */
 .verdict{border-left:6px solid var(--v,var(--accent));display:flex;flex-direction:column;gap:8px}
 .verdict[data-level="wenig"]{--v:var(--good);--v-soft:var(--good-soft)}
@@ -284,6 +298,15 @@ footer.foot a{color:var(--muted)}
       <div id="r-weigh" class="block"></div>
     </div>
 
+    <div class="card block" id="r-water-card">
+      <div><h2 data-en="Water hardness where you live">Wasserhärte bei dir</h2><p class="muted small" data-en="Optional: enter your postal code. Your answers stay on your device.">Freiwillig: Postleitzahl eingeben. Deine Angabe bleibt auf deinem Gerät.</p></div>
+      <form class="water-form" id="water-form" novalidate>
+        <input id="water-plz" inputmode="numeric" autocomplete="postal-code" maxlength="4" placeholder="z. B. 1050" aria-label="Postleitzahl" data-en-aria="Postal code">
+        <button class="btn" type="submit" data-en="Show">Anzeigen</button>
+      </form>
+      <div class="water-out" id="water-out" aria-live="polite" hidden></div>
+    </div>
+
     <div class="card block" id="r-tips-card">
       <h2 data-en="Small habits, big impact">Kleine Gewohnheiten, große Wirkung</h2>
       <ul class="tips" id="r-tips"></ul>
@@ -324,6 +347,7 @@ footer.foot a{color:var(--muted)}
 
 <script src="/haarkompass/engine.js"></script>
 <script src="/haarkompass/en.js"></script>
+<script src="/haarkompass/wasser.js"></script>
 <script>
 "use strict";
 
@@ -529,6 +553,7 @@ function renderResult(a){
       : `<p class="muted">${esc(L().noPts)}</p>`;
   }
   $("#r-tips").innerHTML = r.tips.map(t => `<li>${T(t)}</li>`).join("");
+  renderWater();
   show("result");
   $("#r-title").focus({ preventScroll:true });
 }
@@ -581,6 +606,33 @@ function refreshSaved(){
     $("#saved-date").textContent = isNaN(d) ? "" : L().from + d.toLocaleDateString(L().locale, { day:"numeric", month:"long", year:"numeric" });
   }
 }
+
+/* ---- Wasserhärte (freiwillig, nur auf dem Gerät gespeichert) ---- */
+let waterPlz = null;
+function renderWater(){
+  const out = $("#water-out"), plz = waterPlz || load("haarkompass.plz");
+  $("#water-plz").placeholder = lang === "en" ? "e.g. 1050" : "z. B. 1050";
+  if (typeof wasserFuerPlz !== "function" || !plz){ out.hidden = true; return; }
+  if ($("#water-plz").value !== plz) $("#water-plz").value = plz;
+  const W = WASSER_TEXT[lang], r = wasserFuerPlz(plz);
+  out.hidden = false;
+  if (!r.ok){ out.innerHTML = `<p>${esc(W.falsch)}</p>`; return; }
+  if (!r.bekannt){
+    out.innerHTML = `<p>${esc(W.keine(r.plz))}</p><p><a href="${WASSER_NACHSCHLAGEN}" target="_blank" rel="noopener">${esc(W.nachschlagen)}</a></p>`;
+    return;
+  }
+  const stufe = r.stufeVon === r.stufeBis ? W.stufe[r.stufeVon] : W.stufe[r.stufeVon] + " – " + W.stufe[r.stufeBis];
+  out.innerHTML = `<div class="water-val"><b>${r.von}–${r.bis} °dH</b><span class="water-chip ${r.stufeBis}">${esc(stufe)}</span>`
+    + (r.hoch ? `<span class="water-chip hart">${esc(lang === "en" ? "at times up to " : "zeitweise bis ") + r.hoch} °dH</span>` : "")
+    + `</div><p class="muted small">${esc(W.ort(r.bezirk))}</p><p>${esc(r.hoch ? W.hoch(r.hoch) : W.normal)}</p><p>${esc(W.ehrlich)}</p>`
+    + `<p class="water-src"><a href="${WASSER_QUELLE.url}" target="_blank" rel="noopener">${esc(W.quelle)}</a></p>`;
+}
+$("#water-form").addEventListener("submit", e => {
+  e.preventDefault();
+  waterPlz = $("#water-plz").value.trim();
+  store("haarkompass.plz", waterPlz);
+  renderWater();
+});
 
 function setLang(l, remember){
   lang = l;

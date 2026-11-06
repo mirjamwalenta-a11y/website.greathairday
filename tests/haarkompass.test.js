@@ -203,6 +203,28 @@ console.log(`  Ersteinschätzung: ${JSON.stringify(statistik.level)}`);
 console.log(`  Wunsch-Antworten: ${JSON.stringify(statistik.status)}`);
 console.log(`  Ohne Spezial-Impuls: ${statistik.ohneExtra}`);
 
+/* ---- Wasserhärte nach PLZ (haarkompass/wasser.js) ---- */
+const ctxW = vm.createContext({});
+vm.runInContext(fs.readFileSync(path.join(__dirname, "..", "haarkompass", "wasser.js"), "utf8")
+  + "\n;this.__w = { wasserFuerPlz, WASSER_TEXT, WASSER_WIEN, WASSER_STAND };", ctxW);
+const { wasserFuerPlz, WASSER_TEXT, WASSER_WIEN, WASSER_STAND } = ctxW.__w;
+for (let b = 1; b <= 23; b++){
+  const plz = "1" + String(b).padStart(2, "0") + "0", r = wasserFuerPlz(plz);
+  if (!r.ok || !r.bekannt || r.bezirk !== b) fail("Wasser: Wiener PLZ nicht erkannt", {}, plz);
+  else if (!(r.von > 0 && r.bis >= r.von && (!r.hoch || r.hoch > r.bis))) fail("Wasser: Werte unplausibel", {}, plz);
+}
+const HOCH = [2, 3, 11, 20, 21, 22];   // laut Stadt Wien zeitweise bis 20 °dH
+for (let b = 1; b <= 23; b++) if (!!WASSER_WIEN[b].hoch !== HOCH.includes(b)) fail("Wasser: Grundwasser-Bezirke falsch", {}, b);
+for (const plz of ["1240", "1300", "1400", "2000", "8010"]) { const r = wasserFuerPlz(plz); if (!r.ok || r.bekannt) fail("Wasser: PLZ ohne geprüfte Daten falsch behandelt", {}, plz); }
+for (const plz of ["", "105", "10500", "0123", "abcd"]) if (wasserFuerPlz(plz).ok) fail("Wasser: ungültige Eingabe angenommen", {}, plz);
+if (!/^\d\d\.\d\d\.\d{4}$/.test(WASSER_STAND)) fail("Wasser: Stand fehlt", {}, WASSER_STAND);
+for (const sprache of ["de", "en"]){
+  const W = WASSER_TEXT[sprache];
+  const texte = [W.stufe.weich, W.stufe.mittel, W.stufe.hart, W.ort(5), W.normal, W.hoch(20), W.ehrlich, W.keine("8010"), W.nachschlagen, W.falsch, W.quelle];
+  for (const t of texte) if (!textOk(t)) fail("Wasser: Text fehlt", {}, sprache);
+  if (sprache === "en") for (const t of texte) if (/[äöüßÄÖÜ]/.test(t)) fail("Wasser: englischer Text mit Umlaut", {}, t);
+}
+
 // Hinweis (kein Fehler): Übersetzungen, die nie gebraucht werden
 for (const k of Object.keys(HK_EN)) if (!benutzt.has(k) && !geprueft.has(k)) {
   // Teile zusammengesetzter Texte (z. B. Produktnamen in "Dafür ist …") zählen als benutzt
