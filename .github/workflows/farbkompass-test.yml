@@ -1,0 +1,24 @@
+# Prüft den Farbkompass-Kern (farbkompass/kern.js) mit allen 216
+# Antwort-Kombinationen. Läuft bei jedem Pull Request und jeder Änderung
+# am Farbkompass. Rot = eine Regel ist verletzt; Details im Log.
+# Lokal: node tests/farbkompass.test.js
+name: Farbkompass prüfen
+
+on:
+  pull_request:
+    paths: ["farbkompass/**", "tests/farbkompass.test.js", ".github/workflows/farbkompass-test.yml"]
+  push:
+    branches-ignore: [main]
+    paths: ["farbkompass/**", "tests/farbkompass.test.js", ".github/workflows/farbkompass-test.yml"]
+  workflow_dispatch:
+
+jobs:
+  pruefen:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Alle Antwort-Kombinationen durchrechnen
+        run: node tests/farbkompass.test.js
