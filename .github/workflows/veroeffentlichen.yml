@@ -47,6 +47,9 @@ jobs:
       - name: HaarKompass-Regelwerk prüfen (bei Fehler wird nichts hochgeladen)
         run: node tests/haarkompass.test.js
 
+      - name: Farbkompass prüfen (bei Fehler wird nichts hochgeladen)
+        run: node tests/farbkompass.test.js
+
       - name: Zu World4You hochladen
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
