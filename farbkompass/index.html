@@ -15,27 +15,13 @@
 @font-face{font-family:"Playfair Display";font-style:normal;font-weight:400 900;font-display:swap;src:url(../fonts/playfair.woff2) format("woff2")}
 @font-face{font-family:"Playfair Display";font-style:italic;font-weight:400 900;font-display:swap;src:url(../fonts/playfair-italic.woff2) format("woff2")}
 @font-face{font-family:"Inter";font-style:normal;font-weight:300 600;font-display:swap;src:url(../fonts/inter.woff2) format("woff2")}
-/* Farben und Grundformen wie der HaarKompass */
+/* Farben und Grundformen wie der HaarKompass, immer hell wie die Startseite */
 :root{
   --bg:#F5F0E8; --surface:#FDFAF5; --surface-2:#EDE6DA; --ink:#1A1A18; --muted:#66604F; --line:#E2D9CA;
   --accent:#7A6337; --accent-ink:#FFFFFF; --accent-soft:#EFE6D3;
   --shadow:0 1px 2px rgba(42,33,28,.06),0 6px 20px rgba(42,33,28,.07);
   --f-display:"Playfair Display",Georgia,serif;
   --f-body:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;
-}
-@media (prefers-color-scheme: dark){
-  :root:not([data-theme="light"]){
-    color-scheme:dark;
-    --bg:#17120F; --surface:#221B17; --surface-2:#2D241F; --ink:#F2EAE4; --muted:#B3A499; --line:#3D322B;
-    --accent:#D2BC8E; --accent-ink:#1A1A18; --accent-soft:#3A3122;
-    --shadow:0 1px 2px rgba(0,0,0,.3),0 6px 20px rgba(0,0,0,.25);
-  }
-}
-:root[data-theme="dark"]{
-  color-scheme:dark;
-  --bg:#17120F; --surface:#221B17; --surface-2:#2D241F; --ink:#F2EAE4; --muted:#B3A499; --line:#3D322B;
-  --accent:#D2BC8E; --accent-ink:#1A1A18; --accent-soft:#3A3122;
-  --shadow:0 1px 2px rgba(0,0,0,.3),0 6px 20px rgba(0,0,0,.25);
 }
 *{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%}
@@ -100,9 +86,9 @@ main{padding-block:28px 56px}
 .alt .alt-name{font-family:var(--f-display);font-style:italic;font-size:1.4rem;line-height:1.2}
 
 /* Termin */
-.book{display:flex;gap:16px;align-items:center;justify-content:space-between;flex-wrap:wrap;background:var(--ink);color:var(--bg);border-radius:16px;padding:20px}
-.book h2{color:var(--bg);font-size:clamp(1.35rem,4vw,1.7rem)}
-.book p{color:color-mix(in srgb,var(--bg) 78%,transparent);font-size:.95rem;margin-top:4px;max-width:46ch}
+.book{display:flex;gap:16px;align-items:center;justify-content:space-between;flex-wrap:wrap;background:var(--accent);color:var(--accent-ink);border-radius:16px;padding:20px}
+.book h2{color:var(--accent-ink);font-size:clamp(1.35rem,4vw,1.7rem)}
+.book p{color:color-mix(in srgb,var(--accent-ink) 85%,transparent);font-size:.95rem;margin-top:4px;max-width:46ch}
 .book .btn{background:var(--bg);border-color:var(--bg);color:var(--ink)}
 .book .btn:hover{filter:brightness(.95)}
 .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
