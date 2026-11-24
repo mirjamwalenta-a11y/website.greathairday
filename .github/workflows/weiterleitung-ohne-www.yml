@@ -28,8 +28,11 @@ jobs:
         run: |
           dir="${FTP_DIR#./}"; dir="${dir#/}"
           [ -n "$dir" ] && [ "${dir%/}" = "$dir" ] && dir="$dir/"
-          echo "ZIEL=ftp://${FTP_SERVER}/${dir}.htaccess" >> "$GITHUB_ENV"
-          if [ "$FTP_PROTOCOL" = "ftp" ]; then echo "SSL=" >> "$GITHUB_ENV"; else echo "SSL=--ssl-reqd" >> "$GITHUB_ENV"; fi
+          # Das Server-Zertifikat lautet auf webserver.netpoint.at: Verbindung zum
+          # hinterlegten FTP-Server, Zertifikat aber gegen diesen Namen prüfen.
+          echo "ZIEL=ftp://webserver.netpoint.at/${dir}.htaccess" >> "$GITHUB_ENV"
+          if [ "$FTP_PROTOCOL" = "ftp" ]; then ssl=""; else ssl="--ssl-reqd"; fi
+          echo "SSL=$ssl --connect-to webserver.netpoint.at:21:${FTP_SERVER}:21" >> "$GITHUB_ENV"
 
       - name: Bestehende .htaccess herunterladen
         run: |
