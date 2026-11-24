@@ -1,0 +1,94 @@
+# EINMALIG: Ergänzt in der bestehenden .htaccess im Hauptordner auf dem Server
+# ganz oben die Weiterleitung greathairday.at -> https://www.greathairday.at.
+# Der restliche Inhalt bleibt unverändert. Vorher wird eine Sicherung abgelegt
+# (Actions → dieser Lauf → Artifacts). Klappt die Prüfung danach nicht, wird die
+# Sicherung automatisch zurückgespielt.
+# Start nur von Hand. Nach erfolgreichem Lauf kann diese Datei gelöscht werden.
+
+name: Weiterleitung ohne www einrichten (einmalig)
+
+on:
+  workflow_dispatch:
+
+concurrency:
+  group: veroeffentlichen
+  cancel-in-progress: false
+
+jobs:
+  weiterleitung:
+    runs-on: ubuntu-latest
+    env:
+      FTP_SERVER: ${{ secrets.FTP_SERVER }}
+      FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
+      FTP_PASSWORD: ${{ secrets.FTP_PASSWORD || secrets.FTP_PASSWORT }}
+      FTP_PROTOCOL: ${{ vars.FTP_PROTOCOL || 'ftps' }}
+      FTP_DIR: ${{ vars.FTP_DIR || './' }}
+    steps:
+      - name: Adresse der Datei bestimmen
+        run: |
+          dir="${FTP_DIR#./}"; dir="${dir#/}"
+          [ -n "$dir" ] && [ "${dir%/}" = "$dir" ] && dir="$dir/"
+          echo "ZIEL=ftp://${FTP_SERVER}/${dir}.htaccess" >> "$GITHUB_ENV"
+          if [ "$FTP_PROTOCOL" = "ftp" ]; then echo "SSL=" >> "$GITHUB_ENV"; else echo "SSL=--ssl-reqd" >> "$GITHUB_ENV"; fi
+
+      - name: Bestehende .htaccess herunterladen
+        run: |
+          curl -sS $SSL --user "$FTP_USERNAME:$FTP_PASSWORD" -o alt.htaccess "$ZIEL"
+          test -s alt.htaccess || { echo "::error::Keine bestehende .htaccess gefunden – nichts geändert."; exit 1; }
+          echo "Bestehende .htaccess: $(wc -l < alt.htaccess) Zeilen, $(wc -c < alt.htaccess) Bytes"
+
+      - name: Sicherung ablegen
+        uses: actions/upload-artifact@v4
+        with:
+          name: htaccess-sicherung
+          path: alt.htaccess
+          retention-days: 90
+          include-hidden-files: true
+
+      - name: Schon vorhanden?
+        id: check
+        run: |
+          if grep -qiF 'https://www.greathairday.at/$1' alt.htaccess; then
+            echo "Weiterleitung steht schon in der Datei – nichts zu tun."
+            echo "skip=1" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Drei Zeilen ganz oben einfügen und hochladen
+        if: steps.check.outputs.skip != '1'
+        run: |
+          {
+            printf '%s\n' 'RewriteEngine On'
+            printf '%s\n' 'RewriteCond %{HTTP_HOST} ^greathairday\.at$ [NC]'
+            printf '%s\n' 'RewriteRule ^(.*)$ https://www.greathairday.at/$1 [R=301,L]'
+            printf '\n'
+            cat alt.htaccess
+          } > neu.htaccess
+          # Kontrolle: alter Inhalt steht unverändert unter den neuen Zeilen
+          tail -c "$(wc -c < alt.htaccess)" neu.htaccess | cmp - alt.htaccess
+          curl -sS $SSL --user "$FTP_USERNAME:$FTP_PASSWORD" -T neu.htaccess "$ZIEL"
+          curl -sS $SSL --user "$FTP_USERNAME:$FTP_PASSWORD" -o kontrolle.htaccess "$ZIEL"
+          cmp neu.htaccess kontrolle.htaccess && echo "Hochgeladen und kontrolliert."
+
+      - name: Prüfen (bei Fehler Sicherung zurückspielen)
+        run: |
+          sleep 5
+          ok=1
+          for i in 1 2 3; do
+            ok=1
+            loc=$(curl -sS -o /dev/null -w '%{http_code} %{redirect_url}' "https://greathairday.at/leistungen.html?p=$i")
+            echo "greathairday.at/leistungen.html -> $loc"
+            [ "$loc" = "301 https://www.greathairday.at/leistungen.html?p=$i" ] || ok=0
+            for url in https://www.greathairday.at/ https://www.greathairday.at/leistungen.html https://www.greathairday.at/haarkompass/ https://www.greathairday.at/bewertung/; do
+              c=$(curl -sS -o /dev/null -w '%{http_code}' "$url?p=$i")
+              echo "$url -> $c"
+              [ "$c" = "200" ] || ok=0
+            done
+            [ $ok = 1 ] && break
+            sleep 10
+          done
+          if [ $ok != 1 ]; then
+            echo "::error::Prüfung fehlgeschlagen – spiele die Sicherung zurück."
+            curl -sS $SSL --user "$FTP_USERNAME:$FTP_PASSWORD" -T alt.htaccess "$ZIEL"
+            exit 1
+          fi
+          echo "Weiterleitung funktioniert, Seiten erreichbar."
