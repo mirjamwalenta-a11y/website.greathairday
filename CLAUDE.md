@@ -6,7 +6,7 @@
 - **Texte der Startseite** haben `data-edit="…"`-Attribute, die das Werkzeug bearbeitet. Diese Attribute nicht entfernen; neue Felder auch in `INDEX_GROUPS` im Werkzeug eintragen.
 - **Keine Verbindungen zu Fremdservern beim Seitenaufruf** (keine Google Fonts, keine eingebetteten Karten/Videos, kein Tracking) – sonst muss die Datenschutzerklärung angepasst werden.
 - **Keine privaten E-Mail-Adressen oder Zugangsdaten** in Dateien. Die öffentliche Salon-Adresse `walenta@greathairday.at` ist in Ordnung.
-- **Hosting: World4You** (Webspace, Upload per FTP über `.github/workflows/veroeffentlichen.yml`). Nicht Scaleway. Ändert sich der Hoster, auch `datenschutz.html` (Abschnitt Hosting) anpassen.
+- **Hosting: NetPoint** (NetPoint Computer Handels- und Beratungsgesellschaft m.b.H., Wien; Webspace auf `webserver.netpoint.at`, Upload per FTP über `.github/workflows/veroeffentlichen.yml`). Nicht World4You, nicht Scaleway. Das FTP-Zertifikat ist selbst ausgestellt. Die `.htaccess` im Hauptordner liegt nur auf dem Server (nicht im Projekt) – Änderungen daran macht NetPoint. Ändert sich der Hoster, auch `datenschutz.html` (Abschnitt Hosting) anpassen.
 - **Google-Links nicht selbst neu bauen.** Am Handy getestet und funktionierend (Sept. 2026):
   - Adresse/Route: `https://share.google/iNL8bMsJqvVzm0rmP` (von Google erzeugter Teilen-Link des Eintrags)
   - Kurzadresse für den QR-Code an der Kassa: `https://www.greathairday.at/bewertung/` (`bewertung/index.html` zeigt einen Knopf „Jetzt bewerten“ – bewusst keine automatische Weiterleitung, weil Google das Bewertungsfenster am Handy nur nach echtem Tippen öffnet; gedruckte QR-Codes zeigen dorthin, Adresse nie ändern)

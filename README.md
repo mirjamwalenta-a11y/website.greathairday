@@ -15,17 +15,17 @@ Website von **Great Hair Day**, Friseursalon Mirjam Walenta, Rechte Wienzeile 47
 | `Preise-und-Texte-bearbeiten.html` | Werkzeug zum Ändern von Preisen und Texten, läuft im Browser |
 | `bilder/` | Salonfotos und Vorschaubild für WhatsApp/Facebook |
 | `fonts/` | Schriften (Playfair Display, Inter) – liegen bewusst lokal, damit keine Daten an Google gehen |
-| `.github/workflows/` | automatischer Upload zu World4You |
+| `.github/workflows/` | automatischer Upload auf den Webspace (NetPoint) |
 
 ## Veröffentlichen
 
-Die Website liegt bei **World4You**. Jede Änderung auf `main` wird von GitHub automatisch per FTP dorthin hochgeladen (`.github/workflows/veroeffentlichen.yml`). FileZilla ist dafür nicht mehr nötig.
+Die Website liegt auf dem Webspace von **NetPoint** (Wien). Jede Änderung auf `main` wird von GitHub automatisch per FTP dorthin hochgeladen (`.github/workflows/veroeffentlichen.yml`). FileZilla ist dafür nicht mehr nötig.
 
 - Hochgeladen werden nur geänderte Dateien. Auf dem Server wird nichts gelöscht, was nicht von diesem Ablauf stammt.
 - `README.md` und `CLAUDE.md` bleiben nur hier im Repo. Das Bearbeitungswerkzeug wird mit hochgeladen, damit auf dem Server immer die aktuelle Version liegt.
 - Der Webspace-Ordner ist `/` auf `ftp.greathairday.at` (dort liegt auch noch die alte Joomla-Installation von Netpoint – nicht anfassen, der Ablauf löscht nichts davon).
 - Ablauf ansehen oder von Hand starten: Reiter **Actions** → „Website veröffentlichen“ → **Run workflow**.
-- Einmalige Einrichtung: unter **Settings → Secrets and variables → Actions** die Secrets `FTP_SERVER`, `FTP_USERNAME` und `FTP_PASSWORD` anlegen (Daten aus dem World4You-Kundenbereich). Optional die Variables `FTP_DIR` (Zielordner) und `FTP_PROTOCOL` (`ftps` oder `ftp`).
+- Einmalige Einrichtung: unter **Settings → Secrets and variables → Actions** die Secrets `FTP_SERVER`, `FTP_USERNAME` und `FTP_PASSWORD` anlegen (FTP-Zugangsdaten von NetPoint). Optional die Variables `FTP_DIR` (Zielordner) und `FTP_PROTOCOL` (`ftps` oder `ftp`).
 
 ## Preise und Texte ändern
 
