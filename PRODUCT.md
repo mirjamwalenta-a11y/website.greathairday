@@ -33,7 +33,7 @@ Die Website des Friseursalons „Mirjam Walenta – A great hair day“ (Great H
 
 ## Capabilities and Constraints
 
-- Reines statisches HTML/CSS/JS, kein Framework, kein Build-Schritt. Hosting World4You (Apache), Veröffentlichung per GitHub Actions/FTP bei jedem Merge auf `main`.
+- Reines statisches HTML/CSS/JS, kein Framework, kein Build-Schritt. Hosting NetPoint (Apache), Veröffentlichung per GitHub Actions/FTP bei jedem Merge auf `main`.
 - Keine Fremdserver: Schriften selbst gehostet, kein Tracking, keine Cookies, keine eingebetteten Google-Dienste.
 - **Nur Unisex-Preise** dürfen angegeben werden (keine getrennten Damen-/Herrenpreise).
 - Haarverlängerung, Brow & Lash Lifting und Make-up: „Preis nach Anfrage“.

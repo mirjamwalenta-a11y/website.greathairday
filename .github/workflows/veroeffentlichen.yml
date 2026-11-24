@@ -1,7 +1,7 @@
-# Lädt die Website bei jeder Änderung auf "main" automatisch per FTP zu World4You hoch.
+# Lädt die Website bei jeder Änderung auf "main" automatisch per FTP auf den Webspace bei NetPoint hoch.
 #
 # Einmalig in GitHub einrichten (Settings → Secrets and variables → Actions):
-#   Secrets:    FTP_SERVER    (FTP-Server laut World4You, z. B. ftp.greathairday.at)
+#   Secrets:    FTP_SERVER    (FTP-Server, z. B. ftp.greathairday.at)
 #               FTP_USERNAME  (FTP-Benutzername)
 #               FTP_PASSWORD  (FTP-Passwort; die Schreibweise FTP_PASSWORT wird auch akzeptiert)
 #   Variables (optional):
@@ -50,7 +50,7 @@ jobs:
       - name: Farbkompass prüfen (bei Fehler wird nichts hochgeladen)
         run: node tests/farbkompass.test.js
 
-      - name: Zu World4You hochladen
+      - name: Auf den Webspace hochladen
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
           server: ${{ secrets.FTP_SERVER }}
