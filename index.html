@@ -4,14 +4,14 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Friseur Wien 1050 – Great Hair Day | Mirjam Walenta</title>
-  <meta name="description" content="Friseursalon in Wien 1050: Damen, Herren, Färben &amp; Balayage. Friseurmeisterin Mirjam Walenta, Salon seit 1963. Jetzt online Termin buchen." />
+  <meta name="description" content="Friseursalon in Wien 1050: Schnitt &amp; Styling, Färben &amp; Balayage. Friseurmeisterin Mirjam Walenta, Salon seit 1963. Jetzt online Termin buchen." />
   <link rel="canonical" href="https://www.greathairday.at/" />
   <meta name="robots" content="index, follow, max-image-preview:large" />
   <meta property="og:type" content="website" />
   <meta property="og:locale" content="de_AT" />
   <meta property="og:site_name" content="Great Hair Day" />
   <meta property="og:title" content="Friseur Wien 1050 – Great Hair Day | Mirjam Walenta" />
-  <meta property="og:description" content="Friseursalon in Wien 1050: Damen, Herren, Färben &amp; Balayage. Friseurmeisterin Mirjam Walenta, Salon seit 1963. Jetzt online Termin buchen." />
+  <meta property="og:description" content="Friseursalon in Wien 1050: Schnitt &amp; Styling, Färben &amp; Balayage. Friseurmeisterin Mirjam Walenta, Salon seit 1963. Jetzt online Termin buchen." />
   <meta property="og:url" content="https://www.greathairday.at/" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta property="og:image" content="https://www.greathairday.at/bilder/vorschau.jpg" />
@@ -44,7 +44,7 @@
           "https://www.instagram.com/m.walenta_a.great.hair.day/",
           "https://maps.google.com/?cid=16347082448567763527"
         ],
-        "description": "Friseursalon in Wien-Margareten mit Damen- und Herrenservice, Färben & Umformung, Haarverlängerung, Brow & Lash Lifting, Make-up, Kopfmassage sowie Alpha-Cooling. Inhaberin: Friseurmeisterin Mirjam Walenta.",
+        "description": "Friseursalon in Wien-Margareten mit Schnitt & Styling, Bartpflege, Färben & Umformung, Haarverlängerung, Brow & Lash Lifting, Make-up, Kopfmassage sowie Alpha-Cooling. Inhaberin: Friseurmeisterin Mirjam Walenta.",
         "foundingDate": "1963",
         "priceRange": "ab 55 €",
         "areaServed": {
@@ -103,14 +103,14 @@
             "@type": "Offer",
             "itemOffered": {
               "@type": "Service",
-              "name": "Damenservice"
+              "name": "Schnitt & Styling"
             }
           },
           {
             "@type": "Offer",
             "itemOffered": {
               "@type": "Service",
-              "name": "Herrenservice"
+              "name": "Bartpflege"
             }
           },
           {
@@ -841,6 +841,39 @@
     #impressum p + p { margin-top: 1rem; }
   </style>
   <script>document.documentElement.classList.add('js');</script>
+  <style>
+    /* ── ANGEBOTE MIT ZEITRAUM ── */
+    #angebote { padding: 0 2.5rem 5rem; }
+    .angebot {
+      max-width: 1100px; margin: 0 auto 1.2rem;
+      display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 1.2rem 3rem; align-items: center;
+      background: var(--white); border: 1px solid var(--seide); border-left: 3px solid var(--mokka);
+      border-radius: 3px; padding: 2rem 2.4rem;
+    }
+    .angebot-frist { font-size: 0.72rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--mokka-deep, #6f5a30); font-weight: 600; margin-bottom: 0.6rem; }
+    .angebot h2 { font-family: var(--font-display); font-size: clamp(1.5rem, 3vw, 2rem); font-weight: 700; line-height: 1.2; margin-bottom: 0.6rem; }
+    .angebot p.angebot-text { color: #5a5a52; line-height: 1.7; max-width: 640px; }
+    .angebot-aktion { display: flex; flex-direction: column; align-items: flex-start; gap: 0.6rem; }
+    .angebot-aktion a.angebot-knopf { display: inline-block; background: var(--mokka); color: var(--white); text-decoration: none; font-weight: 600; font-size: 0.92rem; letter-spacing: 0.04em; padding: 0.85rem 1.8rem; border-radius: 2px; white-space: nowrap; }
+    .angebot-aktion a.angebot-knopf:hover { background: var(--night); }
+    .angebot-aktion span { font-size: 0.85rem; color: #66665d; }
+    @media (max-width: 768px) {
+      #angebote { padding: 0 1.2rem 3.5rem; }
+      .angebot { grid-template-columns: minmax(0, 1fr); padding: 1.6rem 1.4rem; }
+    }
+  </style>
+  <!-- ANGEBOTE: Hier Angebote eintragen. Jedes erscheint nur von "von" bis einschließlich "bis" (Datum JJJJ-MM-TT).
+       Ist kein Angebot gerade gültig, bleibt der ganze Abschnitt unsichtbar. -->
+  <script type="application/json" id="angebote-daten">
+  [
+    {
+      "von": "2026-12-01",
+      "bis": "2026-12-23",
+      "titel": "Du zahlst 90&nbsp;€, du verschenkst 100&nbsp;€.",
+      "text": "Unser Weihnachtsangebot: 10&nbsp;% Rabatt auf alle Gutscheine ab 100&nbsp;€. Einfach im Salon vorbeikommen oder anrufen."
+    }
+  ]
+  </script>
 </head>
 <body>
 
@@ -911,13 +944,18 @@
     </div>
   </section>
 
+  <!-- ANGEBOTE (wird nur gezeigt, wenn ein Angebot gerade gilt) -->
+  <section id="angebote" hidden aria-label="Aktuelle Angebote">
+    <div class="container" id="angebote-liste"></div>
+  </section>
+
   <!-- ÜBER -->
   <section id="ueber">
     <div class="container">
       <div class="ueber-grid">
         <div class="ueber-visual">
           <div class="ueber-placeholder">
-            <img src="bilder/salon-empfang.webp" alt="Eingangs- und Damenbereich im Salon" class="ueber-photo" width="1400" height="933" loading="lazy" decoding="async">
+            <img src="bilder/salon-empfang.webp" alt="Eingangsbereich und Arbeitsplätze im Salon" class="ueber-photo" width="1400" height="933" loading="lazy" decoding="async">
             <div class="ueber-badge">
               <strong>Seit 1993</strong>
               im Salon
@@ -943,13 +981,14 @@
       <div class="leistungen-grid">
         <div class="leistung-card fade-in">
           <svg class="leistung-icon" viewBox="0 0 40 40" aria-hidden="true" focusable="false"><circle cx="10.5" cy="30" r="4.5"/><circle cx="28" cy="31" r="4.5"/><path d="M13.6 26.8 31.5 6.5"/><path d="M25.4 27.4 14.5 4.5"/><circle cx="20.2" cy="19.3" r="0.9"/></svg>
-          <h3>Damenservice</h3>
-          <p data-edit="card_damen">Schnitt, Styling und Pflege. Individuell beraten, sorgfältig umgesetzt.</p>
+          <h3>Schnitt &amp; Styling</h3>
+          <p data-edit="card_damen">Schnitt, Styling und Pflege – klassisch oder modern. Individuell beraten, sorgfältig umgesetzt.</p>
+          <p style="grid-column:2; margin-top:0.9rem; font-size:0.85rem;"><a href="haarschnitt.html" style="color:var(--mokka-deep, #6f5a30); text-decoration:none; border-bottom:1px solid currentColor;">Mehr zu Schnitt &amp; Styling</a></p>
         </div>
         <div class="leistung-card fade-in">
           <svg class="leistung-icon" viewBox="0 0 40 40" aria-hidden="true" focusable="false"><path d="M20 20.5c-1.8-3.2-5.6-4.6-8.9-3.2-2.6 1.1-3.9 3.9-7.1 3.6 1.4 4 5.8 5.9 9.9 4.8 2.8-.7 4.7-2.6 6.1-4.2 1.4 1.6 3.3 3.5 6.1 4.2 4.1 1.1 8.5-.8 9.9-4.8-3.2.3-4.5-2.5-7.1-3.6-3.3-1.4-7.1 0-8.9 3.2z"/></svg>
-          <h3>Herrenservice</h3>
-          <p data-edit="card_herren">Klassischer Herrenschnitt, Bartpflege und moderne Schnitte. Präzise und zuverlässig.</p>
+          <h3>Bartpflege</h3>
+          <p data-edit="card_herren">Bart in Form bringen, passend zum Schnitt. Präzise und zuverlässig.</p>
         </div>
         <div class="leistung-card fade-in">
           <svg class="leistung-icon" viewBox="0 0 40 40" aria-hidden="true" focusable="false"><path d="M20 4.5c6 8 10 13 10 19.5a10 10 0 0 1-20 0C10 17.5 14 12.5 20 4.5z"/><path d="M14.5 25.5a5.5 5.5 0 0 0 5.5 5.5"/></svg>
@@ -983,7 +1022,7 @@
   <!-- IMPRESSIONEN -->
   <section id="impressionen">
     <div class="container">
-      <img src="bilder/herrensalon.webp" alt="Herrensalon-Bereich" width="1400" height="933" loading="lazy" decoding="async" style="width:100%; height:auto; max-height:480px; object-fit:cover; border-radius:3px; display:block;">
+      <img src="bilder/herrensalon.webp" alt="Weiterer Arbeitsbereich im Salon" width="1400" height="933" loading="lazy" decoding="async" style="width:100%; height:auto; max-height:480px; object-fit:cover; border-radius:3px; display:block;">
     </div>
   </section>
 
@@ -1181,6 +1220,7 @@
         <p><span aria-hidden="true">👍</span> <a href="https://www.facebook.com/pranz.at" target="_blank" rel="noopener">Facebook<span class="sr-only"> (öffnet neues Fenster)</span></a></p>
       </div>
     </div>
+    <p class="footer-seiten" style="max-width:1100px; margin:2rem auto 0; font-size:0.82rem; line-height:1.9;"><a href="haarschnitt.html" style="color:var(--leinen); text-decoration:none;">Haarschnitt &amp; Styling Wien&nbsp;1050</a> · <a href="leistungen.html" style="color:var(--leinen); text-decoration:none;">Leistungen &amp; Preise</a></p>
     <div class="footer-bottom">
       © 2026 Mirjam Walenta · Great Hair Day Wien · Alle Rechte vorbehalten. · <a href="#anfahrt" style="color:inherit;">Anfahrt &amp; Öffnungszeiten</a> · <a href="#impressum" style="color:inherit;">Impressum</a> · <a href="datenschutz.html" style="color:inherit;">Datenschutz</a> · <a href="karriere/" style="color:inherit;">Karriere</a>
     </div>
@@ -1307,5 +1347,30 @@
 
   </script>
 
+  <script>
+    // Angebote mit Zeitraum: zeigt nur, was heute gilt. Zum Testen: index.html?datum=2026-12-10
+    (function () {
+      var el = document.getElementById('angebote-daten');
+      var box = document.getElementById('angebote'), liste = document.getElementById('angebote-liste');
+      if (!el || !box || !liste) return;
+      var liste_daten;
+      try { liste_daten = JSON.parse(el.textContent); } catch (e) { return; }
+      var d = new Date(), test = new URLSearchParams(location.search).get('datum');
+      var heute = /^\d{4}-\d{2}-\d{2}$/.test(test || '') ? test :
+        d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+      var monate = ['Jänner','Februar','März','April','Mai','Juni','Juli','August','September','Oktober','November','Dezember'];
+      var html = '';
+      liste_daten.forEach(function (a) {
+        if (!a.von || !a.bis || heute < a.von || heute > a.bis) return;
+        var b = a.bis.split('-');
+        html += '<article class="angebot"><div>' +
+          '<p class="angebot-frist">Nur bis ' + parseInt(b[2], 10) + '. ' + monate[parseInt(b[1], 10) - 1] + '</p>' +
+          '<h2>' + a.titel + '</h2><p class="angebot-text">' + a.text + '</p></div>' +
+          '<div class="angebot-aktion"><a class="angebot-knopf" href="tel:+4315863130">Anrufen: 01 586 31 30</a>' +
+          '<span>oder einfach im Salon vorbeikommen</span></div></article>';
+      });
+      if (html) { liste.innerHTML = html; box.hidden = false; }
+    })();
+  </script>
 </body>
 </html>
