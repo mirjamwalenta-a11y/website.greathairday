@@ -32,6 +32,8 @@
   .angebot-card.abgelaufen { opacity:.6; }
   .angebot-status { font-size:.8rem; font-weight:600; letter-spacing:.06em; text-transform:uppercase; margin:.8rem 0 0; color:var(--mokka); }
   .angebot-card.abgelaufen .angebot-status { color:#7a7a70; }
+  .angebot-foto { display:block; max-width:240px; width:100%; height:auto; margin:.4rem 0; border:1px solid var(--seide); border-radius:3px; }
+  .angebot-datei-info { font-size:.9rem; margin:.4rem 0; }
   input[type=date] { font: inherit; font-size: 16px; padding: .55rem .65rem; border:1px solid #cfc6b6; border-radius: 3px; background:#fff; color:var(--night); }
   .warn { background:#fff6df; border:1px solid #e9d59a; padding:.7rem 1rem; border-radius:3px; font-size:.92rem; margin: 1rem 0; }
   #preview { display:none; margin-top:1rem; }
@@ -79,7 +81,7 @@
   <input type="file" accept=".html,text/html" onchange="loadIndex(this.files[0]); this.value=''">
   <div id="angeboteBox" style="display:none">
     <h3>Angebote mit Zeitraum</h3>
-    <p class="hint">Jedes Angebot erscheint auf der Startseite nur vom Start- bis einschließlich zum Enddatum und verschwindet danach von selbst. Abgelaufene Angebote kannst du hier löschen oder mit neuen Daten wiederverwenden (z. B. nächstes Jahr).</p>
+    <p class="hint">Jedes Angebot erscheint auf der Startseite nur vom Start- bis einschließlich zum Enddatum und verschwindet danach von selbst. Abgelaufene Angebote kannst du hier löschen oder mit neuen Daten wiederverwenden (z. B. nächstes Jahr).<br>Zu jedem Angebot kannst du ein <strong>Foto</strong> (wird automatisch verkleinert) und eine <strong>PDF-Datei</strong> (z. B. Flyer, bis 1,5 MB) hinzufügen – beides wird in die <code>index.html</code> eingebaut, du lädst also weiterhin nur diese eine Datei hoch.</p>
     <div id="angebote"></div>
     <button class="sec" onclick="addAngebot()">+ Angebot hinzufügen</button>
   </div>
@@ -288,7 +290,12 @@ const unHtml = s => { const t = document.createElement('textarea'); t.innerHTML 
 const heute = () => { const d = new Date(); return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); };
 const nbsp = s => esc(s.replace(/\s+/g, ' ').trim()).replace(/(\d) (%|€)/g, '$1&nbsp;$2');
 function patchAngebote(src) {
-  const out = angebote.map(a => ({ von: a.von, bis: a.bis, titel: nbsp(a.titel), text: nbsp(a.text) }));
+  const out = angebote.map(a => {
+    const o = { von: a.von, bis: a.bis, titel: nbsp(a.titel), text: nbsp(a.text) };
+    if (a.bild) o.bild = a.bild;
+    if (a.datei) { o.datei = a.datei; if (a.dateitext.trim()) o.dateitext = nbsp(a.dateitext); }
+    return o;
+  });
   const json = '\n  ' + JSON.stringify(out, null, 2).replace(/</g, '\\u003c').replace(/\n/g, '\n  ') + '\n  ';
   return src.replace(ANGEBOTE_RE, (m, a, b, c) => a + json + c);
 }
@@ -327,13 +334,72 @@ function renderAngebote() {
       w.appendChild(inp); g.appendChild(w);
     });
     card.appendChild(g);
+    card.appendChild(fotoFeld(a));
+    card.appendChild(dateiFeld(a));
     const d = document.createElement('button'); d.className = 'del'; d.textContent = 'Dieses Angebot löschen';
     d.onclick = () => { if (confirm('Angebot wirklich löschen?')) { angebote.splice(i, 1); renderAngebote(); } };
     card.appendChild(d); upd(); box.appendChild(card);
   });
   if (!angebote.length) { const p = document.createElement('p'); p.className = 'hint'; p.textContent = 'Zurzeit ist kein Angebot eingetragen.'; box.appendChild(p); }
 }
-function addAngebot() { angebote.push({ von: heute(), bis: '', titel: '', text: '' }); renderAngebote(); }
+function addAngebot() { angebote.push({ von: heute(), bis: '', titel: '', text: '', bild: '', datei: '', dateitext: '' }); renderAngebote(); }
+const PDF_MAX = 1.5 * 1024 * 1024;
+function fileBtn(label, accept, onFile) {
+  const l = document.createElement('label'); l.textContent = label;
+  const i = document.createElement('input'); i.type = 'file'; i.accept = accept;
+  i.addEventListener('change', () => { const f = i.files[0]; i.value = ''; if (f) onFile(f); });
+  const w = document.createElement('div'); w.appendChild(l); w.appendChild(i); return w;
+}
+// Foto verkleinern (max. 1200 px breit, JPEG), damit die Startseite schnell bleibt
+function fotoVerkleinern(file) {
+  return new Promise((ok, fail) => {
+    const url = URL.createObjectURL(file), img = new Image();
+    img.onload = () => {
+      const f = Math.min(1, 1200 / img.naturalWidth, 1200 / img.naturalHeight);
+      const c = document.createElement('canvas');
+      c.width = Math.round(img.naturalWidth * f); c.height = Math.round(img.naturalHeight * f);
+      const x = c.getContext('2d'); x.fillStyle = '#FDFAF5'; x.fillRect(0, 0, c.width, c.height);
+      x.drawImage(img, 0, 0, c.width, c.height); URL.revokeObjectURL(url);
+      ok(c.toDataURL('image/jpeg', 0.82));
+    };
+    img.onerror = () => { URL.revokeObjectURL(url); fail(); };
+    img.src = url;
+  });
+}
+function fotoFeld(a) {
+  const w = document.createElement('div');
+  if (a.bild) {
+    const l = document.createElement('label'); l.textContent = 'Foto'; w.appendChild(l);
+    const im = document.createElement('img'); im.className = 'angebot-foto'; im.src = a.bild; im.alt = 'Foto zum Angebot'; w.appendChild(im);
+    const d = document.createElement('button'); d.className = 'del'; d.textContent = 'Foto entfernen';
+    d.onclick = () => { a.bild = ''; renderAngebote(); }; w.appendChild(d);
+  } else {
+    w.appendChild(fileBtn('Foto (optional)', 'image/*', f => fotoVerkleinern(f)
+      .then(d => { a.bild = d; renderAngebote(); toast('Foto hinzugefügt (' + Math.round(d.length * 0.75 / 1024) + ' KB).'); })
+      .catch(() => toast('Dieses Foto konnte nicht gelesen werden – bitte ein JPG oder PNG wählen.'))));
+  }
+  return w;
+}
+function dateiFeld(a) {
+  const w = document.createElement('div');
+  if (a.datei) {
+    const l = document.createElement('label'); l.textContent = 'PDF-Datei'; w.appendChild(l);
+    const p = document.createElement('p'); p.className = 'angebot-datei-info';
+    p.textContent = '📄 PDF angehängt (' + Math.round(a.datei.length * 0.75 / 1024) + ' KB)'; w.appendChild(p);
+    w.appendChild(field('Linktext auf der Website', a.dateitext, v => a.dateitext = v, 0));
+    const d = document.createElement('button'); d.className = 'del'; d.textContent = 'PDF entfernen';
+    d.onclick = () => { a.datei = ''; a.dateitext = ''; renderAngebote(); }; w.appendChild(d);
+  } else {
+    w.appendChild(fileBtn('PDF-Datei (optional, z. B. Flyer)', 'application/pdf,.pdf', f => {
+      if (!/pdf$/i.test(f.type) && !/\.pdf$/i.test(f.name)) { toast('Bitte eine PDF-Datei wählen.'); return; }
+      if (f.size > PDF_MAX) { toast('Die PDF ist zu groß (' + (f.size / 1048576).toFixed(1).replace('.', ',') + ' MB). Bitte höchstens 1,5 MB.'); return; }
+      const r = new FileReader();
+      r.onload = () => { a.datei = String(r.result).replace(/^data:[^;]*;/, 'data:application/pdf;'); a.dateitext = a.dateitext || 'Details ansehen (PDF)'; renderAngebote(); };
+      r.readAsDataURL(f);
+    }));
+  }
+  return w;
+}
 async function loadIndex(file) {
   if (!file) return;
   indexSrc = await file.text();
@@ -345,7 +411,8 @@ async function loadIndex(file) {
   const am = indexSrc.match(ANGEBOTE_RE);
   if (am) {
     try {
-      angebote = JSON.parse(am[2]).map(a => ({ von: a.von || '', bis: a.bis || '', titel: unHtml(a.titel), text: unHtml(a.text) }));
+      angebote = JSON.parse(am[2]).map(a => ({ von: a.von || '', bis: a.bis || '', titel: unHtml(a.titel), text: unHtml(a.text),
+        bild: a.bild || '', datei: a.datei || '', dateitext: unHtml(a.dateitext) }));
       angeboteOrig = JSON.stringify(angebote);
     } catch (e) { angebote = null; toast('Die Angebote in dieser Datei konnten nicht gelesen werden.'); }
   }
