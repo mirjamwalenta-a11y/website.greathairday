@@ -29,8 +29,8 @@ Die Website liegt auf dem Webspace von **NetPoint** (Wien). Jede Änderung auf `
 
 ## Preise und Texte ändern
 
-1. `Preise-und-Texte-bearbeiten.html` im Browser öffnen.
-2. Aktuelle `leistungen.html` bzw. `index.html` laden, Werte ändern, Vorschau ansehen.
+1. https://www.greathairday.at/Preise-und-Texte-bearbeiten.html im Browser öffnen.
+2. „Aktuelle Startseite laden“ bzw. „Aktuelle Leistungen-Seite laden“ klicken (holt die Seite direkt von der Website; alternativ Datei vom Computer wählen), Werte ändern, Vorschau ansehen.
 3. Heruntergeladene Datei auf GitHub hochladen (**Add file → Upload files**, gleicher Dateiname) – die Website aktualisiert sich dann von selbst.
 
 Preise auch bei **stylisten.eu** und im **Google-Unternehmensprofil** gleich halten.
