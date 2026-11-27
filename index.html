@@ -857,12 +857,22 @@
     .angebot-aktion a.angebot-knopf { display: inline-block; background: var(--mokka); color: var(--white); text-decoration: none; font-weight: 600; font-size: 0.92rem; letter-spacing: 0.04em; padding: 0.85rem 1.8rem; border-radius: 2px; white-space: nowrap; }
     .angebot-aktion a.angebot-knopf:hover { background: var(--night); }
     .angebot-aktion span { font-size: 0.85rem; color: #66665d; }
+    .angebot.mit-bild { grid-template-columns: minmax(0, 280px) minmax(0, 1fr) auto; }
+    .angebot-bild { display: block; width: 100%; height: auto; border-radius: 2px; }
+    .angebot-text-box a.angebot-datei { display: inline-block; margin-top: 0.9rem; color: var(--mokka-deep, #6f5a30); font-weight: 600; font-size: 0.92rem; text-underline-offset: 0.2em; }
+    @media (max-width: 900px) {
+      .angebot.mit-bild { grid-template-columns: minmax(0, 220px) minmax(0, 1fr); }
+      .angebot.mit-bild .angebot-aktion { grid-column: 2; }
+    }
     @media (max-width: 768px) {
       #angebote { padding: 0 1.2rem 3.5rem; }
-      .angebot { grid-template-columns: minmax(0, 1fr); padding: 1.6rem 1.4rem; }
+      .angebot, .angebot.mit-bild { grid-template-columns: minmax(0, 1fr); padding: 1.6rem 1.4rem; }
+      .angebot.mit-bild .angebot-aktion { grid-column: auto; }
     }
   </style>
-  <!-- ANGEBOTE: Hier Angebote eintragen. Jedes erscheint nur von "von" bis einschließlich "bis" (Datum JJJJ-MM-TT).
+  <!-- ANGEBOTE: Am einfachsten über das Werkzeug „Preise & Texte bearbeiten“ ändern.
+       Jedes erscheint nur von "von" bis einschließlich "bis" (Datum JJJJ-MM-TT).
+       Optional: "bild" (Foto als data:image/…), "datei" (PDF als data:application/pdf…) und "dateitext" (Linktext).
        Ist kein Angebot gerade gültig, bleibt der ganze Abschnitt unsichtbar. -->
   <script type="application/json" id="angebote-daten">
   [
@@ -1359,17 +1369,41 @@
       var heute = /^\d{4}-\d{2}-\d{2}$/.test(test || '') ? test :
         d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
       var monate = ['Jänner','Februar','März','April','Mai','Juni','Juli','August','September','Oktober','November','Dezember'];
-      var html = '';
+      var BILD = /^data:image\/(jpeg|png|webp);base64,[A-Za-z0-9+\/=]+$/;
+      var PDF = /^data:application\/pdf;base64,[A-Za-z0-9+\/=]+$/;
+      var html = '', dateien = [];
       liste_daten.forEach(function (a) {
         if (!a.von || !a.bis || heute < a.von || heute > a.bis) return;
         var b = a.bis.split('-');
-        html += '<article class="angebot"><div>' +
+        var bild = BILD.test(a.bild || '');
+        var datei = '';
+        if (PDF.test(a.datei || '')) {
+          dateien.push(a.datei);
+          datei = '<a class="angebot-datei" href="#" data-datei="' + (dateien.length - 1) + '" target="_blank" rel="noopener">' +
+            (a.dateitext || 'Details ansehen (PDF)') + '<span class="sr-only"> (öffnet neues Fenster)</span></a>';
+        }
+        html += '<article class="angebot' + (bild ? ' mit-bild' : '') + '">' +
+          (bild ? '<img class="angebot-bild" src="' + a.bild + '" alt="" loading="lazy">' : '') +
+          '<div class="angebot-text-box">' +
           '<p class="angebot-frist">Nur bis ' + parseInt(b[2], 10) + '. ' + monate[parseInt(b[1], 10) - 1] + '</p>' +
-          '<h2>' + a.titel + '</h2><p class="angebot-text">' + a.text + '</p></div>' +
+          '<h2>' + a.titel + '</h2><p class="angebot-text">' + a.text + '</p>' + datei + '</div>' +
           '<div class="angebot-aktion"><a class="angebot-knopf" href="tel:+4315863130">Anrufen: 01 586 31 30</a>' +
           '<span>oder einfach im Salon vorbeikommen</span></div></article>';
       });
-      if (html) { liste.innerHTML = html; box.hidden = false; }
+      if (!html) return;
+      liste.innerHTML = html; box.hidden = false;
+      // Foto beschreiben: Überschrift des Angebots als Alternativtext
+      liste.querySelectorAll('.angebot-bild').forEach(function (img) {
+        var h = img.parentNode.querySelector('h2'); img.alt = h ? h.textContent : '';
+      });
+      // PDF aus den eingebetteten Daten öffnen
+      liste.querySelectorAll('a[data-datei]').forEach(function (link) {
+        try {
+          var bin = atob(dateien[+link.getAttribute('data-datei')].split(',')[1]), bytes = new Uint8Array(bin.length);
+          for (var i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+          link.href = URL.createObjectURL(new Blob([bytes], { type: 'application/pdf' }));
+        } catch (e) { link.remove(); }
+      });
     })();
   </script>
 </body>
