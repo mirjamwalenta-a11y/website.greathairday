@@ -73,12 +73,19 @@
   <button class="sec" onclick="showPreview()">Vorschau anzeigen</button>
   <button onclick="downloadLeistungen()">leistungen.html herunterladen</button>
   <div id="preview"><iframe id="frame" title="Vorschau"></iframe></div>
-  <p class="hint" style="margin-top:1rem">Hast du die Seite schon einmal mit diesem Werkzeug geändert und diese Datei geöffnet, findest du oben nicht deine letzten Werte? Dann lade hier deine aktuelle <code>leistungen.html</code>:</p>
-  <input type="file" accept=".html,text/html" onchange="loadLeistungen(this.files[0]); this.value=''">
+  <p class="hint" style="margin-top:1rem">Hast du die Seite schon einmal mit diesem Werkzeug geändert und diese Datei geöffnet, findest du oben nicht deine letzten Werte? Dann hol dir hier die aktuelle Leistungen-Seite:</p>
+  <button class="sec" onclick="vomServer('leistungen.html', loadLeistungen)">Aktuelle Leistungen-Seite laden</button>
+  <details class="hint"><summary>oder Datei vom Computer wählen</summary>
+    <input type="file" accept=".html,text/html" onchange="loadLeistungen(this.files[0]); this.value=''">
+  </details>
 
   <h2>5 · Startseite (optional)</h2>
-  <p class="hint">Wähle deine aktuelle <code>index.html</code>. Dann erscheinen die <strong>Angebote</strong> und die Texte der Startseite zum Ändern. Wenn du nur den Haarschnitt-Preis geändert hast, lade sie trotzdem einmal und lade sie wieder herunter – der Preis steckt auch dort in den Suchmaschinen-Daten.</p>
-  <input type="file" accept=".html,text/html" onchange="loadIndex(this.files[0]); this.value=''">
+  <p class="hint">Klicke auf <strong>„Aktuelle Startseite laden“</strong>. Dann erscheinen die <strong>Angebote</strong> und die Texte der Startseite zum Ändern. Wenn du nur den Haarschnitt-Preis geändert hast, lade sie trotzdem einmal und lade sie wieder herunter – der Preis steckt auch dort in den Suchmaschinen-Daten.</p>
+  <button onclick="vomServer('index.html', loadIndex)">Aktuelle Startseite laden</button>
+  <p class="hint">Holt die Startseite, wie sie gerade auf www.greathairday.at online ist. Hast du eben erst eine neue <code>index.html</code> hochgeladen, warte ein paar Minuten, bis sie online ist.</p>
+  <details class="hint"><summary>oder Datei vom Computer wählen</summary>
+    <input type="file" accept=".html,text/html" onchange="loadIndex(this.files[0]); this.value=''">
+  </details>
   <div id="angeboteBox" style="display:none">
     <h3>Angebote mit Zeitraum</h3>
     <p class="hint">Jedes Angebot erscheint auf der Startseite nur vom Start- bis einschließlich zum Enddatum und verschwindet danach von selbst. Abgelaufene Angebote kannst du hier löschen oder mit neuen Daten wiederverwenden (z. B. nächstes Jahr).<br>Zu jedem Angebot kannst du ein <strong>Foto</strong> (wird automatisch verkleinert) und eine <strong>PDF-Datei</strong> (z. B. Flyer, bis 1,5 MB) hinzufügen – beides wird in die <code>index.html</code> eingebaut, du lädst also weiterhin nur diese eine Datei hoch.</p>
@@ -251,9 +258,18 @@ function downloadLeistungen() {
   download('leistungen.html', build());
   toast('leistungen.html wurde heruntergeladen. Jetzt auf GitHub hochladen.');
 }
+// Datei direkt von der eigenen Website holen (das Werkzeug liegt im selben Ordner)
+async function vomServer(name, laden) {
+  if (location.protocol === 'file:') { toast('Das geht nur, wenn das Werkzeug über www.greathairday.at geöffnet ist. Bitte „oder Datei vom Computer wählen“ nutzen.'); return; }
+  try {
+    const r = await fetch(name + '?t=' + Date.now(), { cache: 'no-store' });
+    if (!r.ok) throw 0;
+    await laden(await r.text());
+  } catch (e) { toast(name + ' konnte nicht geladen werden. Bitte Internetverbindung prüfen oder „oder Datei vom Computer wählen“ nutzen.'); }
+}
 async function loadLeistungen(file) {
   if (!file) return;
-  const txt = await file.text();
+  const txt = typeof file === 'string' ? file : await file.text();
   const m = txt.match(/<script type="application\/json" id="seite-daten">([\s\S]*?)<\/script>/);
   if (!m) { toast('In dieser Datei fehlen die gespeicherten Werte – bitte die zuletzt mit diesem Werkzeug erzeugte leistungen.html wählen.'); return; }
   try {
@@ -264,7 +280,7 @@ async function loadLeistungen(file) {
     // Texte aus älteren Versionen, in denen Föhnen/Tönung noch im Beschreibungstext standen, nicht übernehmen
     for (const k in d.texts) if (k in merged.texts && !/\{(haarschnitt_fohn|tonung)\}/.test(d.texts[k]) || !(k in merged.texts)) merged.texts[k] = d.texts[k];
     merged.faq = d.faq;
-    data = merged; renderAll(); toast('Werte aus deiner Datei geladen.');
+    data = merged; renderAll(); toast('Aktuelle Werte geladen.');
   } catch (e) { toast('Die Datei konnte nicht gelesen werden.'); }
 }
 
@@ -402,7 +418,7 @@ function dateiFeld(a) {
 }
 async function loadIndex(file) {
   if (!file) return;
-  indexSrc = await file.text();
+  indexSrc = typeof file === 'string' ? file : await file.text();
   const doc = new DOMParser().parseFromString(indexSrc, 'text/html');
   indexFields = {};
   doc.querySelectorAll('[data-edit]').forEach(el => { indexFields[el.getAttribute('data-edit')] = el.textContent.replace(/\s+/g, ' ').trim(); });
@@ -420,6 +436,7 @@ async function loadIndex(file) {
   if (angebote) renderAngebote();
   if (!Object.keys(indexFields).length) { toast('In dieser Datei wurden keine bearbeitbaren Texte gefunden.'); indexSrc = null; return; }
   renderIndex();
+  toast('Startseite geladen – unten kannst du jetzt Angebote und Texte ändern.');
 }
 function downloadIndex() {
   if (!indexSrc || !validate() || !checkAngebote()) return;
